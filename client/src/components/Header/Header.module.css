@@ -1,0 +1,5 @@
+.wrapper {
+    position: relative;
+    /* border-top: solid 5px var(--color-accent); */
+    border-bottom: solid 5px var(--color-accent) 
+}

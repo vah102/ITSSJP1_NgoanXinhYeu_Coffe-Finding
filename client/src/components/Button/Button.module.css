@@ -1,0 +1,24 @@
+.button {
+    min-height: 50px;
+    background-color: transparent;
+    padding: 0 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.button:focus-within {
+    outline: none;
+}
+
+.primary {
+    background-color: var(--color-button);
+}
+
+.primary:hover {
+    background-color: var(--color-button-hover);
+}
+
+.primary:active {
+    background-color: var(--color-button-active);
+}

@@ -1,0 +1,19 @@
+.wrapper {
+    border: solid 2px var(--color-accent);
+    padding-left: 2rem;
+    border-radius: 30px
+}
+
+.input {
+    background: transparent;
+    width: 300px
+}
+
+.input:focus-within {
+    outline: none;
+}
+
+input::placeholder {
+    color: var(--color-button-light) !important;
+    font-style: italic; 
+  }

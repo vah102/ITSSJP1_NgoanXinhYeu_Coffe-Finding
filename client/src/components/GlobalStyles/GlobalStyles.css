@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --color-primary: #64795A; /* Màu chính */
+    --color-secondary: #F2AD60; /* Màu phụ */
+    --color-accent: #502b04; /* Màu nhấn */
+    --color-button-light : #8B4513;
+    --color-button : #57370E;
+    --color-button-hover: #4F310D;
+    --color-button-active: #472C0C;
+    --color-light: #F6F7F1; /* Màu sáng */
+    --color-background: #F1E5D9; /* Màu Nền */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--color-accent);
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+}
+
+a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}
