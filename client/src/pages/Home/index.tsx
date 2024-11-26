@@ -17,10 +17,10 @@ const cx = classNames.bind(styles);
 type Store = {
     _id: string;
     name: string;
-    location: string;
+    address: string;
     logo: string;
     price: number;
-    rating: number;
+    rate: number;
 };
 
 function Home() {
@@ -31,7 +31,7 @@ function Home() {
         setVisible(!visible);
     };
 
-    const { data, loading } = useFetch<Store[]>(`http://localhost:3000/api/home`);
+    const { data, loading } = useFetch<Store[]>(`http://localhost:3000/api/home/sort-rate`);
 
     console.log(data)
 

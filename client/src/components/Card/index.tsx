@@ -10,10 +10,10 @@ type CardProps = {
     item: {
         _id: string;
         name: string;
-        location: string;
+        address: string;
         logo: string;
         price: number;
-        rating: number;
+        rate: number;
         // to: string | '/'
     };
 };
@@ -27,11 +27,11 @@ function Card({item} : CardProps) {
             </div>
             <div className={cx('card-content')}>
                 <span className='text-3xl font-bold'>{item.name}</span>
-                <span className=''>{item.location}</span>
+                <span className=''>{item.address}</span>
                 <span className=''>~ {item.price} VND</span>
                 <div className='flex felx-row items-center gap-3'>
                     <FontAwesomeIcon icon={faStar} />
-                    <span>{item.rating}</span>
+                    <span>{item.rate}</span>
                 </div>
                 
             </div>
