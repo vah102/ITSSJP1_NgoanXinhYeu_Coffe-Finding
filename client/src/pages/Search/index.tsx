@@ -1,5 +1,3 @@
-import classNames from "classnames/bind";
-import styles from "./Home.module.css";
 import Filter from "../../components/Filter";
 import Tippy from "@tippyjs/react/headless";
 import { useState } from "react";
@@ -9,31 +7,34 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
+import { useSearchContext } from "../../services/contexts/SearchContext";
 import useFetch from "../../services/hooks/useFetch";
 const BASE_URL = import.meta.env.BASE_URL || "";
-
-const cx = classNames.bind(styles);
 
 type Store = {
     _id: string;
     name: string;
     location: string;
-    logo: string;
+    photo: string;
     price: number;
     rating: number;
 };
 
-function Home() {
-    const [sortOption, setSortOption] = useState("Highest rated");
+function Search() {
+    const search = useSearchContext();
 
+    const queryParams = new URLSearchParams();
+    queryParams.append("destination", search.destination || "");
+
+    // const { data, loading } = useFetch<Store[]>(
+    //     `${BASE_URL}/api/home/search?${queryParams}`
+    // );
+
+    const [sortOption, setSortOption] = useState("Highest rated");
     const [visible, setVisible] = useState(false);
     const handleToggleSort = () => {
         setVisible(!visible);
     };
-
-    const { data, loading } = useFetch<Store[]>(`http://localhost:3000/api/home`);
-
-    console.log(data)
 
     return (
         <div className="p-10 flex flex-row gap-10">
@@ -78,20 +79,22 @@ function Home() {
                         </div>
                     </Tippy>
                 </div>
-                {loading ? (
-                    "Loading please wait"
-                ) : (
-                    <div className="p-10 flex flex-wrap gap-10">
-                        {data &&
-                            data.map((item, index) => (
-                                <Card key={index} item={item} />
-                            ))}
-                    </div>
-                )}
-                {/* <Pagination/> */}
+                <div className="p-10 flex flex-wrap gap-10">
+                    <Card
+                        item={{
+                            _id: "1",
+                            name: "StarBucks Coffee",
+                            location: "Trần Đại Nghĩa",
+                            photo: "cf1.jpg",
+                            price: 50.0,
+                            rating: 5,
+                        }}
+                    />
+                </div>
+                {/* <Pagination /> */}
             </div>
         </div>
     );
 }
 
-export default Home;
+export default Search;

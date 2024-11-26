@@ -11,19 +11,19 @@ type CardProps = {
         _id: string;
         name: string;
         location: string;
-        photo: string;
+        logo: string;
         price: number;
         rating: number;
-        to: string | '/'
+        // to: string | '/'
     };
 };
 
 
 function Card({item} : CardProps) {
     return ( 
-        <Link to={item.to} className={cx('wrapper')}>
+        <Link to="/" className={cx('wrapper')}>
             <div className={cx('card-img')}>
-                <img src={import.meta.env.BASE_URL + item.photo} alt="coffee" />
+                <img src={item.logo} alt="coffee" />
             </div>
             <div className={cx('card-content')}>
                 <span className='text-3xl font-bold'>{item.name}</span>

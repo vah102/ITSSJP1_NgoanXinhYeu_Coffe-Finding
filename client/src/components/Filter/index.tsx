@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import styles from './Filter.module.css'
-import Button from '../../../components/Button';
+import Button from '../Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
