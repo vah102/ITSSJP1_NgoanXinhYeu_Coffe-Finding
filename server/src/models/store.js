@@ -1,6 +1,6 @@
 import db from '../config/db.js';
 
-const storeController = {
+const store = {
     getAll: async () => {
       const [rows] = await db.query('SELECT * FROM store');
       return rows;
@@ -18,6 +18,16 @@ const storeController = {
       const [rows] = await db.query('SELECT * FROM store WHERE rate >= 4.0 ORDER BY rate DESC');
       return rows;
     },
+    search: async (keyword) => {
+      const [rows] = await db.query(
+        `SELECT * FROM store WHERE 
+         name LIKE ? OR 
+         address LIKE ?`,
+        [`%${keyword}%`, `%${keyword}%`]
+      );
+      return rows;
+    },
+    
   };
   
-export default storeController;
+export default store;

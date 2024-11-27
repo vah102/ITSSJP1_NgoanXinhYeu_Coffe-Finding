@@ -31,7 +31,19 @@ const storeController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }
+  },
+  searchStores: async (req, res) => {
+    try {
+      const { keyword } = req.query; // Lấy keyword từ query string
+      if (!keyword) {
+        return res.status(400).json({ message: 'Keyword is required' });
+      }
+      const stores = await store.search(keyword);
+      res.status(200).json(stores);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 export default storeController;
