@@ -27,6 +27,38 @@ const store = {
       );
       return rows;
     },
+    filter: async (filters) => {
+      const { min_price, max_price, style, feature } = filters; // Nhận giá trị price và style từ filters
+      let query = 'SELECT DISTINCT s.* FROM store s LEFT JOIN Features_store fs ON s.store_id = fs.store_id LEFT JOIN Features f ON fs.feature_id = f.feature_id WHERE 1=1';
+      const params = [];
+    
+      // Lọc theo khoảng giá (price nằm giữa min_price và max_price)
+      if (min_price) {
+        query += ' AND ? > s.min_price';
+        params.push(min_price);
+      }
+      if (max_price) {
+        query += ' AND ? < s.max_price';
+        params.push(max_price);
+      }
+    
+      // Lọc theo phong cách nếu có
+      if (style && style.length > 0) {
+        const placeholders = style.map(() => '?').join(', '); // Tạo các placeholder `?` cho mảng
+        query += ` AND s.style IN (${placeholders})`;
+        params.push(...style); // Thêm các giá trị style vào params
+      }
+
+      if (feature && feature.length > 0) {
+        query += ` AND f.features_name IN (?)`;
+        params.push(feature);
+      }
+
+      // Thực thi truy vấn
+      const [rows] = await db.query(query, params);
+      return rows;
+    },
+    
     
   };
   

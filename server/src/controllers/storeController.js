@@ -44,6 +44,24 @@ const storeController = {
       res.status(500).json({ message: error.message });
     }
   },
+  filterStores: async (req, res) => {
+    try {
+      const { min_price, max_price, style, feature } = req.query; 
+
+      const styleArray = style ? style.split(',') : [];
+      const featureArray = feature ? feature.split(',') : [];
+      const filters = { 
+        min_price, 
+        max_price, 
+        style: styleArray, 
+        feature: featureArray,
+      }; // Đóng gói vào object filters
+      const stores = await store.filter(filters); // Gọi model để lọc dữ liệu
+      res.status(200).json(stores); // Trả về kết quả lọc
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 export default storeController;
