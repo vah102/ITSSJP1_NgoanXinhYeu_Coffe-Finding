@@ -10,10 +10,11 @@ type ButtonProps = {
     to? : string
     primary? : boolean
     icon? : ReactNode
-    type?: "button" | "submit" | "reset" | undefined;
+    type?: "button" | "submit" | "reset" | undefined
+    onClick? : () => void
 }
 
-function Button({children, to, primary, icon, type} : ButtonProps) {
+function Button({children, to, primary, icon, type, onClick} : ButtonProps) {
 
     let props = {children, to, icon, type}
 
@@ -26,7 +27,7 @@ function Button({children, to, primary, icon, type} : ButtonProps) {
     }
 
     return ( 
-        <Comp className={classes} {...props}>
+        <Comp className={classes} {...props} onClick={onClick}>
             {icon && <span>{icon}</span>}
             <span className='font-semibold px-3'>{children}</span>
         </Comp>

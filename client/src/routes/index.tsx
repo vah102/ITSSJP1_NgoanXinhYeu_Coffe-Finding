@@ -12,7 +12,7 @@ interface IRoute {
 
 const publicRoutes : IRoute[] = [
     { path: config.routes.home, component: Home, layout: DefaultLayout},
-    { path: config.routes.seach, component: Search, layout: DefaultLayout},
+    { path: config.routes.search, component: Search, layout: DefaultLayout},
 ]
 
 export {publicRoutes} 

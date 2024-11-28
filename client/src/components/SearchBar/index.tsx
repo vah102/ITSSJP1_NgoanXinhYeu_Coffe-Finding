@@ -13,10 +13,10 @@ function SearchBar() {
 
     const navigate = useNavigate();
     const search = useSearchContext();
-    const [destination, setDestination] = useState<string>(search.destination);
+    const [keyword, setKeyword] = useState<string>(search.keyword);
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        search.saveSearchValues(destination);
+        search.saveSearchValues(keyword);
         navigate("/search");
     };
 
@@ -25,8 +25,8 @@ function SearchBar() {
             <input
                 type="text"
                 placeholder="Search for a coffee or location"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
                 className={cx("input")}
             />
             <Button

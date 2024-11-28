@@ -62,6 +62,28 @@ const storeController = {
       res.status(500).json({ message: error.message });
     }
   },
+  searchAndFilterStores: async (req, res) => {
+    try {
+      const { keyword, min_price, max_price, style, feature, sortOption } = req.query;
+  
+      // Parse filters
+      const styleArray = style ? style.split(",") : [];
+      const featureArray = feature ? feature.split(",") : [];
+      const filters = {
+        min_price,
+        max_price,
+        style: styleArray,
+        feature: featureArray,
+      };
+  
+      // Call model with sorting parameter
+      const stores = await store.searchAndFilter(keyword, filters, sortOption);
+      res.status(200).json(stores);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+  
 };
 
 export default storeController;

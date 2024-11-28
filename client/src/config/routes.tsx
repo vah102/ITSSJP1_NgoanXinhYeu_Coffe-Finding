@@ -1,6 +1,6 @@
 const routes = {
     home: '/',
-    seach: '/search',
+    search: '/search',
 }
 
 export default routes

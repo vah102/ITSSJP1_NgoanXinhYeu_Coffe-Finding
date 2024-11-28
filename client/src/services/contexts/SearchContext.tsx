@@ -1,8 +1,14 @@
 import React, { useContext, useState } from "react";
 
 type SearchContext = {
-    destination: string;
-    saveSearchValues: (destination: string) => void;
+    keyword: string;
+    sort: string;
+    styles: string[];
+    features: string[];
+    saveSearchValues: (keyword: string) => void;
+    saveSortValues: (sort: string) => void;
+    saveStyleValues: (styles: string[]) => void;
+    saveFeatureValues: (feature: string[]) => void;
 };
 
 const SearchContext = React.createContext<SearchContext | undefined>(undefined);
@@ -14,14 +20,29 @@ type SearchContextProviderProps = {
 export const SearchContextProvider = ({
     children,
 }: SearchContextProviderProps) => {
-    const [destination, setDestination] = useState<string>("");
+    const [keyword, setKeyword] = useState<string>("");
+    const [sort, setSort] = useState<string>("highest_rated");
+    const [styles, setStyles] = useState<string[]>([]);
+    const [features, setFeatures] = useState<string[]>([]);
 
-    const saveSearchValues = (destination: string) => {
-        setDestination(destination);
+    const saveSearchValues = (keyword: string) => {
+        setKeyword(keyword);
     };
 
+    const saveSortValues = (sort: string) => {
+        setSort(sort);
+    };
+
+    const saveStyleValues = (styles: string[]) => {
+        setStyles(styles);
+    }
+
+    const saveFeatureValues = (features: string[]) => {
+        setFeatures(features)
+    }
+
     return (
-        <SearchContext.Provider value={{ destination, saveSearchValues }}>
+        <SearchContext.Provider value={{ keyword, sort, styles, features, saveSearchValues, saveSortValues, saveStyleValues, saveFeatureValues }}>
             {children}
         </SearchContext.Provider>
     );
