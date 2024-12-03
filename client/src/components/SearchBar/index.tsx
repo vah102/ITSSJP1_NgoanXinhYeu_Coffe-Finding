@@ -4,7 +4,7 @@ import Button from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSearchContext } from "../../services/contexts/SearchContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
@@ -19,6 +19,10 @@ function SearchBar() {
         search.saveSearchValues(keyword);
         navigate("/search");
     };
+
+    useEffect(() => {
+        search.saveSearchValues(keyword);
+    }, [keyword, search]);
 
     return (
         <form className={cx("wrapper")} onSubmit={handleSubmit}>

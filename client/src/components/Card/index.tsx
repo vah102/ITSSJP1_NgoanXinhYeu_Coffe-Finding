@@ -27,8 +27,8 @@ function Card({item} : CardProps) {
                 <img src={item.logo} alt="coffee" />
             </div>
             <div className={cx('card-content')}>
-                <span className='text-3xl font-bold mb-5'>{item.name}</span>
-                <span className='mb-3'>{item.address}</span>
+                <span className='text-3xl font-bold mb-3 h-[2.5em] line-clamp-2'>{item.name}</span>
+                <span className='mb-3 line-clamp-2'>{item.address}</span>
                 <span className='font-semibold'>{item.min_price} ~ {item.max_price} VND</span>
                 <div className='flex felx-row items-center gap-3 '>
                     <FontAwesomeIcon icon={faStar} />

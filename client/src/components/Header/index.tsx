@@ -11,7 +11,7 @@ function Header() {
 
     return (
         <div className={cx('wrapper')}>
-            <div className="h-32 w-full">
+            <div className="h-28 w-full">
                 <img
                     src={import.meta.env.BASE_URL + "bg.png"}
                     alt=""

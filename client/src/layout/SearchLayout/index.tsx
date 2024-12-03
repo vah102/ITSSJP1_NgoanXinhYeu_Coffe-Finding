@@ -1,25 +1,23 @@
 import { ReactNode } from "react";
 import Header from "../../components/Header";
-import styles from "./DefaultLayout.module.css"
-import classNames from "classnames/bind";
-
-const cx = classNames.bind(styles)
+import Filter from "../../components/Filter";
 
 type LayoutProps = {
-    children : ReactNode
-}
+    children: ReactNode;
+};
 
-function DefaultLayout({children} : LayoutProps) {
-    return ( 
+function SearchLayout({ children }: LayoutProps) {
+    return (
         <div className="bg-[#F1E5D9] min-h-screen">
             <div className="fixed w-full z-50">
                 <Header />
             </div>
             <div className=" px-10 pb-10 pt-40 flex flex-row gap-10">
-                <div className="w-full">{children}</div>
+                <div className="fixed"><Filter /></div>
+                <div className="pl-[280px] w-full">{children}</div>
             </div>
         </div>
-     );
+    );
 }
 
-export default DefaultLayout;
+export default SearchLayout;

@@ -1,12 +1,12 @@
 .wrapper {
     border: solid 2px var(--color-accent);
     padding-left: 2rem;
-    border-radius: 30px
+    border-radius: 30px;
 }
 
 .input {
     background: transparent;
-    width: 300px
+    width: 300px;
 }
 
 .input:focus-within {

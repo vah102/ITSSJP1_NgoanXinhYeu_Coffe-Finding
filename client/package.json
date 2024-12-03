@@ -15,6 +15,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.1",
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tippyjs/react": "^4.2.6",
     "axios": "^1.7.8",
     "classnames": "^2.5.1",

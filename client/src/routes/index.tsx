@@ -1,8 +1,8 @@
 import { ComponentType } from "react";
 import config from "../config";
 import Home from "../pages/Home";
-import DefaultLayout from "../layout/DefaultLayout";
 import Search from "../pages/Search";
+import SearchLayout from "../layout/SearchLayout";
 
 interface IRoute {
     path: string;
@@ -11,8 +11,8 @@ interface IRoute {
 }
 
 const publicRoutes : IRoute[] = [
-    { path: config.routes.home, component: Home, layout: DefaultLayout},
-    { path: config.routes.search, component: Search, layout: DefaultLayout},
+    { path: config.routes.home, component: Home, layout: SearchLayout},
+    { path: config.routes.search, component: Search, layout: SearchLayout},
 ]
 
 export {publicRoutes} 
