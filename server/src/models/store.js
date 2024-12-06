@@ -8,7 +8,7 @@ const store = {
 
     getById: async (id) => {
         const [rows] = await db.query(
-            "SELECT * FROM stores WHERE store_id = ?",
+            "SELECT * FROM store WHERE store_id = ?",
             [id]
         );
         return rows;
