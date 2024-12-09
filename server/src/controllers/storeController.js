@@ -10,7 +10,8 @@ import store from '../models/store.js';
 const storeController = {
   getStores: async (req, res) => {
     try {
-      const stores = await store.getAll();
+      const userId = req.user.id;  // Lấy userId từ token
+      const stores = await store.getAll(userId);  // Truyền userId vào
       res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -19,7 +20,8 @@ const storeController = {
   getStoresById: async (req, res) => {
     try {
       const { storeId } = req.params;
-      const storeDetails = await store.getById(storeId);
+      const userId = req.user.id;  // Lấy userId từ token
+      const storeDetails = await store.getById(storeId, userId);  // Truyền userId vào
       if (storeDetails.length === 0) {
         return res.status(404).json({ message: 'Store not found' });
       }
@@ -30,7 +32,8 @@ const storeController = {
   },
   getTrendingStores: async (req, res) => {
     try {
-      const stores = await store.getByHighRate();
+      const userId = req.user.id;  // Lấy userId từ token
+      const stores = await store.getByHighRate(userId);  // Truyền userId vào
       res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -38,7 +41,8 @@ const storeController = {
   },
   sortByRate: async (req, res) => {
     try {
-      const stores = await store.sortByHighRate();
+      const userId = req.user.id;  // Lấy userId từ token
+      const stores = await store.sortByHighRate(userId);  // Truyền userId vào
       res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -46,11 +50,12 @@ const storeController = {
   },
   searchStores: async (req, res) => {
     try {
-      const { keyword } = req.query; // Lấy keyword từ query string
+      const { keyword } = req.query;
+      const userId = req.user.id;  // Lấy userId từ token
       if (!keyword) {
         return res.status(400).json({ message: 'Keyword is required' });
       }
-      const stores = await store.search(keyword);
+      const stores = await store.search(keyword, userId);  // Truyền userId vào
       res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -58,8 +63,8 @@ const storeController = {
   },
   filterStores: async (req, res) => {
     try {
-      const { min_price, max_price, style, feature } = req.query; 
-
+      const { min_price, max_price, style, feature } = req.query;
+      const userId = req.user.id;  // Lấy userId từ token
       const styleArray = style ? style.split(',') : [];
       const featureArray = feature ? feature.split(',') : [];
       const filters = { 
@@ -67,9 +72,9 @@ const storeController = {
         max_price, 
         style: styleArray, 
         feature: featureArray,
-      }; // Đóng gói vào object filters
-      const stores = await store.filter(filters); // Gọi model để lọc dữ liệu
-      res.status(200).json(stores); // Trả về kết quả lọc
+      };
+      const stores = await store.filter(filters, userId);  // Truyền userId vào
+      res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -77,8 +82,8 @@ const storeController = {
   searchAndFilterStores: async (req, res) => {
     try {
       const { keyword, min_price, max_price, style, feature, sortOption } = req.query;
+      const userId = req.user.id;  // Lấy userId từ token
   
-      // Parse filters
       const styleArray = style ? style.split(",") : [];
       const featureArray = feature ? feature.split(",") : [];
       const filters = {
@@ -88,14 +93,12 @@ const storeController = {
         feature: featureArray,
       };
   
-      // Call model with sorting parameter
-      const stores = await store.searchAndFilter(keyword, filters, sortOption);
+      const stores = await store.searchAndFilter(keyword, filters, sortOption, userId);  // Truyền userId vào
       res.status(200).json(stores);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
-  
 };
 
 export default storeController;
