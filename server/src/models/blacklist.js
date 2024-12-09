@@ -4,7 +4,7 @@ const BlacklistModel = {
     // Lấy danh sách các quán ăn đã bị blacklist bởi người dùng
     getBlacklistedStores: async (user_id) => {
         const [rows] = await db.execute(`
-            SELECT Store.store_id, Store.name
+            SELECT *
             FROM Store
             JOIN Blacklist_detail ON Store.store_id = Blacklist_detail.store_id
             JOIN Blacklist ON Blacklist_detail.blacklist_id = Blacklist.blacklist_id

@@ -14,17 +14,12 @@ const store = {
         return rows;
     },
 
-    getById: async (id, userId) => {
+    getById: async (id) => {
         const [rows] = await db.query(`
             SELECT * 
             FROM store s
             WHERE s.store_id = ? 
-            AND s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )`, [id, userId]);
+            `, [id]);
         return rows;
     },
 

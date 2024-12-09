@@ -31,8 +31,10 @@ const BlacklistController = {
 
     // Xóa quán ăn khỏi blacklist
     removeStoreFromBlacklist: async (req, res) => {
+        const  store_id  = req.params.storeId;  // Lấy store_id từ URL params
         const user_id = req.user.id;  // Lấy user_id từ token
-        const { store_id } = req.body;
+        console.log(`User ID: ${user_id}`);
+        console.log(`Store ID: ${store_id}`);
 
         try {
             const result = await BlacklistModel.removeStoreFromBlacklist(user_id, store_id);
