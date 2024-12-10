@@ -31,9 +31,9 @@ function Header() {
                     </div>
                 </Link>
                 <SearchBar />
-                <div>
-                    <Button ><span className="text-white">Login</span></Button>
-                    <Button primary><span className="text-white">Signup</span></Button>
+                <div className="flex">
+                    <Button to ="/signin"><span className="text-white">Login</span></Button>
+                    <Button primary to ="/signup"><span className="text-white">Signup</span></Button>
                 </div>
             </div>
         </div>
