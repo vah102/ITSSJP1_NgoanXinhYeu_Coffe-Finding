@@ -18,6 +18,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useFetch from "../../services/hooks/useFetch";
 import Menu from "../../components/Menu";
+import axios from "axios";
 
 type Store = {
   store_id: string;
@@ -81,6 +82,23 @@ function StoreDetail() {
   const menuDetails = data?.Menus?.flatMap((menu) => menu.MenuDetails) || [];
   const Features = data?.Features || [];
   console.log(menuDetails);
+  const API_URL = "http://localhost:3000/api/blacklist/all";
+  const handleBlacklist = async (token: string, storeId: number) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/add`,
+        { store_id: storeId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data; // Trả về dữ liệu blacklist detail mới được thêm
+    } catch (error) {
+      throw new Error("Failed to add store to blacklist");
+    }
+  };
   return (
     <div className="">
       <div className="w-full h-[320px] overflow-hidden relative">
@@ -92,7 +110,7 @@ function StoreDetail() {
         {/* Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         {/* Nội dung */}
-        <div className="relative z-10 flex items-end h-full p-16 ml-24">
+        <div className="relative w-[480px] min-w-96 z-10 flex items-end h-full p-16 ml-24">
           {/* Container bọc thông tin */}
           <div className="h-64 bg-white p-6 rounded-lg shadow-lg flex items-center">
             {/* Logo */}
@@ -105,10 +123,12 @@ function StoreDetail() {
                 <FontAwesomeIcon icon={faStar} />
                 {data?.rate}
               </div>
-              <h2 className="text-xl text-gray-700 font-semibold">
+              <h2 className="text-2xl text-gray-700 font-semibold">
                 {data?.style}
               </h2>
-              <h3 className="text-xl text-green-500 font-semibold">Open now</h3>
+              <h3 className="text-2xl text-green-400 font-semibold">
+                Open now
+              </h3>
             </div>
           </div>
         </div>
@@ -135,7 +155,7 @@ function StoreDetail() {
           </div>
           {/* Location & Hours */}
           <div className="bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">Location & Hours</h2>
+            <h2 className="text-3xl font-bold mb-4 p-6">Location & Hours</h2>
             <div className="flex space-x-4">
               <div className="w-1/2 h-48 bg-gray-300">
                 <iframe
@@ -191,7 +211,7 @@ function StoreDetail() {
 
           {/*Amenities and more*/}
           <div className="bg-white p-6 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">Amenities and More</h2>
+            <h2 className="text-3xl font-bold mb-4">Amenities and More</h2>
             <div className="grid grid-cols-2 gap-4">
               {Features &&
                 Features.map((item, index) => (
@@ -210,15 +230,15 @@ function StoreDetail() {
         </div>
         {/* right */}
         {/* Right Column */}
-        <div className="w-1/3 min-h-5 space-y-8 bg-white">
+        <div className="w-1/3 h-full flex flex-col space-y-8 bg-[#F6F7F1] stickey top-32 mb-6 ">
           {/* Description */}
-          <div className="bg-white p-6 ">
+          <div className="bg-white p-6 m-6">
             <p className="flex items-center space-x-2">
               <span> {data?.description}</span>
             </p>
           </div>
           {/* Contact Info */}
-          <div className="bg-white p-6 ">
+          <div className="bg-white p-6 mr-6 ml-6">
             <p className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faPhone} />
               <span>{data?.phone}</span>
@@ -226,7 +246,7 @@ function StoreDetail() {
           </div>
 
           {/* Map */}
-          <div className="bg-white p-6 ">
+          <div className="bg-white p-6 m-6">
             <p className="flex items-center space-x-2 mt-2">
               <FontAwesomeIcon icon={faMapMarkerAlt} />
               <span>{data?.address}</span>
