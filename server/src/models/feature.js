@@ -1,26 +1,21 @@
-import db from "../config/db.js";
+// models/Feature.js
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js'; // import pool connection
 
-const feature = {
-    getByStoreId: async (storeId) => {
-        const query = `
-        SELECT 
-            f.feature_id, 
-            f.features_name 
-        FROM 
-            Features_store fs
-        INNER JOIN 
-            Features f ON fs.feature_id = f.feature_id
-        WHERE 
-            fs.store_id = ?;
-        `;
-        try {
-            const [rows] = await db.query(query, [storeId]);
-            return rows;
-        } catch (error) {
-            console.error("Error fetching features by store ID:", error);
-            throw error;
-        }
-    },
-};
+const Feature = sequelize.define('Feature', {
+  feature_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  features_name: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+}, {
+  tableName: 'Features',
+  timestamps: false, // Bảng này không có các trường `createdAt`, `updatedAt`
+});
 
-export default feature;
+export default Feature;

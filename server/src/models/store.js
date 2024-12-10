@@ -1,158 +1,85 @@
-import db from "../config/db.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js'; // Import kết nối từ db.js
+import Feature from './feature.js'; // import Feature model
+import FeaturesStore from './feature_store.js'; // import FeaturesStore model
 
-const store = {
-    getAll: async (userId) => {
-        const [rows] = await db.query(`
-            SELECT s.*
-            FROM store s
-            WHERE s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )`, [userId]);
-        return rows;
+const Store = sequelize.define('Store', {
+  store_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true, // Nếu bạn muốn tự động tăng
+    allowNull: false,
+  },
+  logo: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  name: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+  },
+  rate: {
+    type: DataTypes.DECIMAL(2, 1),
+    allowNull: true,
+    validate: {
+      min: 0.0,
+      max: 5.0,
     },
+  },
+  min_price: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  max_price: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  banner: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  style: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  description: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  phone: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
+  address: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  time_open: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
+  time_close: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+  },
+  map: {
+    type: DataTypes.STRING(512),
+    allowNull: true,
+  },
+}, {
+  tableName: 'Store', // Tên bảng trong DB
+  timestamps: false, // Không sử dụng createdAt, updatedAt
+});
+Store.belongsToMany(Feature, {
+    through: FeaturesStore,
+    foreignKey: 'store_id',
+    otherKey: 'feature_id',
+  });
+  
+Feature.belongsToMany(Store, {
+    through: FeaturesStore,
+    foreignKey: 'feature_id',
+    otherKey: 'store_id',
+});
 
-    getById: async (id) => {
-        const [rows] = await db.query(`
-            SELECT * 
-            FROM store s
-            WHERE s.store_id = ? 
-            `, [id]);
-        return rows;
-    },
-
-    getByHighRate: async (userId) => {
-        const [rows] = await db.query(`
-            SELECT * 
-            FROM store s
-            WHERE s.rate >= 4.0
-            AND s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )`, [userId]);
-        return rows;
-    },
-
-    sortByHighRate: async (userId) => {
-        const [rows] = await db.query(`
-            SELECT * 
-            FROM store s
-            WHERE s.rate >= 4.0
-            AND s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )
-            ORDER BY s.rate DESC`, [userId]);
-        return rows;
-    },
-
-    search: async (keyword, userId) => {
-        const [rows] = await db.query(`
-            SELECT * 
-            FROM store s
-            WHERE (s.name LIKE ? OR s.address LIKE ?)
-            AND s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )`, [`%${keyword}%`, `%${keyword}%`, userId]);
-        return rows;
-    },
-
-    filter: async (filters, userId) => {
-        const { min_price, max_price, style, feature } = filters;
-        let query = `
-            SELECT DISTINCT s.* 
-            FROM store s
-            LEFT JOIN Features_store fs ON s.store_id = fs.store_id
-            LEFT JOIN Features f ON fs.feature_id = f.feature_id
-            WHERE 1=1 
-            AND s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )`;
-        const params = [userId];
-
-        if (min_price) {
-            query += " AND s.min_price >= ?";
-            params.push(min_price);
-        }
-        if (max_price) {
-            query += " AND s.max_price <= ?";
-            params.push(max_price);
-        }
-
-        if (style && style.length > 0) {
-            const placeholders = style.map(() => "?").join(", ");
-            query += ` AND s.style IN (${placeholders})`;
-            params.push(...style);
-        }
-
-        if (feature && feature.length > 0) {
-            query += ` AND f.features_name IN (?)`;
-            params.push(feature);
-        }
-
-        const [rows] = await db.query(query, params);
-        return rows;
-    },
-
-    searchAndFilter: async (keyword, filters, sortOption, userId) => {
-        const { min_price, max_price, style, feature } = filters;
-        let query = `
-            SELECT DISTINCT s.* 
-            FROM store s
-            LEFT JOIN Features_store fs ON s.store_id = fs.store_id
-            LEFT JOIN Features f ON fs.feature_id = f.feature_id
-            WHERE (s.name LIKE ? OR s.address LIKE ?)
-            AND s.store_id NOT IN (
-                SELECT bd.store_id
-                FROM Blacklist_detail bd
-                JOIN Blacklist b ON bd.blacklist_id = b.blacklist_id
-                WHERE b.user_id = ?
-            )`;
-
-        const params = [`%${keyword}%`, `%${keyword}%`, userId];
-
-        if (min_price) {
-            query += " AND s.min_price >= ?";
-            params.push(min_price);
-        }
-        if (max_price) {
-            query += " AND s.max_price <= ?";
-            params.push(max_price);
-        }
-        if (style && style.length > 0) {
-            const stylePlaceholders = style.map(() => "?").join(", ");
-            query += ` AND s.style IN (${stylePlaceholders})`;
-            params.push(...style);
-        }
-        if (feature && feature.length > 0) {
-            const featurePlaceholders = feature.map(() => "?").join(", ");
-            query += ` AND f.features_name IN (${featurePlaceholders})`;
-            params.push(...feature);
-        }
-
-        if (sortOption === "highest_rated") {
-            query += " ORDER BY s.rate DESC";
-        } else if (sortOption === "nearest_location") {
-            // Add sorting logic if necessary
-        } else {
-            query += " ORDER BY s.rate DESC"; 
-        }
-
-        const [rows] = await db.query(query, params);
-        return rows;
-    },
-};
-
-export default store;
+export default Store;
