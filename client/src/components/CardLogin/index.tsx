@@ -14,10 +14,41 @@ const CardSignIn: React.FC<CardProps> = ({ children }) => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/");
+  
+    // Extract form data
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
+  
+    // Send POST request to the login endpoint
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+  
+      if (response.ok) {
+        // Handle successful login (e.g., navigate to the home page)
+        navigate("/");
+      } else {
+        // Handle failed login (e.g., show error message)
+        const errorData = await response.json();
+        console.error('Login failed:', errorData);
+        alert('Login failed. Please check your username and password.');
+      }
+    } catch (error) {
+      // Handle network or other unexpected errors
+      console.error('An error occurred:', error);
+      alert('An unexpected error occurred. Please try again later.');
+    }
   };
+  
 
   return (
     <div className="flex justify-center items-center h-screen relative">
@@ -42,6 +73,7 @@ const CardSignIn: React.FC<CardProps> = ({ children }) => {
                 type="text"
                 placeholder="Username"
                 className="border rounded-lg px-4 py-2 w-full"
+                name="username"
                 required
               />
             </div>
@@ -51,6 +83,7 @@ const CardSignIn: React.FC<CardProps> = ({ children }) => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 className="border rounded-lg px-4 py-2 w-full"
+                name="password"
                 required
               />
               <button
