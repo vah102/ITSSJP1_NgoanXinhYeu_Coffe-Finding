@@ -90,14 +90,20 @@ const storeController = {
         }
 
         // Lọc theo các style (nếu có)
-        if (styles && Array.isArray(styles) && styles.length > 0) {
-            whereCondition.style = { [Op.in]: styles };
+        if (styles) {
+          const styleArray = styles.split(',').map(style => style.trim());  // Chuyển thành mảng sau khi split chuỗi
+          whereCondition[Op.or] = [
+              ...(whereCondition[Op.or] || []), // Giữ nguyên các điều kiện đã có
+              { style: { [Op.in]: styleArray } }
+          ];
         }
 
+
         // Lọc theo các tính năng (features_name)
-        let featureCondition = {};
-        if (features && Array.isArray(features) && features.length > 0) {
-            featureCondition = { '$Features.features_name$': { [Op.in]: features } };
+        let featureCondition = null;
+        if (features) {
+            const featureArray = features.split(',').map(feature => feature.trim()); // Chuyển thành mảng sau khi split chuỗi
+            featureCondition = { features_name: { [Op.in]: featureArray } };
         }
 
         // Nếu người dùng đã đăng nhập, lọc bỏ các cửa hàng trong blacklist
