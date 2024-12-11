@@ -3,6 +3,7 @@ const routes = {
     search: '/search',
     login:'/signin',
     signup:'/signup',
+    blacklist:'/blacklist'
 }
 
 export default routes
