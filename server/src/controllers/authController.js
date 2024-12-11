@@ -1,7 +1,7 @@
 import User from '../models/user.js'; // Import User Model
 import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = 'your_jwt_secret_key'; // Thay bằng key thực tế
+const SECRET_KEY = '0de44539cf24170fc1500506fc3376b8e7de9b618a89e57611d7f2fd3b0b591c07ff4b6730f04f89d1df81301ed90a7617145dcebb4765f614f843097f68a6bc'; // Thay bằng key thực tế
 
 const authController = {
   login: async (req, res) => {

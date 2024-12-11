@@ -1,31 +1,27 @@
-import db from "../config/db.js";
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js'; // Import kết nối database
+import Store from './store.js'; // Import Store model
 
-const menu = {
-    getMenuDetailsbyStoreId: async (storeId) => {
-        const query = `
-        SELECT 
-            md.id AS menu_detail_id,
-            md.menu_id,
-            md.dish_name,
-            md.dish_price,
-            md.dish_image,
-            md.description
-        FROM 
-            MenuDetail md
-        INNER JOIN 
-            Menu m ON md.menu_id = m.menu_id
-        WHERE 
-            m.store_id = ?;
-    `;
-    try {
-        const [rows] = await db.query(query, [storeId]);
-        return rows;
-    } catch (error) {
-        console.error('Error fetching MenuDetails:', error);
-        throw error;
-    }
+const Menu = sequelize.define('Menu', {
+  menu_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true, // Tự động tăng
+    allowNull: false,
+  },
+  store_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Store, // Quan hệ với bảng Store
+      key: 'store_id',
     },
-    
-};
+  },
+}, {
+  tableName: 'Menu',
+  timestamps: false, // Không sử dụng các trường createdAt, updatedAt
+});
 
-export default menu;
+// Menu.belongsTo(Store, { foreignKey: 'store_id' }); // Thiết lập quan hệ với Store
+
+export default Menu;

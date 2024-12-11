@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import authRouter from './routers/authRouter.js';
 import homeRouter from './routers/homeRouter.js';
+import StoreDetailsRouter from './routers/StoreDetailsRouter.js';
+import blacklistRouter from './routers/blacklistRouter.js'; 
  // Import middleware xác thực JWT (hoặc từ authController)
 
 // Tạo app Express
@@ -21,7 +23,9 @@ app.use(bodyParser.json())
 
 // Đăng ký các router không yêu cầu xác thực
 app.use('/auth', authRouter);  // Dành cho đăng nhập, không cần authenticate
-app.use('/api/home', homeRouter); 
+app.use('/api/home', homeRouter);
+app.use('/api/store-details', StoreDetailsRouter); 
+app.use('/api/blacklist', blacklistRouter);
 
 
 // Xuất app

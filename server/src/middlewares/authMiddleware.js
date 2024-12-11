@@ -10,17 +10,17 @@ const authMiddleware = (req, res, next) => {
         return res.status(403).json({ message: 'No token provided' });
     }
 
-    // Kiểm tra và xác thực token
     jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
         if (err) {
             return res.status(401).json({ message: 'Invalid or expired token' });
         }
-        // console.log(decoded);
-        // Gắn thông tin người dùng vào request để sử dụng trong các route tiếp theo
-        req.user = decoded;  // decoded chứa { id, username }
-        next();  // Cho phép yêu cầu tiếp tục tới route kế tiếp
+
+        // Log decoded để kiểm tra payload
+        console.log('Decoded JWT:', decoded);
+
+        req.user = decoded;  // Đảm bảo decoded chứa { id, username }
+        next();
     });
 };
-
 
 export default authMiddleware;
