@@ -102,21 +102,46 @@ const storeController = {
 
         // Nếu người dùng đã đăng nhập, lọc bỏ các cửa hàng trong blacklist
         let excludeStoreIds = [];
+        // if (req.user) {
+        //     console.log('User info:', req.user); // Log thông tin người dùng
+
+        //     // Lấy danh sách store_id trong blacklist của user
+        //     const blacklistDetails = await Blacklist_detail.findAll({
+        //         attributes: ['store_id'],
+        //         include: [{
+        //             model: Blacklist,
+        //             where: { user_id: req.user.user_id }, // Chỉ lấy blacklist của user hiện tại
+        //         }],
+        //     });
+
+        //     // Trích xuất store_id để loại trừ
+        //     excludeStoreIds = blacklistDetails.map(detail => detail.store_id);
+        //     console.log('Excluded store IDs:', excludeStoreIds);
+        // }
         if (req.user) {
-            console.log('User info:', req.user); // Log thông tin người dùng
-
-            // Lấy danh sách store_id trong blacklist của user
-            const blacklistDetails = await Blacklist_detail.findAll({
-                attributes: ['store_id'],
-                include: [{
-                    model: Blacklist,
-                    where: { user_id: req.user.user_id }, // Chỉ lấy blacklist của user hiện tại
-                }],
+          // Nếu đã đăng nhập, lọc các cửa hàng không có trong blacklist
+          const blacklist = await Blacklist.findOne({
+            where: {
+              user_id: req.user.user_id, // Giả sử `req.user.user_id` là id người dùng trong JWT
+            },
+          });
+    
+          if (blacklist) {
+            // Tìm danh sách các cửa hàng bị blacklist của người dùng
+            const blacklistedStores = await Blacklist_detail.findAll({
+              where: {
+                blacklist_id: blacklist.blacklist_id,
+              },
+              attributes: ['store_id'],
             });
-
-            // Trích xuất store_id để loại trừ
-            excludeStoreIds = blacklistDetails.map(detail => detail.store_id);
-            console.log('Excluded store IDs:', excludeStoreIds);
+    
+            excludeStoreIds = blacklistedStores.map(entry => entry.store_id);
+    
+            // Thêm điều kiện vào truy vấn để loại bỏ các cửa hàng bị blacklist
+            whereCondition.store_id = {
+              [Op.notIn]:  excludeStoreIds,
+            };
+          }
         }
 
         // Tìm kiếm các cửa hàng theo điều kiện tìm kiếm và lọc

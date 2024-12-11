@@ -82,5 +82,7 @@ Feature.belongsToMany(Store, {
     otherKey: 'store_id',
 });
 
+Store.hasMany(Menu, { foreignKey: 'store_id' });
+
 
 export default Store;
