@@ -7,6 +7,8 @@ import SearchLayout from "../layout/SearchLayout";
 import DefaultLayout from "../layout/DefaultLayout";
 import Login from "../pages/Login";
 import SignUp from "../pages/Signup";
+import StoreDetail from "../pages/StoreDetail";
+import DefaultLayout from "../layout/DefaultLayout";
 
 interface IRoute {
     path: string;
@@ -20,7 +22,7 @@ const publicRoutes : IRoute[] = [
     { path: config.routes.blacklist, component: BlackList, layout: DefaultLayout},
     {path:config.routes.login,component:Login},
     {path:config.routes.signup,component:SignUp},
-    
+    {path:config.routes.storedetail, component: StoreDetail, layout: DefaultLayout }
 ]
 
 export {publicRoutes} 
