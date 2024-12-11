@@ -1,14 +1,18 @@
 import express from 'express';
-
 import storeController from '../controllers/storeController.js';
-import authMiddleware from '../middlewares/authMiddleware.js';
+import userMiddleware from '../middlewares/userMiddleware.js';
+
 const homeRouter = express.Router();
 
+// Lấy danh sách tất cả các cửa hàng
+// homeRouter.get('/stores', storeController.getAllStores);
 
-homeRouter.get('/home', authMiddleware, storeController.getTrendingStores);
-homeRouter.get('/home/sort-rate', authMiddleware, storeController.sortByRate);
-homeRouter.get('/home/search', authMiddleware, storeController.searchStores);
-homeRouter.get('/home/filter', authMiddleware, storeController.filterStores);
-homeRouter.get('/home/search-filter', authMiddleware, storeController.searchAndFilterStores);
+// Lấy danh sách các cửa hàng có rate > 4.0
+homeRouter.get('/stores', userMiddleware, storeController.getStoresByRate);
+
+// Lấy thông tin cửa hàng theo ID
+homeRouter.get('/stores/:id', storeController.getStoreById);
+
+homeRouter.get('/search-filter', userMiddleware,storeController.getStores);
 
 export default homeRouter;

@@ -1,16 +1,12 @@
 import express from 'express';
 
-import menuController from '../controllers/menuController.js';
 import storeController from '../controllers/storeController.js';
-import featureController from '../controllers/featureController.js';
-import blacklistController from '../controllers/blacklistController.js';
-import authMiddleware from '../middlewares/authMiddleware.js';
+import userMiddleware from '../middlewares/userMiddleware.js';
 
 const storeDetailsRouter = express.Router();
 
-storeDetailsRouter.get('/:storeId', storeController.getStoresById);
-storeDetailsRouter.get('/:storeId/menu', menuController.getMenuDetails);
-storeDetailsRouter.get('/:storeId/feature', featureController.getFeaturesByStoreId);
-storeDetailsRouter.post('/:storeId/blacklist', authMiddleware, blacklistController.addStoreToBlacklist);
+// Route: Lấy thông tin chi tiết của Store (bao gồm Menu và Feature)
+// Middleware `userMiddleware` để kiểm tra người dùng đã đăng nhập
+storeDetailsRouter.get('/:store_id', storeController.getStoreDetails);
 
-export default storeDetailsRouter
+export default storeDetailsRouter;
