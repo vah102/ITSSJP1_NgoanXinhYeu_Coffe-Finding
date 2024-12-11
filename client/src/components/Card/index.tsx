@@ -3,12 +3,13 @@ import styles from './Card.module.css'
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import config from '../../config';
 
 const cx = classNames.bind(styles)
 
 type CardProps = {
     item: {
-        _id: string;
+        store_id: string;
         name: string;
         address: string;
         logo: string;
@@ -22,7 +23,7 @@ type CardProps = {
 
 function Card({item} : CardProps) {
     return ( 
-        <Link to="/" className={cx('wrapper')}>
+        <Link to={`/storedetail/${item.store_id}`} className={cx('wrapper')}>
             <div className={cx('card-img')}>
                 <img src={item.logo} alt="coffee" />
             </div>

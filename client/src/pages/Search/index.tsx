@@ -9,7 +9,7 @@ import { useSearchContext } from "../../services/contexts/SearchContext";
 import useFetch from "../../services/hooks/useFetch";
 
 type Store = {
-    _id: string;
+    store_id: string;
     name: string;
     address: string;
     logo: string;
