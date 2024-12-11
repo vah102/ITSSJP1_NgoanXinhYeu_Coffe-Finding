@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 interface CardProps {
   children?: ReactNode;
@@ -23,30 +24,23 @@ const CardSignIn: React.FC<CardProps> = ({ children }) => {
     const username = formData.get('username') as string;
     const password = formData.get('password') as string;
   
-    // Send POST request to the login endpoint
-    try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-  
-      if (response.ok) {
-        // Handle successful login (e.g., navigate to the home page)
-        navigate("/");
-      } else {
-        // Handle failed login (e.g., show error message)
-        const errorData = await response.json();
-        console.error('Login failed:', errorData);
-        alert('Login failed. Please check your username and password.');
-      }
-    } catch (error) {
-      // Handle network or other unexpected errors
-      console.error('An error occurred:', error);
-      alert('An unexpected error occurred. Please try again later.');
-    }
+    fetch('http://localhost:3000/auth/login', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      Cookies.set("token", data.token);
+      navigate("/");
+    })
+    .catch(err => {
+      console.error('Login failed:', err);
+      alert('Login failed. Please check your username and password.')
+    });
   };
   
 

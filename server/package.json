@@ -17,7 +17,8 @@
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.4",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "vite": "^5.4.11"
   },
   "devDependencies": {
     "cors": "^2.8.5",
