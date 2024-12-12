@@ -7,7 +7,7 @@ import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import useFetch from "../../services/hooks/useFetch";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 
 type Store = {
