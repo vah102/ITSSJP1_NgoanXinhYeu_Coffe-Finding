@@ -22,7 +22,6 @@ type Store = {
 
 function SearchPage() {
     const search = useSearchContext();
-    const location = useLocation();
     const navigate = useNavigate();
 
     const [sortOption, setSortOption] = useState("Highest rated");
