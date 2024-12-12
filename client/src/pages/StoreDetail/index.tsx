@@ -19,6 +19,7 @@ import {
 import useFetch from "../../services/hooks/useFetch";
 import Menu from "../../components/Menu";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 type Store = {
   store_id: string;
@@ -82,12 +83,15 @@ function StoreDetail() {
   const menuDetails = data?.Menus?.flatMap((menu) => menu.MenuDetails) || [];
   const Features = data?.Features || [];
   console.log(menuDetails);
+
+  const token = Cookies.get('token');
+
   const API_URL = "http://localhost:3000/api/blacklist/all";
-  const handleBlacklist = async (token: string, storeId: number) => {
+  const handleBlacklist = async () => {
     try {
       const response = await axios.post(
         `${API_URL}/add`,
-        { store_id: storeId },
+        { store_id: store_id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -137,7 +141,17 @@ function StoreDetail() {
       <div className="flex px-16 py-8 space-x-8">
         {/* left */}
         <div className="w-2/3 space-y-8">
-          <button className="flex items-center space-x-2 px-4 py-2 bg-white rounded">
+          <button
+            className={`flex items-center space-x-2 px-4 py-2 rounded ${
+              isBlacklisted
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-white hover:bg-gray-200"
+            }`}
+            onClick={() => {
+              isBlacklisted ? undefined : handleBlacklist();
+            }}
+            disabled={isBlacklisted}
+          >
             <FontAwesomeIcon icon={faBan} />
             <span>Blacklist</span>
           </button>
