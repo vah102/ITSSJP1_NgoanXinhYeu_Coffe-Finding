@@ -18,8 +18,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useFetch from "../../services/hooks/useFetch";
 import Menu from "../../components/Menu";
-import axios from "axios";
-import Cookies from 'js-cookie';
+import axios, { AxiosError } from "axios";
+import Cookies from "js-cookie";
 
 type Store = {
   store_id: string;
@@ -80,29 +80,49 @@ function StoreDetail() {
   const { data, loading } = useFetch<Store>(
     `http://localhost:3000/api/store-details/${store_id}`
   );
+  const [isBlacklisted, setIsBlacklisted] = useState(false);
+
   const menuDetails = data?.Menus?.flatMap((menu) => menu.MenuDetails) || [];
   const Features = data?.Features || [];
   console.log(menuDetails);
 
-  const token = Cookies.get('token');
+  const token = Cookies.get("token");
 
-  const API_URL = "http://localhost:3000/api/blacklist/all";
+  const API_URL = "http://localhost:3000/api/blacklist";
   const handleBlacklist = async () => {
     try {
       const response = await axios.post(
         `${API_URL}/add`,
         { store_id: store_id },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true,
         }
       );
+      setIsBlacklisted(true);
       return response.data; // Trả về dữ liệu blacklist detail mới được thêm
     } catch (error) {
       throw new Error("Failed to add store to blacklist");
     }
   };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/api/blacklist/all`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        response.data.Blacklist_details.forEach((item: any) => {
+          if (item.store_id === store_id) {
+            setIsBlacklisted(true);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching blacklist details:", error);
+      });
+  }, [store_id, token]);
+
   return (
     <div className="">
       <div className="w-full h-[320px] overflow-hidden relative">
@@ -116,7 +136,7 @@ function StoreDetail() {
         {/* Nội dung */}
         <div className="relative w-[480px] min-w-96 z-10 flex items-end h-full p-16 ml-24">
           {/* Container bọc thông tin */}
-          <div className="h-64 bg-white p-6 rounded-lg shadow-lg flex items-center">
+          <div className="h-64 bg-white p-6 rounded-lg shadow-lg flex items-center w-[1000px]">
             {/* Logo */}
             <div className="flex-shrink-0 w-48 h-48 rounded-full overflow-hidden border-2 border-gray-300 mr-6">
               <img src={data?.logo} className="object-cover w-full h-full" />
@@ -143,14 +163,11 @@ function StoreDetail() {
         <div className="w-2/3 space-y-8">
           <button
             className={`flex items-center space-x-2 px-4 py-2 rounded ${
-              isBlacklisted
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-white hover:bg-gray-200"
+              isBlacklisted ? "bg-gray-300 cursor-not-allowed" : "bg-gray-300"
             }`}
             onClick={() => {
-              isBlacklisted ? undefined : handleBlacklist();
+              handleBlacklist();
             }}
-            disabled={isBlacklisted}
           >
             <FontAwesomeIcon icon={faBan} />
             <span>Blacklist</span>
@@ -158,10 +175,10 @@ function StoreDetail() {
           {/* Menu */}
           <div className="bg-white p-6 rounded shadow">
             <h2 className="text-2xl font-bold mb-4">Menu</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 h-108">
               {menuDetails &&
                 menuDetails.map((item, index) => (
-                  <div>
+                  <div className="">
                     <Menu key={index} item={item} />
                   </div>
                 ))}
@@ -244,15 +261,15 @@ function StoreDetail() {
         </div>
         {/* right */}
         {/* Right Column */}
-        <div className="w-1/3 h-full flex flex-col space-y-8 bg-[#F6F7F1] stickey top-32 mb-6 ">
+        <div className="w-1/3 h-full flex flex-col space-y-8 bg-[#F6F7F1] stickey top-32 mb-6 gap-4 p-4 ">
           {/* Description */}
-          <div className="bg-white p-6 m-6">
+          <div className="bg-white p-6">
             <p className="flex items-center space-x-2">
               <span> {data?.description}</span>
             </p>
           </div>
           {/* Contact Info */}
-          <div className="bg-white p-6 mr-6 ml-6">
+          <div className="bg-white p-6">
             <p className="flex items-center space-x-2">
               <FontAwesomeIcon icon={faPhone} />
               <span>{data?.phone}</span>
@@ -260,7 +277,7 @@ function StoreDetail() {
           </div>
 
           {/* Map */}
-          <div className="bg-white p-6 m-6">
+          <div className="bg-white p-6">
             <p className="flex items-center space-x-2 mt-2">
               <FontAwesomeIcon icon={faMapMarkerAlt} />
               <span>{data?.address}</span>

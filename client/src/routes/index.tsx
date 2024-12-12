@@ -8,21 +8,28 @@ import DefaultLayout from "../layout/DefaultLayout";
 import Login from "../pages/Login";
 import SignUp from "../pages/Signup";
 import StoreDetail from "../pages/StoreDetail";
-import DefaultLayout from "../layout/DefaultLayout";
 
 interface IRoute {
-    path: string;
-    component: ComponentType<any>;
-    layout?: ComponentType<any>
+  path: string;
+  component: ComponentType<any>;
+  layout?: ComponentType<any>;
 }
 
-const publicRoutes : IRoute[] = [
-    { path: config.routes.home, component: Home, layout: SearchLayout},
-    { path: config.routes.search, component: Search, layout: SearchLayout},
-    { path: config.routes.blacklist, component: BlackList, layout: DefaultLayout},
-    {path:config.routes.login,component:Login},
-    {path:config.routes.signup,component:SignUp},
-    {path:config.routes.storedetail, component: StoreDetail, layout: DefaultLayout }
-]
+const publicRoutes: IRoute[] = [
+  { path: config.routes.home, component: Home, layout: SearchLayout },
+  { path: config.routes.search, component: Search, layout: SearchLayout },
+  {
+    path: config.routes.blacklist,
+    component: BlackList,
+    layout: DefaultLayout,
+  },
+  { path: config.routes.login, component: Login },
+  { path: config.routes.signup, component: SignUp },
+  {
+    path: config.routes.storedetail,
+    component: StoreDetail,
+    layout: DefaultLayout,
+  },
+];
 
-export {publicRoutes} 
+export { publicRoutes };

@@ -14,7 +14,7 @@ function Menu({ item }: MenuProps) {
       <img
         src={item.dish_image}
         alt="Menu Item"
-        className="w-full h-32 object-cover mb-2"
+        className="w-full h-84 object-cover mb-2"
       />
       <div className="flex justify-between items-center mb-1">
         <h3 className="text-3xl font-semibold">{item.dish_name}</h3>
