@@ -261,7 +261,7 @@ function StoreDetail() {
         </div>
         {/* right */}
         {/* Right Column */}
-        <div className="w-1/3 h-full flex flex-col space-y-8 bg-[#F6F7F1] stickey top-32 mb-6 gap-4 p-4 ">
+        <div className="w-1/3 h-full flex flex-col space-y-8 bg-[#F6F7F1] sticky top-32 mb-6 gap-4 p-4 ">
           {/* Description */}
           <div className="bg-white p-6">
             <p className="flex items-center space-x-2">
