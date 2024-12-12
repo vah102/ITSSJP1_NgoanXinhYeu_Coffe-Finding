@@ -1,8 +1,8 @@
 import { ComponentType } from "react";
 import config from "../config";
 import Home from "../pages/Home";
-import Search from "../pages/Search";
 import BlackList from "../pages/BlackList";
+import SearchPage from "../pages/SearchPage";
 import SearchLayout from "../layout/SearchLayout";
 import DefaultLayout from "../layout/DefaultLayout";
 import Login from "../pages/Login";
@@ -16,7 +16,7 @@ interface IRoute {
 
 const publicRoutes : IRoute[] = [
     { path: config.routes.home, component: Home, layout: SearchLayout},
-    { path: config.routes.search, component: Search, layout: SearchLayout},
+    { path: config.routes.search, component: SearchPage, layout: SearchLayout},
     { path: config.routes.blacklist, component: BlackList, layout: DefaultLayout},
     {path:config.routes.login,component:Login},
     {path:config.routes.signup,component:SignUp},

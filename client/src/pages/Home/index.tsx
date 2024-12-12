@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import useFetch from "../../services/hooks/useFetch";
-import { useSearchContext } from "../../services/contexts/SearchContext";
+import Pagination from "../../components/Pagination";
 
 type Store = {
     _id: string;
@@ -19,8 +19,6 @@ type Store = {
 };
 
 function Home() {
-    const search = useSearchContext();
-
     const [sortOption, setSortOption] = useState("Highest rated");
     const [visible, setVisible] = useState(false);
 
@@ -29,10 +27,25 @@ function Home() {
     };
 
     const { data, loading } = useFetch<Store[]>(
-        `http://localhost:3000/api/home/sort-rate`
+        `http://localhost:3000/api/home/stores`,
     );
+    console.log(data)
 
-    console.log(data);
+
+    const itemsPerPage = 8;
+    const [currentPage, setCurrentPage] = useState(0);
+
+    // Tính toán dữ liệu hiển thị
+    const offset = currentPage * itemsPerPage;
+    const currentItems = data && data.slice(offset, offset + itemsPerPage);
+    const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 1;
+
+    console.log(currentItems);
+
+    // Hàm xử lý khi chuyển trang
+    const handlePageClick = (event: { selected: number }) => {
+        setCurrentPage(event.selected);
+    };
 
     return (
         <div className="w-full">
@@ -48,7 +61,7 @@ function Home() {
                             <Popper>
                                 <PopperItem
                                     onClick={() => {
-                                        search.saveSortValues("highest_rated");
+                                        // search.saveSortValues("highest_rated");
                                         handleToggleSort();
                                     }}
                                 >
@@ -79,13 +92,13 @@ function Home() {
                 "Loading please wait"
             ) : (
                 <div className="p-10 flex flex-wrap gap-10">
-                    {data &&
-                        data.map((item, index) => (
-                            <Card key={index} item={item} />
+                    {currentItems &&
+                        currentItems.map((item) => (
+                            <Card key={item._id} item={item} />
                         ))}
                 </div>
             )}
-            {/* <Pagination/> */}
+            <Pagination pages={pageCount} onPageChange={handlePageClick} />
         </div>
     );
 }

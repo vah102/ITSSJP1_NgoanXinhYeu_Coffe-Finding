@@ -1,5 +1,5 @@
 import Tippy from "@tippyjs/react/headless";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Popper from "../../components/Popper";
 import PopperItem from "../../components/PopperItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,8 @@ import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import useFetch from "../../services/hooks/useFetch";
+import { useLocation, useNavigate } from "react-router-dom";
+import Pagination from "../../components/Pagination";
 
 type Store = {
     _id: string;
@@ -18,31 +20,36 @@ type Store = {
     rate: number;
 };
 
-function Search() {
+function SearchPage() {
     const search = useSearchContext();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const [sortOption, setSortOption] = useState("Highest rated");
     const [visible, setVisible] = useState(false);
 
-    const queryParams = new URLSearchParams();
-    queryParams.append("keyword", search.keyword || "");
+    // Đồng bộ hóa queryParam khi state thay đổi
+    useEffect(() => {
+        const params = new URLSearchParams();
 
-    queryParams.append("sortOption", search.sort || "");
-    queryParams.append("min_price", search.price.min_price.toString() || "");
-    queryParams.append(
-        "max_price",
-        search.price.max_price !== Infinity
-            ? search.price.max_price.toString()
-            : ""
-    );
+        if (search.keyword) params.set("searchTerm", search.keyword);
+        // if (search.sort) params.set("sort", search.sort);
+        if (search.styles.length > 0) params.set("styles", search.styles.join(","));
+        if (search.features.length > 0) params.set("features", search.features.join(","));
+        if (search.price.min_price !== undefined)
+            params.set("minPrice", search.price.min_price.toString());
+        if (search.price.max_price !== undefined && search.price.max_price !== Infinity) {
+            params.set("maxPrice", search.price.max_price.toString());
+        }
 
-    queryParams.append("style", search.styles.join(","));
-    queryParams.append("feature", search.features.join(","));
+        search.saveQueryParam(params.toString());
+        navigate(`/search?${search.queryParam}`);
+    }, [search]);
 
-    console.log(`http://localhost:3000/api/home/search-filter?${queryParams}`);
+    console.log(`http://localhost:3000/api/home/search-filter?${search.queryParam}`);
 
     const { data, loading } = useFetch<Store[]>(
-        `http://localhost:3000/api/home/search-filter?${queryParams}`
+        `http://localhost:3000/api/home/search-filter?${search.queryParam}`
     );
     // console.log(data)
 
@@ -50,10 +57,31 @@ function Search() {
         setVisible(!visible);
     };
 
+    const itemsPerPage = 8;
+    const [currentPage, setCurrentPage] = useState(0);
+
+    // Tính toán dữ liệu hiển thị
+    const offset = currentPage * itemsPerPage;
+    const currentItems = data && data.slice(offset, offset + itemsPerPage);
+    const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 1;
+
+    console.log(currentItems);
+
+    // Hàm xử lý khi chuyển trang
+    const handlePageClick = (event: { selected: number }) => {
+        setCurrentPage(event.selected);
+    };
+
     return (
         <div className="w-full">
             <div className="w-full flex flex-row justify-between ">
-                <h2 className="text-4xl font-bold">Trending this week</h2>
+                {loading ? (
+                    <h2 className="text-4xl font-bold">No item founded</h2>
+                ) : (
+                    <h2 className="text-4xl font-bold">
+                        Result : {data && data.length} items founded
+                    </h2>
+                )}
                 <Tippy
                     visible={visible}
                     onClickOutside={() => setVisible(false)}
@@ -64,7 +92,7 @@ function Search() {
                             <Popper>
                                 <PopperItem
                                     onClick={() => {
-                                        search.saveSortValues("highest_rated");
+                                        // search.saveSortValues("highest_rated");
                                         handleToggleSort();
                                     }}
                                 >
@@ -95,15 +123,15 @@ function Search() {
                 "Loading please wait"
             ) : (
                 <div className="p-10 flex flex-wrap gap-10">
-                    {data &&
-                        data.map((item, index) => (
-                            <Card key={index} item={item} />
+                    {currentItems &&
+                        currentItems.map((item) => (
+                            <Card key={item._id} item={item} />
                         ))}
                 </div>
             )}
-            {/* <Pagination/> */}
+            <Pagination pages={pageCount} onPageChange={handlePageClick} />
         </div>
     );
 }
 
-export default Search;
+export default SearchPage;

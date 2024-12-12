@@ -36,7 +36,7 @@ function Filter() {
                 ? [...prevStyles, style]
                 : prevStyles.filter((prevStyle) => prevStyle !== style)
         );
-        navigate("/search")
+        navigate("/search");
     };
 
     const handleFeaturesChange = (
@@ -49,7 +49,7 @@ function Filter() {
                 ? [...prevFeatures, feature]
                 : prevFeatures.filter((item) => item !== feature)
         );
-        navigate("/search")
+        navigate("/search");
     };
 
     const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,7 @@ function Filter() {
         };
         console.log(price);
         setSelectedPrice(price);
-        navigate("/search")
+        navigate("/search");
     };
 
     const handleClearFilter = () => {

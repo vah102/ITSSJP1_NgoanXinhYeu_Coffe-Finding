@@ -2,18 +2,20 @@ import React, { useContext, useState } from "react";
 
 type SearchContext = {
     keyword: string;
-    sort: string;
+    // sort: string;
     styles: string[];
     features: string[];
     price: {
         min_price: number;
         max_price: number;
     };
+    queryParam: string;
     saveSearchValues: (keyword: string) => void;
-    saveSortValues: (sort: string) => void;
+    // saveSortValues: (sort: string) => void;
     saveStyleValues: (styles: string[]) => void;
-    saveFeatureValues: (feature: string[]) => void;
+    saveFeatureValues: (features: string[]) => void;
     savePriceValues: (price: { min_price: number; max_price: number }) => void;
+    saveQueryParam: (queryParam: string) => void;
 };
 
 const SearchContext = React.createContext<SearchContext | undefined>(undefined);
@@ -26,21 +28,28 @@ export const SearchContextProvider = ({
     children,
 }: SearchContextProviderProps) => {
     const [keyword, setKeyword] = useState<string>("");
-    const [sort, setSort] = useState<string>("highest_rated");
+    // const [sort, setSort] = useState<string>("highest_rated");
     const [styles, setStyles] = useState<string[]>([]);
     const [features, setFeatures] = useState<string[]>([]);
-    const [price, setPrice] = useState<{ min_price: number; max_price: number }>({
+    const [price, setPrice] = useState<{
+        min_price: number;
+        max_price: number;
+    }>({
         min_price: 0,
         max_price: 100000,
     });
+
+    const [queryParam, setQueryParam] = useState<string>("");
+
+    
 
     const saveSearchValues = (keyword: string) => {
         setKeyword(keyword);
     };
 
-    const saveSortValues = (sort: string) => {
-        setSort(sort);
-    };
+    // const saveSortValues = (sort: string) => {
+    //     setSort(sort);
+    // };
 
     const saveStyleValues = (styles: string[]) => {
         setStyles(styles);
@@ -50,23 +59,32 @@ export const SearchContextProvider = ({
         setFeatures(features);
     };
 
-    const savePriceValues = (price: { min_price: number; max_price: number }) => {
+    const savePriceValues = (price: {
+        min_price: number;
+        max_price: number;
+    }) => {
         setPrice(price);
+    };
+
+    const saveQueryParam = (queryParam: string) => {
+        setQueryParam(queryParam);
     };
 
     return (
         <SearchContext.Provider
             value={{
                 keyword,
-                sort,
+                // sort,
                 styles,
                 features,
                 price,
+                queryParam,
                 saveSearchValues,
-                saveSortValues,
+                // saveSortValues,
                 saveStyleValues,
                 saveFeatureValues,
                 savePriceValues,
+                saveQueryParam,
             }}
         >
             {children}

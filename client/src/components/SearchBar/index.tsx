@@ -17,7 +17,7 @@ function SearchBar() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         search.saveSearchValues(keyword);
-        navigate("/search");
+        navigate(`/search?${search.queryParam}`);
     };
 
     useEffect(() => {

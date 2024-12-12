@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
 
+axios.defaults.withCredentials = true; // Bật chế độ gửi cookie
+
 const useFetch = <T,>(url: string) => {
     const [data, setData] = useState<T>();
     const [loading, setLoading] = useState<boolean>(false);
@@ -10,7 +12,9 @@ const useFetch = <T,>(url: string) => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const res = await axios.get<T>(url);
+                const res = await axios.get<T>(url, {
+                    withCredentials: true, // Gửi kèm cookie
+                });
                 setData(res.data);
             } catch (err: any) {
                 setError(err);
@@ -23,7 +27,9 @@ const useFetch = <T,>(url: string) => {
     const reFetch = async () => {
         setLoading(true);
         try {
-            const res = await axios.get<T>(url);
+            const res = await axios.get<T>(url, {
+                withCredentials: true, // Gửi kèm cookie
+            });
             setData(res.data);
         } catch (err: any) {
             setError(err);

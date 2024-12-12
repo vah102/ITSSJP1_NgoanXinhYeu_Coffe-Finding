@@ -6,4 +6,4 @@ const routes = {
     blacklist:'/blacklist'
 }
 
-export default routes
+export default routes;

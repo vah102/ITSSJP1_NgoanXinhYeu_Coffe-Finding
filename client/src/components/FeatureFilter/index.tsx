@@ -5,7 +5,7 @@ type Props = {
 
 const features = [
     "Free Wifi",
-    "Pree Parking",
+    "Free Parking",
     "Air Conditioner",
     "Power Outlet",
     "Smoking Room",
