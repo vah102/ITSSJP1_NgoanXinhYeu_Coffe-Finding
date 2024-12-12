@@ -2,21 +2,22 @@
 import React, { useEffect, useState } from 'react';
 import { getUserBlacklist, addStoreToBlacklist, removeStoreFromBlacklist } from '../../services/contexts/BlackList';
 import CardBlackList from '../../components/CardBlackList'; // 
-
+import Cookies from 'js-cookie';
 
 const Blacklist: React.FC = () => {
   const [blacklist, setBlacklist] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const token = localStorage.getItem('token'); 
+  const token = Cookies.get('token'); 
 
   useEffect(() => {
     if (!token) {
-      setError('No token found. Please login.');
+      setError('No token found. Please login pls pls pls.');
       setLoading(false);
       return;
     }
+    console.log(token);
 
     // Lấy dữ liệu blacklist khi component load
     const fetchBlacklist = async () => {
@@ -31,7 +32,7 @@ const Blacklist: React.FC = () => {
     };
 
     fetchBlacklist();
-  }, [token]);
+  }, []);
 
   const handleAddStore = async (storeId: number) => {
     if (!token) {

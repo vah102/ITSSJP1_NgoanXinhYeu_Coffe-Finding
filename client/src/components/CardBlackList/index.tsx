@@ -25,7 +25,7 @@ const CardBlackList: React.FC<CafeCardProps> = ({
       </div>
       <div className="card-right">
         <div className="cafe-name">{name}</div>
-        <div className="rating-stars">⭐ {rate.toFixed(1)} / 5</div>
+        <div className="rating-stars">⭐ {rate} / 5</div>
         <div className="info-row">
           <span className="info"><b>Thời gian mở cửa:</b> {time_open}</span>
         </div>

@@ -12,10 +12,15 @@ import sequelize from './config/db.js';
 // Tạo app Express
 const app = express();
 
+const corsOptions = {
+    origin: 'http://localhost:5173', // Frontend URL
+    credentials: true, // Cho phép gửi cookie
+  };
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 

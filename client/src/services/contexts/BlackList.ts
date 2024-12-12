@@ -8,10 +8,8 @@ const API_URL = 'http://localhost:3000/api/blacklist/all';
 // Lấy dữ liệu blacklist của người dùng
 export const getUserBlacklist = async (token: string) => {
   try {
-    const response = await axios.get(`${API_URL}/user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await axios.get(`${API_URL}`, {
+      withCredentials: true,
     });
     return response.data; // Trả về dữ liệu blacklist
   } catch (error) {
