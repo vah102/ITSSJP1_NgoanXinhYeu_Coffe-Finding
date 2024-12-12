@@ -77,7 +77,7 @@ const Blacklist: React.FC = () => {
           <div key={store.store_id}>
             {/* Hiển thị thông tin của store trong blacklist bằng CardBlackList */}
             <CardBlackList
-              avatar={store.Store.avatar}
+              avatar={store.Store.logo}
               name={store.Store.name}
               rate={store.Store.rate}
               time_open={store.Store.time_open}
