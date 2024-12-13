@@ -1,5 +1,8 @@
+// src/components/CardBlackList.tsx
 import React from "react";
 import "./CardBlackList.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
 
 interface CafeCardProps {
   avatar: string;
@@ -8,6 +11,8 @@ interface CafeCardProps {
   time_open: string;
   style: string;
   address: string;
+  store_id: number; // Nhận thêm store_id
+  handleRemoveStore: (storeId: number) => void; // Hàm xử lý xóa
 }
 
 const CardBlackList: React.FC<CafeCardProps> = ({
@@ -17,6 +22,8 @@ const CardBlackList: React.FC<CafeCardProps> = ({
   time_open,
   style,
   address,
+  store_id,
+  handleRemoveStore,
 }) => {
   return (
     <div className="card">
@@ -24,7 +31,14 @@ const CardBlackList: React.FC<CafeCardProps> = ({
         <img src={avatar} className="profile-pic" />
       </div>
       <div className="card-right">
-        <div className="cafe-name">{name}</div>
+        <div className="cafe-name">
+          {name}
+          <FontAwesomeIcon 
+            icon={faBan} 
+            className="ban-icon" 
+            onClick={() => handleRemoveStore(store_id)} // Kích hoạt hàm xử lý
+          />
+        </div>
         <div className="rating-stars">⭐ {rate} / 5</div>
         <div className="info-row">
           <span className="info"><b>Time open:</b> {time_open}</span>

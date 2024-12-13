@@ -1,7 +1,7 @@
 // src/pages/BlacklistPage.tsx
 import React, { useEffect, useState } from 'react';
-import { getUserBlacklist, addStoreToBlacklist, removeStoreFromBlacklist } from '../../services/contexts/BlackList';
-import CardBlackList from '../../components/CardBlackList'; // 
+import { getUserBlacklist, removeStoreFromBlacklist } from '../../services/contexts/BlackList';
+import CardBlackList from '../../components/CardBlackList'; // Import CardBlackList
 import Cookies from 'js-cookie';
 
 const Blacklist: React.FC = () => {
@@ -9,20 +9,18 @@ const Blacklist: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const token = Cookies.get('token'); 
+  const token = Cookies.get('token'); // Lấy token từ cookie
 
   useEffect(() => {
     if (!token) {
-      setError('No token found. Please login pls pls pls.');
+      setError('No token found. Please login.');
       setLoading(false);
       return;
     }
-    console.log(token);
 
-    // Lấy dữ liệu blacklist khi component load
     const fetchBlacklist = async () => {
       try {
-        const data = await getUserBlacklist(token); // Gọi service để lấy dữ liệu
+        const data = await getUserBlacklist(token);
         setBlacklist(data);
         setLoading(false);
       } catch (err) {
@@ -32,23 +30,7 @@ const Blacklist: React.FC = () => {
     };
 
     fetchBlacklist();
-  }, []);
-
-  const handleAddStore = async (storeId: number) => {
-    if (!token) {
-      setError('No token found. Please login.');
-      return;
-    }
-    try {
-      const result = await addStoreToBlacklist(token, storeId);
-      setBlacklist((prev: any) => ({
-        ...prev,
-        Blacklist_details: [...prev.Blacklist_details, result.blacklistDetail],
-      }));
-    } catch (err) {
-      setError('Failed to add store to blacklist');
-    }
-  };
+  }, [token]);
 
   const handleRemoveStore = async (storeId: number) => {
     if (!token) {
@@ -71,11 +53,10 @@ const Blacklist: React.FC = () => {
 
   return (
     <div>
-      <h1>Your Blacklist</h1>
+    <h1 className="text-4xl font-bold">Your Blacklist</h1>
       <div>
         {blacklist?.Blacklist_details?.map((store: any) => (
           <div key={store.store_id}>
-            {/* Hiển thị thông tin của store trong blacklist bằng CardBlackList */}
             <CardBlackList
               avatar={store.Store.logo}
               name={store.Store.name}
@@ -83,15 +64,14 @@ const Blacklist: React.FC = () => {
               time_open={store.Store.time_open}
               style={store.Store.style}
               address={store.Store.address}
+              store_id={store.store_id} // Truyền store_id xuống
+              handleRemoveStore={handleRemoveStore} // Truyền hàm xử lý xuống
             />
-            <button onClick={() => handleRemoveStore(store.store_id)}>Remove from blacklist</button>
           </div>
         ))}
       </div>
-      <button onClick={() => handleAddStore(123)}>Add Store to Blacklist</button> {/* Example store ID */}
     </div>
   );
 };
 
 export default Blacklist;
-
