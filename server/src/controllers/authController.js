@@ -33,6 +33,48 @@ const authController = {
       return res.status(500).json({ message: 'Internal server error' });
     }
   },
+  // Đăng ký
+  register: async (req, res) => {
+    const { username, password, email } = req.body;
+
+    try {
+      // Kiểm tra xem username đã tồn tại chưa
+      const existingUser = await User.findOne({
+        where: { username },
+      });
+
+      if (existingUser) {
+        return res.status(400).json({ message: 'Username already exists' });
+      }
+
+      // Tạo người dùng mới
+      const newUser = await User.create({
+        username,
+        gmail: email,
+        password,
+      });
+
+      // Tạo JWT token
+      const token = jwt.sign(
+        { user_id: newUser.user_id, username: newUser.username },
+        SECRET_KEY,
+        { expiresIn: '1h' }
+      );
+
+      res.cookie('token', token);
+      return res.status(201).json({ message: 'Registration successful', token });
+    } catch (error) {
+      console.error('Register error:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+  // Logout
+  logout: (req, res) => {
+    // Xóa token khỏi cookie
+    res.clearCookie('token');
+
+    return res.status(200).json({ message: 'Logout successful' });
+  },
 };
 
 export default authController;

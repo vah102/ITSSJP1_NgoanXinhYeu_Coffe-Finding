@@ -6,6 +6,7 @@ import authRouter from './routers/authRouter.js';
 import homeRouter from './routers/homeRouter.js';
 import StoreDetailsRouter from './routers/StoreDetailsRouter.js';
 import blacklistRouter from './routers/blacklistRouter.js'; 
+import userRouter from './routers/userRouter.js';
 import sequelize from './config/db.js';
  // Import middleware xác thực JWT (hoặc từ authController)
 
@@ -33,6 +34,7 @@ app.use('/auth', authRouter);  // Dành cho đăng nhập, không cần authenti
 app.use('/api/home', homeRouter);
 app.use('/api/store-details', StoreDetailsRouter); 
 app.use('/api/blacklist', blacklistRouter);
+app.use('/api/user', userRouter); // Dành cho user, cần authenticate
 
 sequelize.authenticate().then(() => {
     console.log('Connection success!');
