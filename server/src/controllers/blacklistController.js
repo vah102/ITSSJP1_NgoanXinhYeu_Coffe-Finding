@@ -38,44 +38,53 @@ const blacklistController = {
         try {
             const { user_id } = req.user; // Lấy user_id từ token trong req.user
             const { store_id } = req.body; // Lấy store_id từ request body
-
+    
             if (!store_id) {
                 return res.status(400).json({ message: 'Store ID is required' });
             }
-
+    
             // Tìm blacklist của user dựa trên user_id
             let blacklist = await Blacklist.findOne({
                 where: { user_id: user_id },
             });
-
-            console.log('Blacklist:', blacklist); // In ra để kiểm tra blacklist tìm thấy
-
+    
             if (!blacklist) {
                 // Nếu blacklist chưa tồn tại, tạo mới một blacklist
                 blacklist = await Blacklist.create({
                     user_id: user_id,
                 });
-
-                console.log('Created new blacklist with ID:', blacklist.blacklist_id); // In ra ID của blacklist vừa tạo
             }
-
+    
             // Kiểm tra lại giá trị blacklist.blacklist_id
             if (!blacklist.blacklist_id) {
                 return res.status(500).json({ message: 'Failed to retrieve blacklist ID' });
             }
-
-            // Thêm store vào blacklist_detail với blacklist_id
+    
+            // Kiểm tra store_id đã tồn tại trong blacklist_detail chưa
+            const existingEntry = await Blacklist_detail.findOne({
+                where: {
+                    blacklist_id: blacklist.blacklist_id,
+                    store_id: store_id,
+                },
+            });
+    
+            if (existingEntry) {
+                return res.status(409).json({ message: 'Store is already in the blacklist' });
+            }
+    
+            // Thêm store vào blacklist_detail
             const blacklistDetail = await Blacklist_detail.create({
                 blacklist_id: blacklist.blacklist_id,  // Sử dụng blacklist.blacklist_id
                 store_id: store_id,
             });
-
+    
             res.status(201).json({ message: 'Store added to blacklist successfully', blacklistDetail });
         } catch (error) {
             console.error('Error adding store to blacklist:', error);
             res.status(500).json({ message: 'Error adding store to blacklist' });
         }
     },
+    
      // Hàm xóa store khỏi blacklist của người dùng
      removeStoreFromBlacklist: async (req, res) => {
         try {
