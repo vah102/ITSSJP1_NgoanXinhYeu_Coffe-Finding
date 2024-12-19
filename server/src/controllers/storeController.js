@@ -6,6 +6,8 @@ import Blacklist from '../models/blacklist.js';
 import Blacklist_detail from '../models/blacklist_detail.js';
 import Menu from '../models/menu.js';
 import MenuDetail from '../models/menu_detail.js';
+import Review from '../models/review.js';
+import User from '../models/user.js';
 
 const storeController = {
   // Lấy danh sách tất cả các cửa hàng
@@ -213,6 +215,16 @@ const storeController = {
               {
                 model: MenuDetail, // Kết nối với bảng MenuDetail qua Menu
                 attributes: ['id', 'dish_name', 'dish_price', 'dish_image', 'description'], // Chọn các trường cần thiết
+              },
+            ],
+          },
+          {
+            model: Review, // Kết nối với bảng Review
+            attributes: ['id', 'user_id', 'rate', 'comment', 'image'], // Chọn các trường cần thiết
+            include: [
+              {
+                model: User, // Bao gồm thông tin user viết review (nếu cần)
+                attributes: ['username', 'avatar'], // Chọn các trường từ User
               },
             ],
           },
