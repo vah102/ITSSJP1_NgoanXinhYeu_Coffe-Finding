@@ -9,7 +9,7 @@ import useFetch from "../../services/hooks/useFetch";
 import Pagination from "../../components/Pagination";
 
 type Store = {
-    _id: string;
+    store_id: string;
     name: string;
     address: string;
     logo: string;
@@ -94,7 +94,7 @@ function Home() {
                 <div className="p-10 flex flex-wrap gap-10">
                     {currentItems &&
                         currentItems.map((item) => (
-                            <Card key={item._id} item={item} />
+                            <Card key={item.store_id} item={item} />
                         ))}
                 </div>
             )}

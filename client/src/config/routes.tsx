@@ -3,7 +3,8 @@ const routes = {
     search: '/search',
     login:'/signin',
     signup:'/signup',
-    blacklist:'/blacklist'
+    blacklist:'/blacklist',
+    storedetail: '/storedetail/:store_id',
 }
 
 export default routes;

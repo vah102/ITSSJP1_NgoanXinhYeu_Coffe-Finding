@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 type CardProps = {
     item: {
-        _id: string;
+        store_id: string;
         name: string;
         address: string;
         logo: string;
@@ -32,7 +32,7 @@ function Card({ item }: CardProps) {
     }, [item]);
 
     return (
-        <Link to="/" className={cx('wrapper')}>
+        <Link to={`/storedetail/${item.store_id}`} className={cx('wrapper')}>
             <div className={cx('card-img')}>
                 <img 
                     src={imageSrc} 
