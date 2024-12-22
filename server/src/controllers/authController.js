@@ -35,7 +35,7 @@ const authController = {
   },
   // Đăng ký
   register: async (req, res) => {
-    const { username, password, email } = req.body;
+    const { username, password, gmail } = req.body; 
 
     try {
       // Kiểm tra xem username đã tồn tại chưa
@@ -50,7 +50,7 @@ const authController = {
       // Tạo người dùng mới
       const newUser = await User.create({
         username,
-        gmail: email,
+        gmail, 
         password,
       });
 
@@ -78,4 +78,3 @@ const authController = {
 };
 
 export default authController;
-
