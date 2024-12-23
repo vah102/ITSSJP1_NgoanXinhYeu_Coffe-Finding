@@ -5,7 +5,7 @@ import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import config from "../../config";
 import { useSearchContext } from "../../services/contexts/SearchContext";
-
+import Location from "../Location";
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -18,7 +18,7 @@ function Header() {
 
     return (
         <div className={cx("wrapper")}>
-            <div className="h-28 w-full">
+            <div className="h-[12rem] w-full">
                 <img
                     src={import.meta.env.BASE_URL + "bg.png"}
                     alt=""
@@ -37,7 +37,10 @@ function Header() {
                         <h1 className="font-bold text-6xl">FiCofe</h1>
                     </div>
                 </Link>
-                <SearchBar />
+                <div className="flex flex-col items-center gap-3">
+                    <Location />
+                    <SearchBar />
+                </div>
                 <div className="flex">
                     <Button to="/signin">
                         <span className="text-white">Login</span>
