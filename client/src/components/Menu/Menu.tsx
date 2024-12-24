@@ -24,7 +24,7 @@ type MenuProps = {
             {item.dish_price}
           </span>
         </div>
-        <p className="text-2xl line-clamp-3">{item.description}</p>
+        <p className="text-2xl line-clamp-5">{item.description}</p>
       </div>
     );  
   }

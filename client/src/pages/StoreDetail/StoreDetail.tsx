@@ -20,6 +20,8 @@ import useFetch from "../../services/hooks/useFetch";
 import Menu from "../../components/Menu/Menu";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import ReviewCard from "../../components/CardReview/ReviewCard";
+import RatingOverview from "../../components/CardReview/RatingOverview";
 
 type Store = {
   store_id: string;
@@ -146,8 +148,29 @@ function StoreDetail() {
             <div className="ml-6 flex flex-col space-y-2">
               <h1 className="text-3xl font-bold text-gray-800">{data?.name}</h1>
               <div className="flex items-center mt-2 text-yellow-500">
-                <FontAwesomeIcon icon={faStar} />
-                {data?.rate}
+                {[...Array(5)].map((_, index) => {
+                  const rate = data?.rate ?? 0; // Đảm bảo rate không phải là undefined
+                  // Kiểm tra nếu sao đó được điền (đầy hoặc nửa sao)
+                  const isFull = index + 1 <= Math.floor(rate);
+                  const isHalf =
+                    index + 1 === Math.floor(rate) + 1 && rate % 1 !== 0;
+
+                  return (
+                    <FontAwesomeIcon
+                      key={index}
+                      icon={faStar}
+                      className={
+                        isFull
+                          ? "text-yellow-400"
+                          : isHalf
+                          ? "text-yellow-300"
+                          : "text-gray-300"
+                      }
+                      size="lg"
+                    />
+                  );
+                })}
+                <span className="ml-2 text-yellow-400">{data?.rate ?? 0}</span>
               </div>
               <h2 className="text-2xl text-gray-700 font-semibold">
                 {data?.style}
@@ -265,6 +288,12 @@ function StoreDetail() {
                   </div>
                 ))}
             </div>
+          </div>
+          {/* Review */}
+          <div className="bg-white p-12 rounded shadow">
+            <h2 className="text-3xl font-bold mb-4">Review</h2>
+            <RatingOverview />
+            <ReviewCard />
           </div>
         </div>
         {/* right */}
