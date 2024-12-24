@@ -67,6 +67,14 @@ const Store = sequelize.define('Store', {
     type: DataTypes.STRING(512),
     allowNull: true,
   },
+  latitude: {  // Cột mới cho vĩ độ
+    type: DataTypes.DECIMAL(10, 8),
+    allowNull: true,  // Có thể để null nếu không bắt buộc
+  },
+  longitude: {  // Cột mới cho kinh độ
+    type: DataTypes.DECIMAL(11, 8),
+    allowNull: true,  // Có thể để null nếu không bắt buộc
+  },
 }, {
   tableName: 'Store', // Tên bảng trong DB
   timestamps: false, // Không sử dụng createdAt, updatedAt

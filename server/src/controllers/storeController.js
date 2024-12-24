@@ -9,6 +9,20 @@ import MenuDetail from '../models/menu_detail.js';
 import Review from '../models/review.js';
 import User from '../models/user.js';
 
+const haversine = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Radius of Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  return distance;
+};
+
 const storeController = {
   // Lấy danh sách tất cả các cửa hàng
   getAllStores: async (req, res) => {
@@ -69,7 +83,7 @@ const storeController = {
     }
   },
   getStores : async (req, res) => {
-    const { searchTerm, minPrice, maxPrice, features, styles, sortOrder } = req.query;
+    const { searchTerm, minPrice, maxPrice, features, styles,latitude, longitude, sortOrder } = req.query;
 
     console.log('Request Query:', req.query); // In ra query để kiểm tra
 
@@ -153,7 +167,7 @@ const storeController = {
         }
 
         // Tìm kiếm các cửa hàng theo điều kiện tìm kiếm và lọc
-        const stores = await Store.findAll({
+        let stores = await Store.findAll({
             where: {
                 ...whereCondition,
                 store_id: { [Op.notIn]: excludeStoreIds }, // Loại bỏ các store_id trong blacklist
@@ -165,8 +179,25 @@ const storeController = {
                     where: featureCondition,
                 },
             ],
-            order: [['rate', sortOrder || 'DESC']],
+            // order: [['rate', sortOrder || 'DESC']],
+            
         });
+        if (latitude && longitude) {
+          // Tính khoảng cách giữa cửa hàng và vị trí người dùng
+          stores = stores.map(store => {
+              const storeLat = store.latitude;
+              const storeLon = store.longitude;
+              const distance = haversine(latitude, longitude, storeLat, storeLon);
+              store.dataValues.distance = distance; // Thêm khoảng cách vào mỗi cửa hàng
+              return store;
+          });
+
+          // Sắp xếp các cửa hàng theo khoảng cách (tăng dần)
+          stores.sort((a, b) => a.dataValues.distance - b.dataValues.distance);
+      } else if (sortOrder) {
+          // Nếu không có tọa độ, sắp xếp theo `rate`
+          stores.sort((a, b) => (sortOrder === 'ASC' ? a.rate - b.rate : b.rate - a.rate));
+      }
 
         if (stores.length === 0) {
             return res.status(404).json({ message: 'Store not found' });
