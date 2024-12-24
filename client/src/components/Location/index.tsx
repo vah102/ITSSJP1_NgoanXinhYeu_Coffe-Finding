@@ -97,6 +97,44 @@ const Location: React.FC = ({ className }: Parameter) => {
     //   }
     // }, [location]);
 
+    const sendLocationToBackend = async (latitude: number, longitude: number) => {
+      try {
+        // Xây dựng URL với query string
+        const url = `http://localhost:3000/api/home/search-filter?latitude=${latitude}&longitude=${longitude}&sortOrder=ASC`;
+    
+        // Gửi yêu cầu GET tới API
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+    
+        // Kiểm tra phản hồi
+        if (!response.ok) {
+          throw new Error("Failed to send location to the server.");
+        }
+    
+        const data = await response.json();
+        console.log("Location sent successfully:", data);
+      } catch (error) {
+        console.error("Error sending location:", error);
+      }
+    };
+    
+  
+    // Log và gửi tọa độ khi state location thay đổi
+    useEffect(() => {
+      if (location.lat && location.lon) {
+        console.log("Tọa độ người dùng:");
+        console.log("Vĩ độ (Latitude):", location.lat);
+        console.log("Kinh độ (Longitude):", location.lon);
+  
+        // Gửi tọa độ đến Backend
+        sendLocationToBackend(location.lat, location.lon);
+      }
+    }, [location]);
+
   return (
     <div className={`mt-3 ${className || ""}`}>
       {/* Form nhập địa chỉ */}
