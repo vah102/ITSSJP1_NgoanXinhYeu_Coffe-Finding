@@ -7,7 +7,6 @@ import StyleFilter from "../StyleFilter";
 import { useEffect, useState } from "react";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
-
 function Filter() {
     const search = useSearchContext();
     const navigate = useNavigate();
@@ -81,6 +80,7 @@ function Filter() {
                     Clear Filters
                 </Button>
             </div>
+            
             <PriceFilter
                 selectedPrice={selectedPrice}
                 onChange={handlePriceChange}

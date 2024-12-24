@@ -16,8 +16,22 @@ const LocationDisplay: React.FC<LocationProps> = ({ lat, lon }) => {
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
           );
           const data = await response.json();
-          if (data && data.display_name) {
-            setAddress(data.display_name); // Địa chỉ đầy đủ
+
+          if (data && data.address) {
+            const {
+              house_number,
+              road,
+              neighbourhood,
+              suburb,
+              city,
+              state,
+              country,
+            } = data.address;
+
+            // Ghép các thành phần địa chỉ, loại bỏ postcode
+            const fullAddress = `${house_number || ""} ${road || ""}, ${neighbourhood || ""}, ${suburb || ""}, ${city || ""}, ${state || ""}, ${country || ""}`.trim();
+
+            setAddress(fullAddress || "Không tìm thấy địa chỉ đầy đủ");
           } else {
             setAddress("Không tìm thấy địa chỉ cụ thể");
           }

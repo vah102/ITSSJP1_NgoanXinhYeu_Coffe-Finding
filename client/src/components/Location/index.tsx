@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
-const Location: React.FC = () => {
+interface Parameter {
+  className?: string;
+}
+
+const Location: React.FC = ({ className }: Parameter) => {
   const [location, setLocation] = useState<{ lat: number | null; lon: number | null }>({
     lat: null,
     lon: null,
@@ -21,19 +25,27 @@ const Location: React.FC = () => {
       );
       const data = await response.json();
       if (data && data.display_name) {
-        setCurrentLocation({
-          display_name: `Vị trí của bạn: ${data.display_name}`,
+        const locationData = {
+          display_name: data.display_name, // Địa chỉ đầy đủ
+          short_name: "Current Location", // Tên ngắn gọn
           lat,
           lon,
-        });
+        };
+        setCurrentLocation(locationData);
+
+        // Điền trực tiếp vào ô input nếu chưa có dữ liệu
+        if (!manualAddress) {
+          setManualAddress(locationData.display_name);
+          setHasSelected(true); // Đánh dấu là đã chọn
+        }
       }
     } catch {
-      setError("Không thể lấy địa chỉ hiện tại.");
+      setError("Cannot fetch current location.");
     }
   };
 
   const handleInputFocus = () => {
-    if (hasSelected) return;
+    if (hasSelected) return; // Không thực hiện nếu đã chọn địa chỉ
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -41,7 +53,7 @@ const Location: React.FC = () => {
           fetchCurrentLocation(latitude, longitude);
         },
         () => {
-          setError("Không thể lấy vị trí hiện tại.");
+          setError("Unable to access location.");
         }
       );
     }
@@ -50,6 +62,7 @@ const Location: React.FC = () => {
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (!manualAddress.trim()) {
+        // Hiển thị "Current Location" nếu ô nhập trống
         setSuggestions(currentLocation ? [currentLocation] : []);
         return;
       }
@@ -64,11 +77,9 @@ const Location: React.FC = () => {
         );
         const data = await response.json();
 
-        setSuggestions(
-          currentLocation ? [currentLocation, ...data] : data
-        );
+        setSuggestions(data); // Hiển thị danh sách gợi ý từ API
       } catch {
-        setError("Không thể lấy dữ liệu gợi ý.");
+        setError("Cannot fetch suggestions.");
       } finally {
         setLoadingSuggestions(false);
       }
@@ -84,20 +95,18 @@ const Location: React.FC = () => {
   const handleSuggestionClick = (suggestion: any) => {
     const { lat, lon, display_name } = suggestion;
 
-    const cleanedAddress = display_name.replace(/,\s*\d{5,}(?=,|$)/, "");
-
     setLocation({ lat: parseFloat(lat), lon: parseFloat(lon) });
-    setManualAddress(cleanedAddress);
+    setManualAddress(display_name);
     setSuggestions([]);
     setError(null);
     setHasSelected(true);
   };
 
   return (
-    <div className="p-4">
+    <div className="mt-3">
       {/* Form Nhập Địa Chỉ */}
-      <div className="mt-4 relative">
-        <div className="relative flex items-center">
+      <div className="relative">
+        <div className="relative flex items-center mt-10">
           {/* Icon Bản Đồ */}
           <FontAwesomeIcon
             icon={faMapMarkerAlt}
@@ -106,34 +115,31 @@ const Location: React.FC = () => {
           {/* Input */}
           <input
             type="text"
-            placeholder="Nhập địa chỉ (vd: 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)"
+            placeholder="Enter address (e.g., 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)"
             value={manualAddress}
             onFocus={handleInputFocus}
             onChange={(e) => {
               setManualAddress(e.target.value);
               setHasSelected(false);
             }}
-            className="border border-gray-300 rounded-lg pl-10 px-4 py-2 w-96 mb-2"
+            className="border border-gray-300 rounded-lg pl-10 px-4 py-2 w-96 mb-1"
           />
         </div>
 
-        {loadingSuggestions && !hasSelected && (
-          <p className="text-gray-500">Đang tải gợi ý...</p>
-        )}
-
         {/* Danh sách gợi ý */}
-        {!hasSelected && (
-          <ul
-            className="absolute border border-gray-300 rounded-lg bg-white max-h-40 overflow-y-auto w-full mt-1"
-            style={{ width: "calc(100% - 2px)" }} // Tính toán độ rộng danh sách khớp với ô input
-          >
+        {!hasSelected && suggestions.length > 0 && (
+          <ul className="absolute z-50 border-gray-300 rounded-lg bg-white max-h-40 overflow-y-auto w-96 mt-2">
             {suggestions.map((suggestion, index) => (
               <li
                 key={index}
                 onClick={() => handleSuggestionClick(suggestion)}
-                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
               >
-                {suggestion.display_name}
+                {/* Hiển thị icon cho "Current Location" */}
+                {suggestion.short_name === "Current Location" && (
+                  <FontAwesomeIcon icon={faLocationArrow} className="mr-2 text-blue-500" />
+                )}
+                {suggestion.short_name || suggestion.display_name}
               </li>
             ))}
           </ul>

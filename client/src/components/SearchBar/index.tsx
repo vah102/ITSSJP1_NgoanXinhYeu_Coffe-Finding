@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function SearchBar() {
+interface Parameter {
+    className?: string;
+}
+
+function SearchBar({ className }: Parameter) {
 
     const navigate = useNavigate();
     const search = useSearchContext();
@@ -25,7 +29,7 @@ function SearchBar() {
     }, [keyword, search]);
 
     return (
-        <form className={cx("wrapper")} onSubmit={handleSubmit}>
+        <form className={cx("wrapper", className)} onSubmit={handleSubmit}>
             <input
                 type="text"
                 placeholder="Search for a coffee or location"

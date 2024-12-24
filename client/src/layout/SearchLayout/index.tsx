@@ -12,7 +12,7 @@ function SearchLayout({ children }: LayoutProps) {
             <div className="fixed w-full z-50">
                 <Header />
             </div>
-            <div className=" px-10 pb-10 pt-40 flex flex-row gap-10">
+            <div className=" px-10 pb-10 pt-64 flex flex-row gap-10">
                 <div className="fixed"><Filter /></div>
                 <div className="pl-[280px] w-full">{children}</div>
             </div>

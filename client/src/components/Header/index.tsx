@@ -37,10 +37,17 @@ function Header() {
                         <h1 className="font-bold text-6xl">FiCofe</h1>
                     </div>
                 </Link>
-                <div className="flex flex-col items-center gap-3">
-                    <Location />
-                    <SearchBar />
+
+                <div className="flex flex-col items-start justify-center space-y-4 relative">
+                    <div className="w-full">
+                        <Location />
+                    </div>
+                    <div className="w-full transform scale-[85%] origin-left">
+                        <SearchBar className="mb-10" />
+                    </div>
                 </div>
+
+
                 <div className="flex">
                     <Button to="/signin">
                         <span className="text-white">Login</span>
