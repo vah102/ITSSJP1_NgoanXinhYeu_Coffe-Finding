@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.13.1",
+    "@cloudinary/url-gen": "^1.21.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
     "@fortawesome/free-brands-svg-icons": "^6.7.1",
-    "@fortawesome/free-regular-svg-icons": "^6.7.1",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@heroicons/react": "^2.2.0",
@@ -22,10 +24,13 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "classnames": "^2.5.1",
+    "cloudinary": "^2.5.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
+    "react-ionicons": "^4.2.1",
     "react-paginate": "^8.2.0",
     "react-router-dom": "^7.0.1"
   },
