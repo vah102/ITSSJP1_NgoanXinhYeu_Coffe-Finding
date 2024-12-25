@@ -9,11 +9,7 @@ import useFetch from "../../services/hooks/useFetch";
 import Tippy from "@tippyjs/react/headless";
 import PopperItem from "../PopperItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faChevronDown,
-    faRightFromBracket,
-    faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 import Popper from "../Popper";
 import { useEffect, useState } from "react";
 const cx = classNames.bind(styles);
@@ -31,9 +27,7 @@ function Header() {
         search.saveFeatureValues([]);
     };
 
-    const { data, loading } = useFetch<User>(
-        `http://localhost:3000/api/user/profile`
-    );
+    const { data, loading } = useFetch<User>(`http://localhost:3000/api/user/profile`);
     console.log(data);
     const [avaSrc, setAvaSrc] = useState(data?.avatar);
     const handleAvaError = () => {
@@ -44,15 +38,15 @@ function Header() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('http://localhost:3000/auth/logout', {
-                method: 'POST',
-                credentials: 'include',
+            const response = await fetch("http://localhost:3000/auth/logout", {
+                method: "POST",
+                credentials: "include",
             });
             if (response.ok) {
-                navigate('/signin');
+                navigate("/signin");
             }
         } catch (error) {
-            console.error('Có lỗi xảy ra:', error);
+            console.error("Có lỗi xảy ra:", error);
         }
     };
 
@@ -70,21 +64,13 @@ function Header() {
     return (
         <div className={cx("wrapper")}>
             <div className="h-[8rem] w-full">
-                <img
-                    src={import.meta.env.BASE_URL + "bg.png"}
-                    alt=""
-                    className="w-full h-full object-cover object-top"
-                />
+                <img src={import.meta.env.BASE_URL + "bg.png"} alt="" className="w-full h-full object-cover object-top" />
             </div>
 
             <div className="absolute flex flex-row justify-between items-center top-0 w-full h-full px-32">
                 <Link to={config.routes.home} onClick={handleReset}>
                     <div className="flex flex-row items-center gap-3">
-                        <img
-                            className="w-24 h-24"
-                            src={import.meta.env.BASE_URL + "icon.png"}
-                            alt=""
-                        />
+                        <img className="w-24 h-24" src={import.meta.env.BASE_URL + "icon.png"} alt="" />
                         <h1 className="font-bold text-6xl">FiCofe</h1>
                     </div>
                 </Link>
@@ -103,11 +89,7 @@ function Header() {
                             placement="bottom-end"
                             interactive
                             render={(attrs) => (
-                                <div
-                                    className={cx("user-menu")}
-                                    tabIndex={-1}
-                                    {...attrs}
-                                >
+                                <div className={cx("user-menu")} tabIndex={-1} {...attrs}>
                                     <Popper>
                                         <PopperItem
                                             onClick={() => {
@@ -134,10 +116,7 @@ function Header() {
                                 onClick={handleToggleLang}
                             >
                                 <p className="text-white">{language}</p>
-                                <FontAwesomeIcon
-                                    color="#fff"
-                                    icon={faChevronDown}
-                                />
+                                <FontAwesomeIcon color="#fff" icon={faChevronDown} />
                             </div>
                         </Tippy>
                     </div>
@@ -145,40 +124,19 @@ function Header() {
                     <div className="flex flex-row gap-5">
                         {data ? (
                             <>
-                                <p className="flex flex-row items-center font-bold text-white">
-                                    {data.username}
-                                </p>
+                                <p className="flex flex-row items-center font-bold text-white">{data.username}</p>
                                 <Tippy
                                     visible={visible}
                                     onClickOutside={() => setVisible(false)}
                                     placement="bottom-end"
                                     interactive
                                     render={(attrs) => (
-                                        <div
-                                            className={cx("user-menu")}
-                                            tabIndex={-1}
-                                            {...attrs}
-                                        >
+                                        <div className={cx("user-menu")} tabIndex={-1} {...attrs}>
                                             <Popper>
-                                                <PopperItem
-                                                    icon={
-                                                        <FontAwesomeIcon
-                                                            icon={faUser}
-                                                        />
-                                                    }
-                                                >
+                                                <PopperItem to="/profile" icon={<FontAwesomeIcon icon={faUser} />}>
                                                     Profile
                                                 </PopperItem>
-                                                <PopperItem
-                                                    onClick={handleLogout}
-                                                    icon={
-                                                        <FontAwesomeIcon
-                                                            icon={
-                                                                faRightFromBracket
-                                                            }
-                                                        />
-                                                    }
-                                                >
+                                                <PopperItem onClick={handleLogout} icon={<FontAwesomeIcon icon={faRightFromBracket} />}>
                                                     Log out
                                                 </PopperItem>
                                             </Popper>
