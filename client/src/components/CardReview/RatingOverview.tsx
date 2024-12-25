@@ -18,7 +18,7 @@ type RatingOverviewProps = {
 
 function RatingOverview({ reviews, averageRating }: RatingOverviewProps) {
   // Tính toán tỷ lệ phần trăm của mỗi sao (1 sao, 2 sao, v.v.)
-  const ratingBreakdown = [1, 2, 3, 4, 5].map(star => ({
+  const ratingBreakdown = [5, 4, 3, 2, 1].map(star => ({
     stars: star,
     percentage: (reviews.filter(review => review.rate === star).length / reviews.length) * 100,
   }));

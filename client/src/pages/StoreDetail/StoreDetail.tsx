@@ -22,6 +22,12 @@ import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import ReviewCard from "../../components/CardReview/ReviewCard";
 import RatingOverview from "../../components/CardReview/RatingOverview";
+import ReviewForm from "../../components/CardReview/ReviewForm";
+
+type User = {
+  username: string;
+  avatar: string;
+};
 
 type Store = {
   store_id: string;
@@ -94,14 +100,12 @@ function StoreDetail() {
   const { data, loading } = useFetch<Store>(
     `http://localhost:3000/api/store-details/${store_id}`
   );
+  const { data: user, loading: userLoading } = useFetch<User>(`http://localhost:3000/api/user/profile`);
   const [isBlacklisted, setIsBlacklisted] = useState(false);
 
   const menuDetails = data?.Menus?.flatMap((menu) => menu.MenuDetails) || [];
   const Features = data?.Features || [];
   const Reviews = data?.Reviews || [];
-
-  console.log(menuDetails);
-
   const token = Cookies.get("token");
 
   const API_URL = "http://localhost:3000/api/blacklist";
@@ -122,6 +126,7 @@ function StoreDetail() {
     }
   };
 
+
   useEffect(() => {
     axios
       .get(`http://localhost:3000/api/blacklist/all`, {
@@ -138,7 +143,20 @@ function StoreDetail() {
       .catch((error) => {
         console.error("Error fetching blacklist details:", error);
       });
+
+      //review 
+      const handleReviewSubmit = (rating: number, comment: string, photo: string | null) => {
+        console.log("Submitted Review:");
+        console.log("Rating:", rating);
+        console.log("Comment:", comment);
+        console.log("Photo:", photo);
+        // Gửi dữ liệu lên server hoặc cập nhật lại state
+      };
   }, [store_id, token]);
+
+  function handleReviewSubmit(rating: number, comment: string, photo: string | null): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <div className="">
@@ -173,7 +191,7 @@ function StoreDetail() {
                     size="lg"
                   />
                 ))}
-                <span className="text-2xl text-gray-700">
+                <span className="pl-6 text-3xl font-semibold text-gray-700">
                   {data?.rate ?? 0}
                 </span>
               </div>
@@ -298,8 +316,23 @@ function StoreDetail() {
           {/* Review */}
           <div className="bg-white p-12 rounded shadow">
             <h2 className="text-3xl font-bold mb-4">Review</h2>
+            {/* Phần ReviewForm */}
+            {token ? (
+              <ReviewForm
+                username= {user?.username ?? ''} // Tên người dùng lấy từ auth hoặc props
+                avatar= {user?.avatar ?? ''}// Avatar người dùng
+                store_id={data?.store_id ?? ''} 
+                onSubmit={handleReviewSubmit} // Hàm gửi review
+              />
+            ) : (
+              <p className="text-gray-600">Please log in to submit a review.</p> // Thông báo nếu chưa đăng nhập
+            )}
             {/* Tổng quan đánh giá */}
-            <RatingOverview reviews ={data?.Reviews ?? []} averageRating={data?.rate ?? 0} />            {/* Danh sách review */}
+            <RatingOverview
+              reviews={data?.Reviews ?? []}
+              averageRating={data?.rate ?? 0}
+            />{" "}
+            {/* Danh sách review */}
             {Reviews.length > 0 ? (
               <div className="space-y-8">
                 {Reviews.map((review) => {
@@ -321,7 +354,7 @@ function StoreDetail() {
                 })}
               </div>
             ) : (
-              <p className="text-gray-500">No reviews yet.</p>
+              <p className="text-black">No reviews yet.</p>
             )}
           </div>
         </div>
@@ -337,7 +370,7 @@ function StoreDetail() {
           {/* Contact Info */}
           <div className="bg-white p-12">
             <p className="flex items-center space-x-2">
-              <FontAwesomeIcon icon={faPhone}  className="pr-6"/>
+              <FontAwesomeIcon icon={faPhone} className="pr-6" />
               <span>{data?.phone}</span>
             </p>
           </div>

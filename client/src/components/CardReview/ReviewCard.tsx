@@ -16,14 +16,14 @@ function ReviewCard({ item }: ReviewCardProps) {
   return (
     <div>
       {/* User Info */}
-      <div className="flex items-center mb-4">
+      <div className="flex items-center py-6">
         <img
           src={item.avatar}
           alt="user avatar"
-          className="w-16 h-16 rounded-full mr-4"
+          className="w-20 h-20 rounded-full mr-4"
         />
         <div>
-          <h3 className="text-2xl font-semibold">{item.username}</h3>
+          <h3 className="text-2xl font-semibold pb-2">{item.username}</h3>
           <p className="text-xl text-gray-500">{item.time}</p>
         </div>
       </div>
@@ -44,16 +44,18 @@ function ReviewCard({ item }: ReviewCardProps) {
       </div>
 
       {/* Comment */}
-      <p className="text-xl text-gray-700 mb-4">{item.comment}</p>
+      <p className="text-2xl text-black mb-4">{item.comment}</p>
 
       {/* Images */}
-      <div className="mb-4">
-        <img
-          src={item.image}
-          alt="Review Image"
-          className="w-full h-32 object-cover rounded-lg"
-        />
-      </div>
+      {item.image && (
+        <div className="mb-4">
+          <img
+            src={item.image}
+            alt="Review Image"
+            className="w-60 h-60 object-cover rounded-lg"
+          />
+        </div>
+      )}
     </div>
   );
 }
