@@ -5,7 +5,7 @@ type Props = {
 };
 
 function Popper({ children }: Props) {
-    return <div className="w-full bg-white py-3 rounded-lg">{children}</div>;
+    return <div className="w-full bg-white py-3 rounded-lg drop-shadow">{children}</div>;
 }
 
 export default Popper;

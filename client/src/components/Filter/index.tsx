@@ -70,7 +70,8 @@ function Filter() {
     };
 
     return (
-        <div className="bg-[var(--color-secondary)] w-[250px] h-full rounded-[10px] pl-[25px] pb-[25px] flex flex-col gap-[20px]">
+        <div className="bg-[var(--color-secondary)] w-[250px] h-full rounded-[10px] pl-[25px] pb-[25px] flex flex-col mt-3">
+            
             <div className="w-full flex flex-row items-center justify-between">
                 <h2 className="text-3xl font-bold">Filter</h2>
                 <Button
@@ -80,7 +81,7 @@ function Filter() {
                     Clear Filters
                 </Button>
             </div>
-            
+
             <PriceFilter
                 selectedPrice={selectedPrice}
                 onChange={handlePriceChange}

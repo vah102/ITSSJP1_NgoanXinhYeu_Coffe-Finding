@@ -139,7 +139,7 @@ const Location: React.FC = ({ className }: Parameter) => {
     <div className={`mt-3 ${className || ""}`}>
       {/* Form nhập địa chỉ */}
       <div className="relative">
-        <div className="relative flex items-center mt-10">
+        <div className="relative flex items-center">
           <FontAwesomeIcon
             icon={faMapMarkerAlt}
             className="absolute left-3 text-gray-500"
@@ -153,7 +153,7 @@ const Location: React.FC = ({ className }: Parameter) => {
               setManualAddress(e.target.value);
               setHasSelected(false);
             }}
-            className="border border-gray-300 rounded-lg pl-10 px-4 py-2 w-96 mb-1"
+            className="border border-gray-300 rounded-lg pl-10 px-4 py-2 w-[250px] mb-1"
           />
         </div>
 
