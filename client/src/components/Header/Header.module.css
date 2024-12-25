@@ -3,3 +3,7 @@
     /* border-top: solid 5px var(--color-accent); */
     border-bottom: solid 5px var(--color-accent) 
 }
+
+.icon {
+    color: white !important;
+}

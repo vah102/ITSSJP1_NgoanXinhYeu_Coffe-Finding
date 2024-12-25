@@ -45,7 +45,7 @@ function Card({ item }: CardProps) {
                 <span className="mb-3 line-clamp-2">{item.address}</span>
                 <span className="font-semibold">{item.min_price} ~ {item.max_price} VND</span>
                 <div className="flex flex-row items-center gap-3">
-                    <FontAwesomeIcon icon={faStar}/>
+                    <FontAwesomeIcon color='#F7CA4C' icon={faStar}/>
                     <span>{item.rate}</span>
                 </div>
             </div>
