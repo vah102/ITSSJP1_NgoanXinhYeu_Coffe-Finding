@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-regular-svg-icons/faStar";
+import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
 import { faBan } from "@fortawesome/free-solid-svg-icons/faBan";
 import {
   faSnowflake,
@@ -53,6 +53,17 @@ type Store = {
       dish_image: string;
     }[];
   }[];
+  Reviews: {
+    id: number;
+    user_id: number;
+    rate: number;
+    comment: string;
+    image: string;
+    User: {
+      username: string;
+      avatar: string;
+    };
+  }[];
 };
 
 const featureIcons: Record<string, JSX.Element> = {
@@ -87,6 +98,8 @@ function StoreDetail() {
 
   const menuDetails = data?.Menus?.flatMap((menu) => menu.MenuDetails) || [];
   const Features = data?.Features || [];
+  const Reviews = data?.Reviews || [];
+
   console.log(menuDetails);
 
   const token = Cookies.get("token");
@@ -148,29 +161,21 @@ function StoreDetail() {
             <div className="ml-6 flex flex-col space-y-2">
               <h1 className="text-3xl font-bold text-gray-800">{data?.name}</h1>
               <div className="flex items-center mt-2 text-yellow-500">
-                {[...Array(5)].map((_, index) => {
-                  const rate = data?.rate ?? 0; // Đảm bảo rate không phải là undefined
-                  // Kiểm tra nếu sao đó được điền (đầy hoặc nửa sao)
-                  const isFull = index + 1 <= Math.floor(rate);
-                  const isHalf =
-                    index + 1 === Math.floor(rate) + 1 && rate % 1 !== 0;
-
-                  return (
-                    <FontAwesomeIcon
-                      key={index}
-                      icon={faStar}
-                      className={
-                        isFull
-                          ? "text-yellow-400"
-                          : isHalf
-                          ? "text-yellow-300"
-                          : "text-gray-300"
-                      }
-                      size="lg"
-                    />
-                  );
-                })}
-                <span className="ml-2 text-yellow-400">{data?.rate ?? 0}</span>
+                {[...Array(5)].map((_, index) => (
+                  <FontAwesomeIcon
+                    key={index}
+                    icon={faStarSolid}
+                    className={
+                      index + 1 <= (data?.rate ?? 0)
+                        ? "text-yellow-400"
+                        : "text-gray-300"
+                    }
+                    size="lg"
+                  />
+                ))}
+                <span className="text-2xl text-gray-700">
+                  {data?.rate ?? 0}
+                </span>
               </div>
               <h2 className="text-2xl text-gray-700 font-semibold">
                 {data?.style}
@@ -290,10 +295,34 @@ function StoreDetail() {
             </div>
           </div>
           {/* Review */}
+          {/* Review */}
           <div className="bg-white p-12 rounded shadow">
             <h2 className="text-3xl font-bold mb-4">Review</h2>
-            <RatingOverview />
-            <ReviewCard />
+            {/* Tổng quan đánh giá */}
+            <RatingOverview reviews ={data?.Reviews ?? []} averageRating={data?.rate ?? 0} />            {/* Danh sách review */}
+            {Reviews.length > 0 ? (
+              <div className="space-y-8">
+                {Reviews.map((review) => {
+                  // Lấy dữ liệu từ review
+                  const user = review.User || {}; // Truy cập phần tử đầu tiên của mảng User
+                  return (
+                    <ReviewCard
+                      key={review.id}
+                      item={{
+                        avatar: review.User.avatar || "default-avatar.png",
+                        username: review.User.username || "Anonymous",
+                        time: "24/12/2024", // Nếu có thời gian thực trong dữ liệu review, hãy thay vào đây
+                        rate: review.rate,
+                        comment: review.comment,
+                        image: review.image || "",
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-gray-500">No reviews yet.</p>
+            )}
           </div>
         </div>
         {/* right */}
@@ -308,7 +337,7 @@ function StoreDetail() {
           {/* Contact Info */}
           <div className="bg-white p-12">
             <p className="flex items-center space-x-2">
-              <FontAwesomeIcon icon={faPhone} />
+              <FontAwesomeIcon icon={faPhone}  className="pr-6"/>
               <span>{data?.phone}</span>
             </p>
           </div>
@@ -316,7 +345,7 @@ function StoreDetail() {
           {/* Map */}
           <div className="bg-white p-12">
             <p className="flex items-center space-x-2 mt-2">
-              <FontAwesomeIcon icon={faMapMarkerAlt} />
+              <FontAwesomeIcon icon={faMapMarkerAlt} className="pr-6" />
               <span>{data?.address}</span>
             </p>
           </div>
