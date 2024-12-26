@@ -14,11 +14,11 @@ function Filter() {
     const [selectedStyles, setSelectedStyles] = useState<string[]>([]);
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
     const [selectedPrice, setSelectedPrice] = useState<{
-        min_price: number;
-        max_price: number;
+        min_price: number | null;
+        max_price: number | null;
     }>({
-        min_price: 0,
-        max_price: 100000,
+        min_price: null,
+        max_price: null,
     });
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function Filter() {
         const price = {
             min_price: parseInt(priceArr[0]),
             max_price:
-                priceArr[1] === "Infinity" ? Infinity : parseInt(priceArr[1]),
+                priceArr[1] === "null" ? null : parseInt(priceArr[1]),
         };
         console.log(price);
         setSelectedPrice(price);

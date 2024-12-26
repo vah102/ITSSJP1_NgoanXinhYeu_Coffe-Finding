@@ -1,7 +1,7 @@
 type Props = {
     selectedPrice: {
-        min_price: number;
-        max_price: number;
+        min_price: number | null;
+        max_price: number | null;
     };
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -17,7 +17,7 @@ const prices = [
     },
     {
         min_price: 200000,
-        max_price: Infinity,
+        max_price: null,
     },
 ];
 
@@ -38,7 +38,7 @@ function PriceFilter({ selectedPrice, onChange }: Props) {
                         onChange={onChange}
                     />
                     <span>
-                        {price.max_price === Infinity
+                        {price.max_price === null
                             ? `From ${price.min_price}`
                             : `${price.min_price} ~ ${price.max_price}`}
                     </span>
