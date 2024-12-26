@@ -100,10 +100,26 @@ const storeController = {
         }
 
         // Điều kiện lọc theo giá (minPrice và maxPrice)
-        if (minPrice && maxPrice) {
-            whereCondition.min_price = { [Op.lte]: maxPrice };
-            whereCondition.max_price = { [Op.gte]: minPrice };
-        }
+        // if (minPrice && maxPrice) {
+        //     whereCondition.min_price = { [Op.lte]: maxPrice };
+        //     whereCondition.max_price = { [Op.gte]: minPrice };
+        // }
+        if (minPrice || maxPrice) {
+          whereCondition[Op.and] = []; // Khởi tạo mảng điều kiện
+      
+          if (minPrice && maxPrice) {
+              // Truy vấn theo cả minPrice và maxPrice
+              whereCondition[Op.and].push(
+                  { min_price: { [Op.gte]: minPrice } }, // min_price <= minPrice
+                  { max_price: { [Op.lte]: maxPrice } }  // max_price >= maxPrice
+              );
+          } else if (minPrice) {
+              // Chỉ có maxPrice
+              whereCondition[Op.and].push(
+                  { min_price: { [Op.gte]: minPrice } }  // min_price >= minPrice
+              );
+          }
+      }
 
         // Lọc theo các style (nếu có)
         if (styles) {
