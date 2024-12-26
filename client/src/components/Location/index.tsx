@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { useSearchContext } from "../../services/contexts/SearchContext";
 
-interface Parameter {
-  className?: string;
-}
 
-const Location: React.FC = ({ className }: Parameter) => {
-  const [location, setLocation] = useState<{ lat: number | null; lon: number | null }>({
-    lat: null,
-    lon: null,
-  });
+function Location () {
+  const search = useSearchContext();
+  
+  // const [location, setLocation] = useState<{ lat: number | null; lon: number | null }>({
+  //   lat: null,
+  //   lon: null,
+  // });
   const [error, setError] = useState<string | null>(null);
   const [manualAddress, setManualAddress] = useState<string>("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -19,7 +19,8 @@ const Location: React.FC = ({ className }: Parameter) => {
 
   // Lấy vị trí hiện tại của người dùng
   const fetchCurrentLocation = async (lat: number, lon: number) => {
-    setLocation({ lat, lon }); // Lưu tọa độ vào state
+    // setLocation({ lat, lon }); // Lưu tọa độ vào state
+    search.saveLocationValues({ lat, lon });
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
@@ -82,7 +83,8 @@ const Location: React.FC = ({ className }: Parameter) => {
   // Xử lý khi người dùng chọn gợi ý
   const handleSuggestionClick = (suggestion: any) => {
     const { lat, lon, display_name } = suggestion;
-    setLocation({ lat: parseFloat(lat), lon: parseFloat(lon) }); // Lưu tọa độ
+    search.saveLocationValues({ lat: parseFloat(lat), lon: parseFloat(lon) });
+    // setLocation({ lat: parseFloat(lat), lon: parseFloat(lon) }); // Lưu tọa độ
     setManualAddress(display_name); // Hiển thị địa chỉ
     setSuggestions([]);
     setError(null);
@@ -125,18 +127,18 @@ const Location: React.FC = ({ className }: Parameter) => {
   
     // Log và gửi tọa độ khi state location thay đổi
     useEffect(() => {
-      if (location.lat && location.lon) {
+      if (search.location.lat && search.location.lon) {
         console.log("Tọa độ người dùng:");
-        console.log("Vĩ độ (Latitude):", location.lat);
-        console.log("Kinh độ (Longitude):", location.lon);
+        console.log("Vĩ độ (Latitude):", search.location.lat);
+        console.log("Kinh độ (Longitude):", search.location.lon);
   
         // Gửi tọa độ đến Backend
-        sendLocationToBackend(location.lat, location.lon);
+        // sendLocationToBackend(location.lat, location.lon);
       }
     }, [location]);
 
   return (
-    <div className={`mt-3 ${className || ""}`}>
+    <div className={`mt-3`}>
       {/* Form nhập địa chỉ */}
       <div className="relative">
         <div className="relative flex items-center">

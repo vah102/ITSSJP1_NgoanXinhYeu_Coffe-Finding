@@ -1,5 +1,5 @@
 import Tippy from "@tippyjs/react/headless";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Popper from "../../components/Popper";
 import PopperItem from "../../components/PopperItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +7,8 @@ import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import useFetch from "../../services/hooks/useFetch";
 import Pagination from "../../components/Pagination";
+import { useSearchContext } from "../../services/contexts/SearchContext";
+import { useNavigate } from "react-router-dom";
 
 type Store = {
     store_id: string;
@@ -16,21 +18,24 @@ type Store = {
     min_price: number;
     max_price: number;
     rate: number;
+    distance: number;
 };
 
 function Home() {
     const [sortOption, setSortOption] = useState("Highest rated");
     const [visible, setVisible] = useState(false);
 
+    const search = useSearchContext();
+    const navigate = useNavigate();
+
     const handleToggleSort = () => {
         setVisible(!visible);
     };
 
     const { data, loading } = useFetch<Store[]>(
-        `http://localhost:3000/api/home/stores`,
+        `http://localhost:3000/api/home/stores`
     );
-    console.log(data)
-
+    console.log(data);
 
     const itemsPerPage = 8;
     const [currentPage, setCurrentPage] = useState(0);
@@ -61,8 +66,10 @@ function Home() {
                             <Popper>
                                 <PopperItem
                                     onClick={() => {
-                                        // search.saveSortValues("highest_rated");
+                                        setSortOption("Highest rated");
+                                        search.saveSortValues("ASC");
                                         handleToggleSort();
+                                        navigate(`/search`);
                                     }}
                                 >
                                     Highest rated
@@ -71,6 +78,7 @@ function Home() {
                                     onClick={() => {
                                         setSortOption("Nearest location");
                                         handleToggleSort();
+                                        navigate(`/search`);
                                     }}
                                 >
                                     Nearest location
