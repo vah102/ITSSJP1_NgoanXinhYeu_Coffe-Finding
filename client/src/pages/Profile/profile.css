@@ -32,9 +32,11 @@
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    margin: auto;
 }
 
 .form {
+    text-align: center;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
