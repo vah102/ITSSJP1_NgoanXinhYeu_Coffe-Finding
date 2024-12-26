@@ -1,3 +1,10 @@
+.wrapper {
+  display: flex;
+  flex-direction: column; 
+  text-decoration: none; 
+  color: inherit; 
+  width: 100%;
+}
 .card {
   display: flex;
   align-items: center;
@@ -7,6 +14,10 @@
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
+  width: 100%; 
+  max-width: 1200px; 
+  margin-left: auto; 
+  margin-right: auto;
 }
 
 .card-left .profile-pic {
@@ -22,10 +33,10 @@
   padding-left: 20px;
 }
 
-.cafe-name {
-  display: flex; /* Dùng flex để căn chỉnh các phần tử ngang hàng */
+.cafe-name1 {
+  display: flex; 
   justify-content: space-between; /* Đẩy các phần tử con sang hai bên */
-  align-items: center; /* Căn giữa theo chiều dọc */
+  align-items: center; 
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 10px;
@@ -42,8 +53,8 @@
 }
 
 .ban-icon {
-  color: red; /* Màu sắc của biểu tượng */
-  font-size: 20px; /* Kích thước biểu tượng */
-  cursor: pointer; /* Thêm hiệu ứng chuột */
+  color: red; 
+  font-size: 20px;
+  cursor: pointer; 
 }
 

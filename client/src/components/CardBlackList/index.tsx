@@ -3,6 +3,8 @@ import React from "react";
 import "./CardBlackList.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
+
 
 interface CafeCardProps {
   avatar: string;
@@ -11,7 +13,7 @@ interface CafeCardProps {
   time_open: string;
   style: string;
   address: string;
-  store_id: number; // Nhận thêm store_id
+  store_id: number; 
   handleRemoveStore: (storeId: number) => void; // Hàm xử lý xóa
 }
 
@@ -25,18 +27,27 @@ const CardBlackList: React.FC<CafeCardProps> = ({
   store_id,
   handleRemoveStore,
 }) => {
+  const handleBanClick = (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>
+  ) => {
+    e.preventDefault(); // Hàm ngăn khi bấm Ban chuyển sang trang storedetail
+    e.stopPropagation(); 
+    handleRemoveStore(store_id); 
+  };
+
   return (
+  <Link to={`/storedetail/${store_id}`} className="wrapper">    
     <div className="card">
       <div className="card-left">
         <img src={avatar} className="profile-pic" />
       </div>
       <div className="card-right">
-        <div className="cafe-name">
+        <div className="cafe-name1">
           {name}
           <FontAwesomeIcon 
             icon={faBan} 
             className="ban-icon" 
-            onClick={() => handleRemoveStore(store_id)} // Kích hoạt hàm xử lý
+            onClick={handleBanClick} 
           />
         </div>
         <div className="rating-stars">⭐ {rate} / 5</div>
@@ -51,6 +62,7 @@ const CardBlackList: React.FC<CafeCardProps> = ({
         </div>
       </div>
     </div>
+  </Link>
   );
 };
 
