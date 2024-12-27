@@ -97,10 +97,10 @@ function SearchPage() {
         <div className="w-full">
             <div className="w-full flex flex-row justify-between">
                 {loading ? (
-                    <h2 className="text-4xl font-bold">No item founded</h2>
+                    <h2 className="text-4xl font-bold">{t("home.no_item")}</h2>
                 ) : (
                     <h2 className="text-4xl font-bold">
-                        Result : {data && data.length} items founded
+                        {t("home.result")} {data && data.length} {t("home.item")}
                     </h2>
                 )}
                 <Tippy

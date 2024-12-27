@@ -40,7 +40,10 @@
     "rate":"Lượt đánh giá cao",
     "location":"Những địa chỉ gần",
     "sort":"Sắp xếp theo",
-    "enter_address":"Nhập vào địa chỉ"
+    "enter_address":"Nhập vào địa chỉ",
+    "result":"Kết quả:",
+    "item":"quán tìm được",
+    "no_item":"Không có kết quả tìm thấy"
    },
    "store":{
     "open_now":"Giờ mở cửa",

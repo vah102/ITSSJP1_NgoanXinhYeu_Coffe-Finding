@@ -39,7 +39,10 @@
     "rate":" Highest rated",
     "location":"Nearest location",
     "sort":"Sort by",
-    "enter_address":"Enter address (e.g., 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)"
+    "enter_address":"Enter address (e.g., 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)",
+    "result":"Result :",
+    "item":"items founded",
+    "no_item":"No item founded"
    },
    "store":{
     "open_now":"Open now",

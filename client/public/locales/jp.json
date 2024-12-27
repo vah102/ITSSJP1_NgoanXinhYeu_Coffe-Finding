@@ -40,7 +40,10 @@
     "rate": "最高評価",
     "location": "最寄りの場所",
     "sort": "並べ替え",
-    "enter_address":"住所を入力してください"
+    "enter_address":"住所を入力してください",
+    "result":"結果 :",
+    "item":"アイテムが設立されました",
+    "no_item":"項目が見つかりませんでした"
   },
   "store": {
     "open_now": "オープン",
