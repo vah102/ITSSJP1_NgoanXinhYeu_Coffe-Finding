@@ -203,19 +203,21 @@ const storeController = {
         });
         if (latitude && longitude) {
           // Tính khoảng cách giữa cửa hàng và vị trí người dùng
-          stores = stores.map(store => {
-              const storeLat = store.latitude;
-              const storeLon = store.longitude;
-              const distance = haversine(latitude, longitude, storeLat, storeLon);
-              store.dataValues.distance = distance; // Thêm khoảng cách vào mỗi cửa hàng
-              return store;
-          });
+          stores = stores.filter(store => {
+            const storeLat = store.latitude;
+            const storeLon = store.longitude;
+            const distance = haversine(latitude, longitude, storeLat, storeLon);
+            
+            // Thêm khoảng cách vào mỗi cửa hàng, nếu khoảng cách >= 10km thì loại bỏ cửa hàng đó
+            store.dataValues.distance = distance;
+            return distance < 10; // Chỉ giữ lại các cửa hàng có khoảng cách < 10km
+        });
 
           // Sắp xếp các cửa hàng theo khoảng cách (tăng dần)
           stores.sort((a, b) => a.dataValues.distance - b.dataValues.distance);
       } else if (sortOrder) {
           // Nếu không có tọa độ, sắp xếp theo `rate`
-          stores.sort((a, b) => (sortOrder === 'ASC' ? a.rate - b.rate : b.rate - a.rate));
+          stores.sort((a, b) => (sortOrder === 'DESC' ? a.rate - b.rate : b.rate - a.rate));
       }
 
         if (stores.length === 0) {
