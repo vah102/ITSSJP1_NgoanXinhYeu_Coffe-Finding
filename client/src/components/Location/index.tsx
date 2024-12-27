@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 
-
-function Location () {
+function Location() {
   const search = useSearchContext();
-  
-  // const [location, setLocation] = useState<{ lat: number | null; lon: number | null }>({
-  //   lat: null,
-  //   lon: null,
-  // });
+
   const [error, setError] = useState<string | null>(null);
   const [manualAddress, setManualAddress] = useState<string>("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loadingSuggestions, setLoadingSuggestions] = useState<boolean>(false);
   const [hasSelected, setHasSelected] = useState<boolean>(false);
 
-  // Lấy vị trí hiện tại của người dùng
+  // Tự động lấy vị trí người dùng khi vào trang
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchCurrentLocation(latitude, longitude);
+        },
+        () => {
+          setError("Unable to access location.");
+        }
+      );
+    } else {
+      setError("Geolocation is not supported by your browser.");
+    }
+  }, []);
+
+  // Lấy vị trí hiện tại và đặt địa chỉ
   const fetchCurrentLocation = async (lat: number, lon: number) => {
-    // setLocation({ lat, lon }); // Lưu tọa độ vào state
     search.saveLocationValues({ lat, lon });
     try {
       const response = await fetch(
@@ -35,26 +46,10 @@ function Location () {
     }
   };
 
-  // Xử lý khi người dùng focus vào ô input
-  const handleInputFocus = () => {
-    if (hasSelected) return; // Không thực hiện nếu đã chọn địa chỉ
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          fetchCurrentLocation(latitude, longitude);
-        },
-        () => {
-          setError("Unable to access location.");
-        }
-      );
-    }
-  };
-
   // Lấy danh sách gợi ý địa chỉ từ API
   useEffect(() => {
     const fetchSuggestions = async () => {
-      if (!manualAddress.trim()) return;
+      if (!manualAddress.trim() || hasSelected) return;
 
       setLoadingSuggestions(true);
       try {
@@ -64,7 +59,6 @@ function Location () {
           )}`
         );
         const data = await response.json();
-        console.log("Dữ liệu API trả về:", data); 
         setSuggestions(data);
       } catch {
         setError("Unable to fetch suggestions.");
@@ -73,9 +67,7 @@ function Location () {
       }
     };
 
-    const debounceFetch = setTimeout(() => {
-      if (!hasSelected) fetchSuggestions();
-    }, 300);
+    const debounceFetch = setTimeout(fetchSuggestions, 300);
 
     return () => clearTimeout(debounceFetch);
   }, [manualAddress, hasSelected]);
@@ -84,61 +76,14 @@ function Location () {
   const handleSuggestionClick = (suggestion: any) => {
     const { lat, lon, display_name } = suggestion;
     search.saveLocationValues({ lat: parseFloat(lat), lon: parseFloat(lon) });
-    // setLocation({ lat: parseFloat(lat), lon: parseFloat(lon) }); // Lưu tọa độ
-    setManualAddress(display_name); // Hiển thị địa chỉ
+    setManualAddress(display_name);
     setSuggestions([]);
     setError(null);
     setHasSelected(true);
   };
-    // // Log tọa độ khi state location thay đổi
-    // useEffect(() => {
-    //   if (location.lat && location.lon) {
-    //     console.log("Tọa độ người dùng:");
-    //     console.log("Vĩ độ (Latitude):", location.lat);
-    //     console.log("Kinh độ (Longitude):", location.lon);
-    //   }
-    // }, [location]);
-
-    const sendLocationToBackend = async (latitude: number, longitude: number) => {
-      try {
-        // Xây dựng URL với query string
-        const url = `http://localhost:3000/api/home/search-filter?latitude=${latitude}&longitude=${longitude}&sortOrder=ASC`;
-    
-        // Gửi yêu cầu GET tới API
-        const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-    
-        // Kiểm tra phản hồi
-        if (!response.ok) {
-          throw new Error("Failed to send location to the server.");
-        }
-    
-        const data = await response.json();
-        console.log("Location sent successfully:", data);
-      } catch (error) {
-        console.error("Error sending location:", error);
-      }
-    };
-    
-  
-    // Log và gửi tọa độ khi state location thay đổi
-    useEffect(() => {
-      if (search.location.lat && search.location.lon) {
-        console.log("Tọa độ người dùng:");
-        console.log("Vĩ độ (Latitude):", search.location.lat);
-        console.log("Kinh độ (Longitude):", search.location.lon);
-  
-        // Gửi tọa độ đến Backend
-        // sendLocationToBackend(location.lat, location.lon);
-      }
-    }, [location]);
 
   return (
-    <div className={`mt-3`}>
+    <div className="mt-3">
       {/* Form nhập địa chỉ */}
       <div className="relative">
         <div className="relative flex items-center">
@@ -148,9 +93,9 @@ function Location () {
           />
           <input
             type="text"
-            placeholder="Enter address (e.g., 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)"
+            placeholder="Enter address (or auto-detected)"
             value={manualAddress}
-            onFocus={handleInputFocus}
+            onFocus={() => setHasSelected(false)}
             onChange={(e) => {
               setManualAddress(e.target.value);
               setHasSelected(false);
@@ -184,7 +129,6 @@ function Location () {
       {error && <p className="text-red-500 mt-4">{error}</p>}
     </div>
   );
-  
-};
+}
 
 export default Location;
