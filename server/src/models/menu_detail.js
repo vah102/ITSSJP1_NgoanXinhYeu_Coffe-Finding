@@ -30,7 +30,7 @@ const MenuDetail = sequelize.define('MenuDetail', {
     allowNull: true,
   },
   description: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.TEXT,
     allowNull: true,
   },
 }, {

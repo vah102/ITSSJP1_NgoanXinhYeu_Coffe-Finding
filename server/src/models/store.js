@@ -44,7 +44,7 @@ const Store = sequelize.define('Store', {
     allowNull: true,
   },
   description: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.TEXT,
     allowNull: true,
   },
   phone: {

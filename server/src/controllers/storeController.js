@@ -126,7 +126,7 @@ const storeController = {
           const styleArray = styles.split(',').map(style => style.trim());  // Chuyển thành mảng sau khi split chuỗi
           whereCondition[Op.or] = [
               ...(whereCondition[Op.or] || []), // Giữ nguyên các điều kiện đã có
-              { style: { [Op.in]: styleArray } }
+              { style: { [Op.like]: `%${styleArray}%` } }
           ];
         }
 
@@ -135,7 +135,7 @@ const storeController = {
         let featureCondition = null;
         if (features) {
             const featureArray = features.split(',').map(feature => feature.trim()); // Chuyển thành mảng sau khi split chuỗi
-            featureCondition = { features_name: { [Op.in]: featureArray } };
+            featureCondition = { features_name: { [Op.like]: `%${featureArray}%` } };
         }
 
         // Nếu người dùng đã đăng nhập, lọc bỏ các cửa hàng trong blacklist
