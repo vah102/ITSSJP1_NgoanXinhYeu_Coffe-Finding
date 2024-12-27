@@ -31,10 +31,7 @@ function Header() {
 
     const { data, loading } = useFetch<User>(`http://localhost:3000/api/user/profile`);
     console.log(data);
-    const [avaSrc, setAvaSrc] = useState(data?.avatar);
-    const handleAvaError = () => {
-        setAvaSrc("/default.png");
-    };
+
 
     const navigate = useNavigate();
 
@@ -95,7 +92,7 @@ function Header() {
                 <Link to={config.routes.home} onClick={handleReset}>
                     <div className="flex flex-row items-center gap-3">
                         <img className="w-24 h-24" src={import.meta.env.BASE_URL + "icon.png"} alt="" />
-                        <h1 className="font-bold text-6xl">FiCofe</h1>
+                        <h1 className="font-bold text-6xl text-[#4F310D]">FiCofe</h1>
                     </div>
                 </Link>
 
@@ -141,7 +138,7 @@ function Header() {
                             )}
                         >
                             <div
-                                className="flex flex-row items-center justify-between w-[110px] py-3 px-5 font-bold cursor-pointer gap-2 border-solid rounded-full border-white border-2"
+                                className="flex flex-row items-center justify-between w-[130px] py-3 px-5 font-bold cursor-pointer gap-2 border-solid rounded-full border-white border-2"
                                 onClick={handleToggleLang}
                             >
                                 <p className="text-white">{getLanguageLabel(language)}</p>

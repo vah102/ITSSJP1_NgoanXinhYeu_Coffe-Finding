@@ -41,7 +41,7 @@ function PriceFilter({ selectedPrice, onChange }: Props) {
                     />
                     <span>
                         {price.max_price === null
-                            ? `From ${price.min_price}`
+                            ? `${price.min_price} ~`
                             : `${price.min_price} ~ ${price.max_price}`}
                     </span>
                 </label>

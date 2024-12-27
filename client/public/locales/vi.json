@@ -8,7 +8,7 @@
       "vintage": "Cổ điển"
     },
     "features": {
-      "features":"tiện ích",
+      "features":"Tiện ích",
       "free_wifi": "Wifi miễn phí",
       "free_parking": "Chỗ đậu xe miễn phí",
       "air_conditioner": "Máy điều hòa",
@@ -25,7 +25,7 @@
       "logout": "Đăng xuất",
       "trending_this_week": "Xu hướng tuần này",
        "filter":"Bộ lọc",
-       "clear": "làm sạch",
+       "clear": "Xoá bộ lọc",
        "search":"Tìm kiếm quán hoặc địa chỉ"
     },
     "price":"Giá",

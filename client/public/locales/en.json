@@ -8,6 +8,7 @@
       "vintage": "Vintage"
     },
     "features": {
+      "features":"Features",
       "free_wifi": "Free Wifi",
       "free_parking": "Free Parking",
       "air_conditioner": "Air Conditioner",
@@ -27,7 +28,7 @@
        "clear": "Clear Filters",
        "search":"Search for a coffee or location"
     },
-    "price":"price",
+    "price":"Price",
     "hour":{
       "timeOpen":"Time open",
       "style":"Style",

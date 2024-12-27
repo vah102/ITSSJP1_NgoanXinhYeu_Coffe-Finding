@@ -22,7 +22,7 @@ type Store = {
 };
 
 function Home() {
-    const{t}=useTranslation();
+    const { t } = useTranslation();
     const [sortOption, setSortOption] = useState("");
     const [visible, setVisible] = useState(false);
 
@@ -82,7 +82,7 @@ function Home() {
                                         navigate(`/search`);
                                     }}
                                 >
-                                   {t("home.location")}
+                                    {t("home.location")}
                                 </PopperItem>
                             </Popper>
                         </div>
@@ -92,7 +92,10 @@ function Home() {
                         className="flex flex-row items-center gap-3 cursor-pointer"
                         onClick={handleToggleSort}
                     >
-                        <div>{t("home.sort")}{sortOption}</div>
+                        <div>
+                            {t("home.sort")}
+                            {sortOption}
+                        </div>
                         <FontAwesomeIcon icon={faArrowDownWideShort} />
                     </div>
                 </Tippy>

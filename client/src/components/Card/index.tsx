@@ -21,8 +21,9 @@ type CardProps = {
 };
 
 function Card({ item }: CardProps) {
-    const [imageSrc, setImageSrc] = useState("");
+    const address = item.address.split("|").map((i) => i.trim());
 
+    const [imageSrc, setImageSrc] = useState("");
     const handleImageError = () => {
         setImageSrc("/default.png");
     };
@@ -31,6 +32,25 @@ function Card({ item }: CardProps) {
         console.log("Card rendered with:", item);
         setImageSrc(item.logo);
     }, [item]);
+
+    const savedLanguage = localStorage.getItem("language") || "en";
+    const [language, setLanguage] = useState(0);
+    useEffect(() => {
+        switch (savedLanguage) {
+            case "en":
+                setLanguage(0); 
+                break;
+            case "jp":
+                setLanguage(2);
+                break;
+            case "vi":
+                setLanguage(1); 
+                break;
+            default:
+                setLanguage(0); 
+                break;
+        }
+    }, [savedLanguage]);
 
     return (
         <Link to={`/storedetail/${item.store_id}`} className={cx("wrapper")}>
@@ -41,7 +61,7 @@ function Card({ item }: CardProps) {
                 <span className="text-3xl font-bold mb-3 h-[2.5em] line-clamp-2">
                     {item.name}
                 </span>
-                <span className="mb-3 line-clamp-2">{item.address}</span>
+                <span className="mb-3 line-clamp-2">{address[language]}</span>
                 <span className="font-semibold">
                     {item.min_price} ~ {item.max_price} VND
                 </span>
