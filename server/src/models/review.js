@@ -46,6 +46,11 @@ const Review = sequelize.define('Review', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW, // Mặc định giá trị là thời gian hiện tại
+  },
 }, {
   sequelize,
   modelName: 'Review',

@@ -1,3 +1,4 @@
+import sequelize from '../config/db.js'; // import sequelize
 import Review from '../models/review.js'; // import Review model
 
 const reviewController = {
@@ -16,7 +17,8 @@ const reviewController = {
               user_id,
               rate,
               comment,
-              image
+              image,
+              created_at: sequelize.fn('CONVERT_TZ', sequelize.fn('NOW'), '+00:00', '+07:00') // Lưu thời gian với múi giờ VN
             });
       
             // Trả về kết quả tạo review thành công

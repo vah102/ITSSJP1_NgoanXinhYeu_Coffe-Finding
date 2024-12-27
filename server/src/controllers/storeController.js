@@ -270,13 +270,14 @@ const storeController = {
           },
           {
             model: Review, // Kết nối với bảng Review
-            attributes: ['id', 'user_id', 'rate', 'comment', 'image'], // Chọn các trường cần thiết
+            attributes: ['id', 'user_id', 'rate', 'comment', 'image', 'created_at'], // Chọn các trường cần thiết
             include: [
               {
                 model: User, // Bao gồm thông tin user viết review (nếu cần)
                 attributes: ['username', 'avatar'], // Chọn các trường từ User
               },
             ],
+            // order: [['created_at', 'DESC']], // Sắp xếp theo thời gian tạo review giảm dần
           },
         ],
       });
@@ -285,7 +286,10 @@ const storeController = {
       if (!store) {
         return res.status(404).json({ message: 'Store not found' });
       }
-  
+      // Sắp xếp các review theo thời gian tạo (created_at)
+      if (store.Reviews) {
+        store.Reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sắp xếp giảm dần theo created_at
+      }
       // Trả về thông tin store, features, menu, và chi tiết menu liên quan
       res.json(store);
     } catch (error) {
