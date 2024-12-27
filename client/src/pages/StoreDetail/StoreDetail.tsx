@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleChevronRight,
+  faCircleChevronLeft,
+  faStar as faStarSolid,
+} from "@fortawesome/free-solid-svg-icons";
 import { faBan } from "@fortawesome/free-solid-svg-icons/faBan";
 import {
   faSnowflake,
@@ -24,6 +28,8 @@ import ReviewCard from "../../components/CardReview/ReviewCard";
 import RatingOverview from "../../components/CardReview/RatingOverview";
 import ReviewForm from "../../components/CardReview/ReviewForm";
 import { useTranslation } from "react-i18next";
+import Pagination from "../../components/Pagination";
+
 type User = {
   username: string;
   avatar: string;
@@ -101,12 +107,58 @@ function StoreDetail() {
   const { data, loading } = useFetch<Store>(
     `http://localhost:3000/api/store-details/${store_id}`
   );
-  const { data: user, loading: userLoading } = useFetch<User>(`http://localhost:3000/api/user/profile`);
+  const { data: user, loading: userLoading } = useFetch<User>(
+    `http://localhost:3000/api/user/profile`
+  );
   const [isBlacklisted, setIsBlacklisted] = useState(false);
 
   const menuDetails = data?.Menus?.flatMap((menu) => menu.MenuDetails) || [];
+  const [currentIndex, setCurrentIndex] = useState(0); // Vị trí bắt đầu
+
+  const itemsPerPage = 3; // Số mục hiển thị mỗi lần
+  const totalPages = Math.ceil(menuDetails.length / itemsPerPage);
+
+  // Xử lý nút sang trái
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalPages - 1));
+  };
+
+  // Xử lý nút sang phải
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev < totalPages - 1 ? prev + 1 : 0));
+  };
+
+  // Lấy các mục cần hiển thị
+  const visibleItems = menuDetails.slice(
+    currentIndex * itemsPerPage,
+    currentIndex * itemsPerPage + itemsPerPage
+  );
+  const paddedItems =
+    visibleItems.length < itemsPerPage
+      ? [
+          ...visibleItems,
+          ...menuDetails.slice(0, itemsPerPage - visibleItems.length),
+        ]
+      : visibleItems;
+
   const Features = data?.Features || [];
   const Reviews = data?.Reviews || [];
+  const itemsPerPageReview = 2; // Số review mỗi trang
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Tính toán dữ liệu hiển thị
+  const currentItems = Reviews.slice(
+    currentPage * itemsPerPageReview,
+    (currentPage + 1) * itemsPerPageReview
+  );
+  const pageCount = Reviews
+    ? Math.ceil(Reviews.length / itemsPerPageReview)
+    : 1;
+
+  // Hàm xử lý khi chuyển trang
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected);
+  };
   const token = Cookies.get("token");
 
   const API_URL = "http://localhost:3000/api/blacklist";
@@ -127,7 +179,6 @@ function StoreDetail() {
     }
   };
 
-
   useEffect(() => {
     axios
       .get(`http://localhost:3000/api/blacklist/all`, {
@@ -145,17 +196,25 @@ function StoreDetail() {
         console.error("Error fetching blacklist details:", error);
       });
 
-      //review 
-      const handleReviewSubmit = (rating: number, comment: string, photo: string | null) => {
-        console.log("Submitted Review:");
-        console.log("Rating:", rating);
-        console.log("Comment:", comment);
-        console.log("Photo:", photo);
-        // Gửi dữ liệu lên server hoặc cập nhật lại state
-      };
+    //review
+    const handleReviewSubmit = (
+      rating: number,
+      comment: string,
+      photo: string | null
+    ) => {
+      console.log("Submitted Review:");
+      console.log("Rating:", rating);
+      console.log("Comment:", comment);
+      console.log("Photo:", photo);
+      // Gửi dữ liệu lên server hoặc cập nhật lại state
+    };
   }, [store_id, token]);
 
-  function handleReviewSubmit(rating: number, comment: string, photo: string | null): void {
+  function handleReviewSubmit(
+    rating: number,
+    comment: string,
+    photo: string | null
+  ): void {
     throw new Error("Function not implemented.");
   }
 
@@ -213,7 +272,7 @@ function StoreDetail() {
           <button
             className={`flex items-center space-x-2 px-4 py-2 rounded ${
               isBlacklisted
-                ? "bg-red-400 text-white cursor-not-allowed"
+                ? "bg-red-500 text-white cursor-not-allowed"
                 : "bg-gray-300 hover:bg-gray-400"
             }`}
             onClick={() => {
@@ -228,15 +287,37 @@ function StoreDetail() {
           {/* Menu */}
           <div className="bg-white p-12 rounded shadow">
             <h2 className="text-2xl font-bold mb-4">{t("store.menu")}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-              {menuDetails &&
-                menuDetails.map((item, index) => (
-                  <div className="">
-                    <Menu key={index} item={item} />
-                  </div>
-                ))}
+            <div className="relative">
+              {/* Bao bọc menu và nút trong container */}
+              <div className="">
+                {/* Nút Sang Trái */}
+                <button
+                  onClick={handlePrev}
+                  className="absolute left-[-50px] top-1/2 transform -translate-y-1/2 p-16 z-10"
+                >
+                  <FontAwesomeIcon icon={faCircleChevronLeft} />
+                </button>
+
+                {/* Danh sách Menu */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 p-6">
+                  {paddedItems.map((item, index) => (
+                    <div key={index} className="relative">
+                      <Menu item={item} />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Nút Sang Phải */}
+                <button
+                  onClick={handleNext}
+                  className="absolute right-[-50px] top-1/2 transform -translate-y-1/2 p-16 z-10"
+                >
+                  <FontAwesomeIcon icon={faCircleChevronRight} />
+                </button>
+              </div>
             </div>
           </div>
+
           {/* Location & Hours */}
           <div className="bg-white p-12 rounded shadow">
             <h2 className="text-3xl font-bold mb-4 p-6">{t("store.location_hour")}</h2>
@@ -314,15 +395,14 @@ function StoreDetail() {
             </div>
           </div>
           {/* Review */}
-          {/* Review */}
           <div className="bg-white p-12 rounded shadow">
             <h2 className="text-3xl font-bold mb-4">{t("store.review")}</h2>
             {/* Phần ReviewForm */}
             {token ? (
               <ReviewForm
-                username= {user?.username ?? ''} // Tên người dùng lấy từ auth hoặc props
-                avatar= {user?.avatar ?? ''}// Avatar người dùng
-                store_id={data?.store_id ?? ''} 
+                username={user?.username ?? ""} // Tên người dùng lấy từ auth hoặc props
+                avatar={user?.avatar ?? ""} // Avatar người dùng
+                store_id={data?.store_id ?? ""}
                 onSubmit={handleReviewSubmit} // Hàm gửi review
               />
             ) : (
@@ -336,15 +416,14 @@ function StoreDetail() {
             {/* Danh sách review */}
             {Reviews.length > 0 ? (
               <div className="space-y-8">
-                {Reviews.map((review) => {
-                  // Lấy dữ liệu từ review
-                  const user = review.User || {}; // Truy cập phần tử đầu tiên của mảng User
+                {currentItems.map((review) => {
+                  const user = review.User || {};
                   return (
                     <ReviewCard
                       key={review.id}
                       item={{
-                        avatar: review.User.avatar || "default-avatar.png",
-                        username: review.User.username || "Anonymous",
+                        avatar: user.avatar || "default-avatar.png",
+                        username: user.username || "Anonymous",
                         time: "24/12/2024", // Nếu có thời gian thực trong dữ liệu review, hãy thay vào đây
                         rate: review.rate,
                         comment: review.comment,
@@ -353,6 +432,9 @@ function StoreDetail() {
                     />
                   );
                 })}
+
+                {/* Pagination */}
+                <Pagination pages={pageCount} onPageChange={handlePageClick} />
               </div>
             ) : (
               <p className="text-black">No reviews yet.</p>

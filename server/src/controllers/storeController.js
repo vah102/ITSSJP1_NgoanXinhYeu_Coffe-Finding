@@ -100,27 +100,46 @@ const storeController = {
         }
 
         // Điều kiện lọc theo giá (minPrice và maxPrice)
-        if (minPrice && maxPrice) {
-            whereCondition.min_price = { [Op.lte]: maxPrice };
-            whereCondition.max_price = { [Op.gte]: minPrice };
-        }
+        // if (minPrice && maxPrice) {
+        //     whereCondition.min_price = { [Op.lte]: maxPrice };
+        //     whereCondition.max_price = { [Op.gte]: minPrice };
+        // }
+        if (minPrice || maxPrice) {
+          whereCondition[Op.and] = []; // Khởi tạo mảng điều kiện
+      
+          if (minPrice && maxPrice) {
+              // Truy vấn theo cả minPrice và maxPrice
+              whereCondition[Op.and].push(
+                  { min_price: { [Op.gte]: minPrice } }, // min_price <= minPrice
+                  { max_price: { [Op.lte]: maxPrice } }  // max_price >= maxPrice
+              );
+          } else if (minPrice) {
+              // Chỉ có maxPrice
+              whereCondition[Op.and].push(
+                  { min_price: { [Op.gte]: minPrice } }  // min_price >= minPrice
+              );
+          }
+      }
 
         // Lọc theo các style (nếu có)
         if (styles) {
-          const styleArray = styles.split(',').map(style => style.trim());  // Chuyển thành mảng sau khi split chuỗi
+          const styleArray = styles.split(',').map(style => style.trim()); // Chuyển thành mảng sau khi split chuỗi
           whereCondition[Op.or] = [
               ...(whereCondition[Op.or] || []), // Giữ nguyên các điều kiện đã có
-              { style: { [Op.in]: styleArray } }
+              ...styleArray.map(style => ({ style: { [Op.like]: `%${style}%` } }))
           ];
-        }
+      }
 
 
         // Lọc theo các tính năng (features_name)
         let featureCondition = null;
         if (features) {
-            const featureArray = features.split(',').map(feature => feature.trim()); // Chuyển thành mảng sau khi split chuỗi
-            featureCondition = { features_name: { [Op.in]: featureArray } };
-        }
+          const featureArray = features.split(',').map(feature => feature.trim()); // Chuyển thành mảng sau khi split chuỗi
+          featureCondition = {
+              [Op.or]: featureArray.map(feature => ({ features_name: { [Op.like]: `%${feature}%` } }))
+          };
+      }
+      
 
         // Nếu người dùng đã đăng nhập, lọc bỏ các cửa hàng trong blacklist
         let excludeStoreIds = [];
@@ -251,13 +270,14 @@ const storeController = {
           },
           {
             model: Review, // Kết nối với bảng Review
-            attributes: ['id', 'user_id', 'rate', 'comment', 'image'], // Chọn các trường cần thiết
+            attributes: ['id', 'user_id', 'rate', 'comment', 'image', 'created_at'], // Chọn các trường cần thiết
             include: [
               {
                 model: User, // Bao gồm thông tin user viết review (nếu cần)
                 attributes: ['username', 'avatar'], // Chọn các trường từ User
               },
             ],
+            // order: [['created_at', 'DESC']], // Sắp xếp theo thời gian tạo review giảm dần
           },
         ],
       });
@@ -266,7 +286,10 @@ const storeController = {
       if (!store) {
         return res.status(404).json({ message: 'Store not found' });
       }
-  
+      // Sắp xếp các review theo thời gian tạo (created_at)
+      if (store.Reviews) {
+        store.Reviews.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sắp xếp giảm dần theo created_at
+      }
       // Trả về thông tin store, features, menu, và chi tiết menu liên quan
       res.json(store);
     } catch (error) {
