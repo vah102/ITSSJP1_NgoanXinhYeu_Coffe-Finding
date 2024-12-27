@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-
+import { useTranslation } from "react-i18next";
 type RatingOverviewProps = {
   reviews: {
     id: number;
@@ -22,7 +22,7 @@ function RatingOverview({ reviews, averageRating }: RatingOverviewProps) {
     stars: star,
     percentage: (reviews.filter(review => review.rate === star).length / reviews.length) * 100,
   }));
-
+  const{t}=useTranslation();
   return (
     <div className="flex gap-8 p-6">
       {/* Hiển thị điểm trung bình của quán */}
@@ -42,14 +42,14 @@ function RatingOverview({ reviews, averageRating }: RatingOverviewProps) {
           ))}
         </div>
         <span className="text-4xl font-bold">{averageRating}</span>
-        <span className="text-4xl text-gray-500">Rating Overall</span>
+        <span className="text-4xl text-gray-500">{t("store.rating_over")}</span>
       </div>
 
       {/* Hiển thị tỷ lệ phần trăm cho từng sao */}
       <div className="flex-[3]">
         {ratingBreakdown.map(({ stars, percentage }) => (
           <div key={stars} className="flex items-center gap-2 mb-2">
-            <span className="w-20 text-lg font-semibold">{stars} stars</span>
+            <span className="w-20 text-lg font-semibold">{stars} {t("store.star")}</span>
             <div className="flex-1 h-4 bg-gray-200 rounded-full">
               <div
                 className="h-full bg-yellow-400 rounded-full transition-all duration-300"

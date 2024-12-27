@@ -4,7 +4,7 @@ import "./CardBlackList.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 
 interface CafeCardProps {
   avatar: string;
@@ -34,7 +34,7 @@ const CardBlackList: React.FC<CafeCardProps> = ({
     e.stopPropagation(); 
     handleRemoveStore(store_id); 
   };
-
+  const{t}=useTranslation();
   return (
   <Link to={`/storedetail/${store_id}`} className="wrapper">    
     <div className="card">
@@ -52,13 +52,13 @@ const CardBlackList: React.FC<CafeCardProps> = ({
         </div>
         <div className="rating-stars">⭐ {rate} / 5</div>
         <div className="info-row">
-          <span className="info"><b>Time open:</b> {time_open}</span>
+          <span className="info"><b>{t("hour.timeOpen")}</b> {time_open}</span>
         </div>
         <div className="info-row">
-          <span className="info"><b>Style:</b> {style}</span>
+          <span className="info"><b>{t("hour.style")}:</b> {style}</span>
         </div>
         <div className="info-row">
-          <span className="info"><b>Address:</b> {address}</span>
+          <span className="info"><b>{t("hour.address")}:</b> {address}</span>
         </div>
       </div>
     </div>

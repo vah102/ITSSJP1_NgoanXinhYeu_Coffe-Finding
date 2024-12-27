@@ -1,14 +1,22 @@
+import { useTranslation } from "react-i18next";
 type Props = {
     selectedStyles: string[];
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const styles = ["Working Space", "Tropical", "Industrial", "Modern", "Vintage"];
 
 function StyleFilter({ selectedStyles, onChange }: Props) {
+    const { t } = useTranslation();
+    const styles = [
+        t("styles.working_space"),
+        t("styles.tropical"),
+        t("styles.industrial"),
+        t("styles.modern"),
+        t("styles.vintage")
+    ];
     return (
         <div>
-            <h4 className="text-md font-semibold mb-2">Styles</h4>
+             <h4 className="text-md font-semibold mb-2">{t("styles.styles")}</h4> 
             {styles.map((style, index) => (
                 <label key={index} className="flex items-center space-x-2 cursor-pointer">
                     <input

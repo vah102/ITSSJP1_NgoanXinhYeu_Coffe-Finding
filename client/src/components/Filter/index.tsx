@@ -7,7 +7,9 @@ import StyleFilter from "../StyleFilter";
 import { useEffect, useState } from "react";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 function Filter() {
+    const{t}=useTranslation();
     const search = useSearchContext();
     const navigate = useNavigate();
 
@@ -73,12 +75,12 @@ function Filter() {
         <div className="bg-[var(--color-secondary)] w-[250px] h-full rounded-[10px] pl-[25px] pb-[25px] flex flex-col mt-3">
             
             <div className="w-full flex flex-row items-center justify-between">
-                <h2 className="text-3xl font-bold">Filter</h2>
+                <h2 className="text-3xl font-bold">{t("header.filter")}</h2>
                 <Button
                     onClick={handleClearFilter}
                     icon={<FontAwesomeIcon icon={faRotateRight} />}
                 >
-                    Clear Filters
+                   {t("header.clear")}
                 </Button>
             </div>
 

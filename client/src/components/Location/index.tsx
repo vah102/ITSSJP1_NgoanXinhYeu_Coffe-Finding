@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 import { useSearchContext } from "../../services/contexts/SearchContext";
-
+import { useTranslation } from "react-i18next";
 
 function Location () {
   const search = useSearchContext();
-  
+  const{t}=useTranslation();
   // const [location, setLocation] = useState<{ lat: number | null; lon: number | null }>({
   //   lat: null,
   //   lon: null,
@@ -148,7 +148,7 @@ function Location () {
           />
           <input
             type="text"
-            placeholder="Enter address (e.g., 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)"
+            placeholder={t("home.enter_address")}
             value={manualAddress}
             onFocus={handleInputFocus}
             onChange={(e) => {

@@ -51,11 +51,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { UserProfile } from "../../pages/Profile/Profile";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 export default function UserSidebar() {
     const [formData, setFormData] = useState<UserProfile | null>(null);
     const [activeLink, setActiveLink] = useState<string>("profile"); // State để theo dõi link đang được chọn
-
+    const { t } = useTranslation();
     // Lấy dữ liệu từ API khi component được render
     useEffect(() => {
         axios
@@ -83,7 +84,7 @@ export default function UserSidebar() {
                 >
                     <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "5px" }}>
                         <FontAwesomeIcon icon={faUser} />
-                        <span className="title">Profile</span>
+                        <span className="title">{t("header.profile")}</span>
                     </div>
                 </Link>
                 <Link
@@ -94,7 +95,7 @@ export default function UserSidebar() {
                 >
                     <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "5px" }}>
                         <FontAwesomeIcon icon={faBan} />
-                        <span className="title">Blacklist</span>
+                        <span className="title">{t("blacklist")}</span>
                     </div>
                 </Link>
             </div>

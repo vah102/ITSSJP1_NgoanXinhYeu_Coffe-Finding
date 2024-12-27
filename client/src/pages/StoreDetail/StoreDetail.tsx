@@ -23,7 +23,7 @@ import Cookies from "js-cookie";
 import ReviewCard from "../../components/CardReview/ReviewCard";
 import RatingOverview from "../../components/CardReview/RatingOverview";
 import ReviewForm from "../../components/CardReview/ReviewForm";
-
+import { useTranslation } from "react-i18next";
 type User = {
   username: string;
   avatar: string;
@@ -95,6 +95,7 @@ const featureIcons: Record<string, JSX.Element> = {
 };
 
 function StoreDetail() {
+  const{t}=useTranslation();
   const { store_id } = useParams(); // Lấy id từ URL để gọi dữ liệu cho quán
   const navigate = useNavigate(); // Hook điều hướng
   const { data, loading } = useFetch<Store>(
@@ -199,7 +200,7 @@ function StoreDetail() {
                 {data?.style}
               </h2>
               <h3 className="text-2xl text-green-400 font-semibold">
-                Open now
+                {t("store.open_now")}
               </h3>
             </div>
           </div>
@@ -221,12 +222,12 @@ function StoreDetail() {
             disabled={isBlacklisted}
           >
             <FontAwesomeIcon icon={faBan} />
-            <span>Blacklist</span>
+            <span>{t("store.blacklist")}</span>
           </button>
 
           {/* Menu */}
           <div className="bg-white p-12 rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">Menu</h2>
+            <h2 className="text-2xl font-bold mb-4">{t("store.menu")}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
               {menuDetails &&
                 menuDetails.map((item, index) => (
@@ -238,7 +239,7 @@ function StoreDetail() {
           </div>
           {/* Location & Hours */}
           <div className="bg-white p-12 rounded shadow">
-            <h2 className="text-3xl font-bold mb-4 p-6">Location & Hours</h2>
+            <h2 className="text-3xl font-bold mb-4 p-6">{t("store.location_hour")}</h2>
             <div className="flex space-x-4">
               <div className="w-1/2 h-96 bg-gray-300">
                 <iframe
@@ -250,42 +251,42 @@ function StoreDetail() {
               </div>
 
               <div className="w-1/2 p-12">
-                <p className="text-2xl font-semibold mb-2">Opening Hours:</p>
+                <p className="text-2xl font-semibold mb-2">{t("store.open_hour")}</p>
                 <ul className="text-2xl space-y-2">
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Mon:</span>
+                    <span>{t("store.mon")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                   </li>
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Tue:</span>
+                    <span>{t("store.tue")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                   </li>
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Wed:</span>
+                    <span>{t("store.wed")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                   </li>
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Thu:</span>
+                    <span>{t("store.thu")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                     <span></span>
-                    <span className="text-green-500">Open now</span>
+                    <span className="text-green-500">{t("store.open_now")}</span>
                   </li>
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Fri:</span>
+                    <span>{t("store.fri")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                   </li>
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Sat:</span>
+                    <span>{t("store.sat")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                   </li>
                   <li className="grid grid-cols-5 gap-0">
-                    <span>Sun:</span>
+                    <span>{t("store.sun")}:</span>
                     <span>{data?.time_open} AM -</span>
                     <span>{data?.time_close} PM</span>
                   </li>
@@ -296,7 +297,7 @@ function StoreDetail() {
 
           {/*Amenities and more*/}
           <div className="bg-white p-12 rounded shadow">
-            <h2 className="text-3xl font-bold mb-4">Amenities and More</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("store.amenities")}</h2>
             <div className="grid grid-cols-2 gap-4">
               {Features &&
                 Features.map((item, index) => (
@@ -315,7 +316,7 @@ function StoreDetail() {
           {/* Review */}
           {/* Review */}
           <div className="bg-white p-12 rounded shadow">
-            <h2 className="text-3xl font-bold mb-4">Review</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("store.review")}</h2>
             {/* Phần ReviewForm */}
             {token ? (
               <ReviewForm

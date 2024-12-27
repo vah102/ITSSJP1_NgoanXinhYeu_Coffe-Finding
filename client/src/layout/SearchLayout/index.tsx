@@ -18,7 +18,7 @@ function SearchLayout({ children }: LayoutProps) {
                     <Location />
                     <Filter />
                 </div>
-                s<div className="pl-[280px] w-full">{children}</div>
+                <div className="pl-[280px] w-full">{children}</div>
             </div>
         </div>
     );

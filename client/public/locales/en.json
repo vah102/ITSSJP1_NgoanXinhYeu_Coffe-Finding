@@ -1,0 +1,74 @@
+{
+    "styles": {
+      "styles": "Styles",
+      "working_space": "Working Space",
+      "tropical": "Tropical",
+      "industrial": "Industrial",
+      "modern": "Modern",
+      "vintage": "Vintage"
+    },
+    "features": {
+      "free_wifi": "Free Wifi",
+      "free_parking": "Free Parking",
+      "air_conditioner": "Air Conditioner",
+      "power_outlet": "Power Outlet",
+      "smoking_room": "Smoking Room",
+      "smoking_no": "Smoking: No",
+      "pet_allowed": "Pet allowed",
+      "good_for_kids": "Good for Kids"
+    },
+    "header": {
+      "login": "Login",
+      "signup": "Signup",
+      "profile": "Profile",
+      "logout": "Logout",
+      "trending_this_week": "Trending this week",
+      "filter":"Filter",
+       "clear": "Clear Filters",
+       "search":"Search for a coffee or location"
+    },
+    "price":"price",
+    "hour":{
+      "timeOpen":"Time open",
+      "style":"Style",
+      "address":"Address"
+    },
+   "blacklist":"Your Blacklist",
+   "home":{
+    "trending":"Trending this week",
+    "rate":" Highest rated",
+    "location":"Nearest location",
+    "sort":"Sort by",
+    "enter_address":"Enter address (e.g., 8 Bùi Ngọc Dương, Thanh Nhàn, Hai Bà Trưng, Việt Nam)"
+   },
+   "store":{
+    "open_now":"Open now",
+    "blacklist":"Blacklist",
+    "menu":"Menu",
+    "location_hour":"Location & Hours",
+    "open_hour":"Opening Hours:",
+    "mon":"Mon",
+    "tue":"Tue",
+    "wed":"Wed",
+    "thu":"Thu",
+    "fri":"Fri",
+    "sat":"Sat",
+    "sun":"Sun",
+    "amenities":"Amenities and More",
+    "review":"Review",
+    "rating_over":"Rating Overall",
+    "star":"stars"
+   },
+   "review":{
+    "start":" Start Your Review",
+    "add_photo":" Add Photo",
+    "save":"Save"
+   },
+   "profile":{
+    "update_avt":" Update Avatar",
+    "your_pro":"YOUR PROFILE",
+    "submit":"Submit",
+    "edit":"Edit"
+   }
+  }
+  

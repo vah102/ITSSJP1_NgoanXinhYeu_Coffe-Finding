@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { getUserBlacklist, removeStoreFromBlacklist } from "../../services/contexts/BlackList";
 import CardBlackList from "../../components/CardBlackList"; // Import CardBlackList
 import Cookies from "js-cookie";
-
+import { useTranslation } from "react-i18next";
 const Blacklist: React.FC = () => {
+    const{t}=useTranslation();
     const [blacklist, setBlacklist] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -53,7 +54,7 @@ const Blacklist: React.FC = () => {
 
     return (
         <div>
-            <h1 className="text-4xl font-bold">Your Blacklist</h1>
+            <h1 className="text-4xl font-bold">{t("blacklist")}</h1>
             <div>
                 {blacklist?.Blacklist_details?.map((store: any) => (
                     <div key={store.store_id}>

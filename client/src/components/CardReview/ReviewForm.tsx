@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faTimes, faCamera } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-
+import { useTranslation } from "react-i18next";
 type ReviewFormProps = {
   username: string; // Tên người dùng
   avatar: string; // Avatar người dùng
@@ -41,7 +41,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       reader.readAsDataURL(e.target.files[0]);
     }
   };
-
+  const { t } = useTranslation();
   // Xử lý khi người dùng gửi đánh giá
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,7 +111,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           className="text-[#57370E] font-semibold"
           onClick={() => setIsFormOpen(true)} // Mở form khi nhấn "Start your review"
         >
-          Start Your Review
+          {t("review.start")}
         </button>
       </div>
 
@@ -155,7 +155,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                 className="flex items-center text-[#57370E] cursor-pointer"
               >
                 <FontAwesomeIcon icon={faCamera} className="mr-2 text-[#57370E]" />
-                Add Photo
+                {t("review.add_photo")}
               </label>
               <input
                 type="file"
@@ -178,7 +178,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
               className="w-full bg-[#57370E] text-white py-2 rounded-lg hover:bg-[#4F310D] transition"
               disabled={rating === 0 || comment.trim() === ""}
             >
-              Save
+                {t("review.save")}
             </button>
           </div>
         </div>

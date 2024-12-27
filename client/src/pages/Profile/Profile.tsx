@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./profile.css";
 import { toast } from "react-toastify";
-
+import { useTranslation } from "react-i18next";
 // Định nghĩa kiểu dữ liệu cho thông tin người dùng
 export interface UserProfile {
     user_id: number;
@@ -16,6 +16,7 @@ export interface UserProfile {
 }
 
 export default function Profile() {
+    const{t}=useTranslation();
     const [formData, setFormData] = useState<UserProfile | null>(null); // Dữ liệu người dùng
     const [selectedFile, setSelectedFile] = useState<File | null>(null); // Tệp ảnh được chọn
     const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
@@ -105,12 +106,12 @@ export default function Profile() {
                 <img src={formData.avatar} alt="User Avatar" className="avatar-img" />
                 <input type="file" accept="image/*" onChange={handleFileChange} className="file-input" id="file-input" style={{ display: "none" }} />
                 <button className="button-update-avatar" onClick={() => document.getElementById("file-input")?.click()}>
-                    Update Avatar
+                    {t("profile.update_avt")}
                 </button>
                 {selectedFile && <button className="button-upload-avatar" onClick={handleAvatarUpload}></button>}
             </div>
             <div className="form">
-                <h2 style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold", fontSize: "20px" }}>YOUR PROFILE</h2>
+                <h2 style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold", fontSize: "20px" }}>{t("profile.your_pro")}</h2>
 
                 <div className="item">
                     <input className="input" placeholder="Username" type="text" value={formData.username} onChange={(e) => handleChange("username", e.target.value)} disabled={!isEditing} />
@@ -133,7 +134,7 @@ export default function Profile() {
                     <input className="input" placeholder="Address" type="text" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} disabled={!isEditing} />
                 </div>
                 <button className="button-update-avatar" onClick={isEditing ? handleSubmit : () => setIsEditing(true)}>
-                    {isEditing ? "SUBMIT" : "EDIT"}
+                    {isEditing ? t("profile.submit") : t("profile.edit")}
                 </button>
             </div>
         </div>

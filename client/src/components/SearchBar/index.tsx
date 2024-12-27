@@ -6,6 +6,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,7 @@ interface Parameter {
 }
 
 function SearchBar({ className }: Parameter) {
-
+    const{t}=useTranslation();
     const navigate = useNavigate();
     const search = useSearchContext();
     const [keyword, setKeyword] = useState<string>(search.keyword);
@@ -32,7 +33,7 @@ function SearchBar({ className }: Parameter) {
         <form className={cx("wrapper", className)} onSubmit={handleSubmit}>
             <input
                 type="text"
-                placeholder="Search for a coffee or location"
+                placeholder={t("header.search")}
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 className={cx("input")}

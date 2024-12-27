@@ -1,0 +1,76 @@
+{
+    "styles": {
+      "styles":"Phong cách",
+      "working_space": "Không gian làm việc",
+      "tropical": "Nhiệt đới",
+      "industrial": "Công nghiệp",
+      "modern": "Hiện đại",
+      "vintage": "Cổ điển"
+    },
+    "features": {
+      "features":"tiện ích",
+      "free_wifi": "Wifi miễn phí",
+      "free_parking": "Chỗ đậu xe miễn phí",
+      "air_conditioner": "Máy điều hòa",
+      "power_outlet": "Ổ cắm điện",
+      "smoking_room": "Phòng hút thuốc",
+      "smoking_no": "Không hút thuốc",
+      "pet_allowed": "Cho phép thú cưng",
+      "good_for_kids": "Phù hợp cho trẻ em"
+    },
+    "header": {
+      "login": "Đăng nhập",
+      "signup": "Đăng ký",
+      "profile": "Trang cá nhân ",
+      "logout": "Đăng xuất",
+      "trending_this_week": "Xu hướng tuần này",
+       "filter":"Bộ lọc",
+       "clear": "làm sạch",
+       "search":"Tìm kiếm quán hoặc địa chỉ"
+    },
+    "price":"Giá",
+    "hour":{
+      "timeOpen":"Giờ mở cửa",
+      "style":"Phong cách",
+      "address":"Địa chỉ"
+    },
+   "blacklist":"Danh sách đen của bạn",
+   "home":{
+    "trending":"Xu hướng tuần",
+    "rate":"Lượt đánh giá cao",
+    "location":"Những địa chỉ gần",
+    "sort":"Sắp xếp theo",
+    "enter_address":"Nhập vào địa chỉ"
+   },
+   "store":{
+    "open_now":"Giờ mở cửa",
+    "blacklist":"Danh sách đen",
+    "menu":"Thực đơn",
+    "location_hour":"Địa chỉ và giờ mở cửa",
+    "open_hour":"Giờ mở cửa",
+    "mon":"Thứ hai",
+    "tue":"Thứ ba",
+    "wed":"Thứ tư",
+    "thu":"Thứ năm",
+    "fri":"Thứ sáu",
+    "sat":"Thứ bảy",
+    "sun":"Chủ nhật",
+    "amenities":"Tiện nghi",
+    "review":"Đánh giá",
+     "rating_over":"Tổng số đánh giá",
+    "star":"sao"
+   },
+   "review":{
+    "start":" Bắt đầu đánh giá của bạn",
+    "add_photo":"Thêm ảnh",
+    "save":"Lưu"
+   },
+   "profile":{
+    "update_avt":"Cập nhật ảnh",
+    "your_pro":"Hồ sơ của bạn",
+    "submit":"Gửi",
+    "edit":"Sửa"
+   }
+
+  }
+  

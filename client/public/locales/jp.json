@@ -1,0 +1,74 @@
+{
+  "styles": {
+    "styles": "スタイル",
+    "working_space": "ワーキングスペース",
+    "tropical": "トロピカル",
+    "industrial": "インダストリアル",
+    "modern": "モダン",
+    "vintage": "ビンテージ"
+  },
+  "features": {
+    "features": "特徴",
+    "free_wifi": "無料Wi-Fi",
+    "free_parking": "無料駐車場",
+    "air_conditioner": "エアコン",
+    "power_outlet": "電源コンセント",
+    "smoking_room": "喫煙室",
+    "smoking_no": "禁煙",
+    "pet_allowed": "ペット同伴可",
+    "good_for_kids": "子供に優しい"
+  },
+  "header": {
+    "login": "ログイン",
+    "signup": "サインアップ",
+    "profile": "プロファイル",
+    "logout": "ログアウ",
+    "trending_this_week": "今週の注目",
+    "filter": "フィルター",
+    "clear": "フィルターをクリアする",
+    "search":"コーヒーまたは場所を検索する"
+  },
+  "price": "価格",
+  "hour": {
+    "timeOpen": "オープン時間",
+    "style": "スタイル",
+    "address": "住所"
+  },
+  "blacklist": "ブラックリスト",
+  "home": {
+    "trending": "今週のトレンド",
+    "rate": "最高評価",
+    "location": "最寄りの場所",
+    "sort": "並べ替え",
+    "enter_address":"住所を入力してください"
+  },
+  "store": {
+    "open_now": "オープン",
+    "blacklist": "ブラックリスト",
+    "menu": "メニュー",
+    "location_hour": "場所と営業時間",
+    "open_hour": "営業時間:",
+    "mon": "月曜日",
+    "tue": "火曜日",
+    "wed": "水曜日",
+    "thu": "木曜日",
+    "fri": "金曜日",
+    "sat": "土曜日",
+    "sun": "日曜日",
+    "amenities": "アメニティなど",
+    "review": "レビュー",
+     "rating_over":"総合評価",
+    "star":"星"
+  },
+  "review":{
+   "start":" レビューを始める",
+   "add_photo":"写真を追加",
+   "save":"保存"
+  },
+  "profile":{
+   "update_avt":"アバターを更新する",
+   "your_pro":"プロフィール",
+   "submit":"送信",
+   "edit":"編集"
+  }
+}

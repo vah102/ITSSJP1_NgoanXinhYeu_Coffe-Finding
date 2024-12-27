@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface LocationProps {
   lat: number | null;
@@ -43,11 +44,11 @@ const LocationDisplay: React.FC<LocationProps> = ({ lat, lon }) => {
       fetchAddress();
     }
   }, [lat, lon]);
-
+ const{t}=useTranslation();
   return (
     <div>
       {address ? (
-        <p>Địa chỉ: {address}</p>
+        <p>{t("hour.address")}: {address}</p>
       ) : (
         <p>Chưa có dữ liệu về địa chỉ</p>
       )}

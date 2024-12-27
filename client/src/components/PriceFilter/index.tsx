@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 type Props = {
     selectedPrice: {
         min_price: number | null;
@@ -22,9 +23,10 @@ const prices = [
 ];
 
 function PriceFilter({ selectedPrice, onChange }: Props) {
+    const{t}=useTranslation();
     return (
         <div>
-            <h4 className="text-md font-semibold mb-2">Price</h4>
+            <h4 className="text-md font-semibold mb-2">{t("price")}</h4>
             {prices.map((price, index) => (
                 <label key={index} className="flex items-center space-x-2 cursor-pointer">
                     <input

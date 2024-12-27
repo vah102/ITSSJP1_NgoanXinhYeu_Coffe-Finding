@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 import Popper from "../Popper";
 import { useEffect, useState } from "react";
+import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 const cx = classNames.bind(styles);
 
 type User = {
@@ -55,12 +57,34 @@ function Header() {
         setVisible(!visible);
     };
 
-    const [language, setLanguage] = useState("English");
+    const [language, setLanguage] = useState(localStorage.getItem("language") || "en"); // Lấy mã ngôn ngữ từ localStorage
+    useEffect(() => {
+        const savedLanguage = localStorage.getItem("language") || "en";
+        i18n.changeLanguage(savedLanguage); // Đồng bộ với i18n khi load trang
+    }, []);
     const [visibleLang, setVisibleLang] = useState(false);
     const handleToggleLang = () => {
         setVisibleLang(!visibleLang);
     };
-
+    const handleChangeLanguage = (lang: string) => {
+        i18n.changeLanguage(lang);
+        setLanguage(lang);
+        localStorage.setItem("language", lang); // Lưu vào localStorage
+        setVisibleLang(false);
+    };
+    const getLanguageLabel = (lang: string) => {
+        switch (lang) {
+            case "en":
+                return "English";
+            case "vi":
+                return "Tiếng Việt";
+            case "jp":
+                return "日本語";
+            default:
+                return "English";
+        }
+    };
+    const { t } = useTranslation();
     return (
         <div className={cx("wrapper")}>
             <div className="h-[8rem] w-full">
@@ -93,19 +117,24 @@ function Header() {
                                     <Popper>
                                         <PopperItem
                                             onClick={() => {
-                                                setLanguage("English");
-                                                setVisibleLang(false);
+                                                handleChangeLanguage("en")
                                             }}
                                         >
                                             English
                                         </PopperItem>
                                         <PopperItem
                                             onClick={() => {
-                                                setLanguage("日本語");
-                                                setVisibleLang(false);
+                                                handleChangeLanguage("jp")
                                             }}
                                         >
                                             日本語
+                                        </PopperItem>
+                                        <PopperItem
+                                            onClick={() => {
+                                                handleChangeLanguage("vi")
+                                            }}
+                                        >
+                                            Tiếng Việt
                                         </PopperItem>
                                     </Popper>
                                 </div>
@@ -115,7 +144,7 @@ function Header() {
                                 className="flex flex-row items-center justify-between w-[110px] py-3 px-5 font-bold cursor-pointer gap-2 border-solid rounded-full border-white border-2"
                                 onClick={handleToggleLang}
                             >
-                                <p className="text-white">{language}</p>
+                                <p className="text-white">{getLanguageLabel(language)}</p>
                                 <FontAwesomeIcon color="#fff" icon={faChevronDown} />
                             </div>
                         </Tippy>
@@ -134,10 +163,10 @@ function Header() {
                                         <div className={cx("user-menu")} tabIndex={-1} {...attrs}>
                                             <Popper>
                                                 <PopperItem to="/profile" icon={<FontAwesomeIcon icon={faUser} />}>
-                                                    Profile
+                                                    {t("header.profile")}
                                                 </PopperItem>
                                                 <PopperItem onClick={handleLogout} icon={<FontAwesomeIcon icon={faRightFromBracket} />}>
-                                                    Log out
+                                                    {t("header.logout")}
                                                 </PopperItem>
                                             </Popper>
                                         </div>
@@ -148,17 +177,17 @@ function Header() {
                                         className="w-[40px] h-[40px] rounded-full cursor-pointer"
                                         src="/default.png"
                                         alt="avatar"
-                                        // onError={handleAvaError}
+                                    // onError={handleAvaError}
                                     />
                                 </Tippy>
                             </>
                         ) : (
                             <div className="flex">
                                 <Button to="/signin">
-                                    <span className="text-white">Login</span>
+                                    <span className="text-white"> {t("header.login")}</span>
                                 </Button>
                                 <Button primary to="/signup">
-                                    <span className="text-white">Signup</span>
+                                    <span className="text-white"> {t("header.signup")}</span>
                                 </Button>
                             </div>
                         )}

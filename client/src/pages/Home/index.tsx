@@ -9,7 +9,7 @@ import useFetch from "../../services/hooks/useFetch";
 import Pagination from "../../components/Pagination";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
 type Store = {
     store_id: string;
     name: string;
@@ -22,7 +22,8 @@ type Store = {
 };
 
 function Home() {
-    const [sortOption, setSortOption] = useState("Highest rated");
+    const{t}=useTranslation();
+    const [sortOption, setSortOption] = useState("");
     const [visible, setVisible] = useState(false);
 
     const search = useSearchContext();
@@ -55,7 +56,7 @@ function Home() {
     return (
         <div className="w-full">
             <div className="w-full flex flex-row justify-between ">
-                <h2 className="text-4xl font-bold">Trending this week</h2>
+                <h2 className="text-4xl font-bold">{t("home.trending")}</h2>
                 <Tippy
                     visible={visible}
                     onClickOutside={() => setVisible(false)}
@@ -66,22 +67,22 @@ function Home() {
                             <Popper>
                                 <PopperItem
                                     onClick={() => {
-                                        setSortOption("Highest rated");
+                                        setSortOption(t("home.rate"));
                                         search.saveSortValues("ASC");
                                         handleToggleSort();
                                         navigate(`/search`);
                                     }}
                                 >
-                                    Highest rated
+                                    {t("home.rate")}
                                 </PopperItem>
                                 <PopperItem
                                     onClick={() => {
-                                        setSortOption("Nearest location");
+                                        setSortOption(t("home.location"));
                                         handleToggleSort();
                                         navigate(`/search`);
                                     }}
                                 >
-                                    Nearest location
+                                   {t("home.location")}
                                 </PopperItem>
                             </Popper>
                         </div>
@@ -91,7 +92,7 @@ function Home() {
                         className="flex flex-row items-center gap-3 cursor-pointer"
                         onClick={handleToggleSort}
                     >
-                        <div>Sort by {sortOption}</div>
+                        <div>{t("home.sort")}{sortOption}</div>
                         <FontAwesomeIcon icon={faArrowDownWideShort} />
                     </div>
                 </Tippy>
