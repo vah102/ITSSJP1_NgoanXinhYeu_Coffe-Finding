@@ -123,20 +123,23 @@ const storeController = {
 
         // Lọc theo các style (nếu có)
         if (styles) {
-          const styleArray = styles.split(',').map(style => style.trim());  // Chuyển thành mảng sau khi split chuỗi
+          const styleArray = styles.split(',').map(style => style.trim()); // Chuyển thành mảng sau khi split chuỗi
           whereCondition[Op.or] = [
               ...(whereCondition[Op.or] || []), // Giữ nguyên các điều kiện đã có
-              { style: { [Op.like]: `%${styleArray}%` } }
+              ...styleArray.map(style => ({ style: { [Op.like]: `%${style}%` } }))
           ];
-        }
+      }
 
 
         // Lọc theo các tính năng (features_name)
         let featureCondition = null;
         if (features) {
-            const featureArray = features.split(',').map(feature => feature.trim()); // Chuyển thành mảng sau khi split chuỗi
-            featureCondition = { features_name: { [Op.like]: `%${featureArray}%` } };
-        }
+          const featureArray = features.split(',').map(feature => feature.trim()); // Chuyển thành mảng sau khi split chuỗi
+          featureCondition = {
+              [Op.or]: featureArray.map(feature => ({ features_name: { [Op.like]: `%${feature}%` } }))
+          };
+      }
+      
 
         // Nếu người dùng đã đăng nhập, lọc bỏ các cửa hàng trong blacklist
         let excludeStoreIds = [];
