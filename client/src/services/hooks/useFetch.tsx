@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from 'axios';
-
-axios.defaults.withCredentials = true; // Bật chế độ gửi cookie
+import axios from "axios";
 
 const useFetch = <T,>(url: string) => {
     const [data, setData] = useState<T>();
@@ -15,9 +13,17 @@ const useFetch = <T,>(url: string) => {
                 const res = await axios.get<T>(url, {
                     withCredentials: true, // Gửi kèm cookie
                 });
+                console.log(res);
                 setData(res.data);
             } catch (err: any) {
-                setError(err);
+                if (err.response && err.response.status === 404) {
+                    console.log(
+                        "Store not found on re-fetch, setting data to null"
+                    );
+                    setData(undefined);
+                } else {
+                    setError(err); // Lưu lỗi nếu không phải 404
+                }
             }
             setLoading(false);
         };
@@ -32,7 +38,14 @@ const useFetch = <T,>(url: string) => {
             });
             setData(res.data);
         } catch (err: any) {
-            setError(err);
+            if (err.response && err.response.status === 404) {
+                console.log(
+                    "Store not found on re-fetch, setting data to null"
+                );
+                setData(undefined);
+            } else {
+                setError(err); // Lưu lỗi nếu không phải 404
+            }
         }
         setLoading(false);
     };

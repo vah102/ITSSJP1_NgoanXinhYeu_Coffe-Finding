@@ -38,28 +38,42 @@ type SearchContextProviderProps = {
 export const SearchContextProvider = ({
     children,
 }: SearchContextProviderProps) => {
+    const savedData = localStorage.getItem("searchContext");
     const [keyword, setKeyword] = useState<string>("");
-    const [sortOrder, setSortOrder] = useState<string>("ASC");
-    const [styles, setStyles] = useState<string[]>([]);
-    const [features, setFeatures] = useState<string[]>([]);
+    const [sortOrder, setSortOrder] = useState<string>(
+        savedData ? JSON.parse(savedData).sortOrder : ""
+    );
+    const [styles, setStyles] = useState<string[]>(
+        savedData ? JSON.parse(savedData).styles : []
+    );
+    const [features, setFeatures] = useState<string[]>(
+        savedData ? JSON.parse(savedData).features : []
+    );
     const [price, setPrice] = useState<{
         min_price: number | null;
         max_price: number | null;
-    }>({
-        min_price: null,
-        max_price: null,
-    });
+    }>(
+        savedData
+            ? JSON.parse(savedData).price
+            : {
+                  min_price: null,
+                  max_price: null,
+              }
+    );
 
     const [location, setLocation] = useState<{
         lat: number | null;
         lon: number | null;
-    }>({
-        lat: null,
-        lon: null,
-    });
+    }>(
+        savedData
+            ? JSON.parse(savedData).location
+            : {
+                  lat: null,
+                  lon: null,
+              }
+    );
 
     const [queryParam, setQueryParam] = useState<string>("");
-
 
     const saveSearchValues = (keyword: string) => {
         setKeyword(keyword);
@@ -95,19 +109,6 @@ export const SearchContextProvider = ({
         setQueryParam(queryParam);
     };
 
-    useEffect(() => {
-        const savedData = localStorage.getItem("searchContext");
-        if (savedData !== null) {
-            const data = JSON.parse(savedData);
-            setKeyword(data.keyword || "");
-            setSortOrder(data.sortOrder || "ASC");
-            setStyles(data.styles || []);
-            setFeatures(data.features || []);
-            setPrice(data.price || { min_price: null, max_price: null });
-            setLocation(data.location || { lat: null, lon: null });
-        }
-    }, []);
-
     // Lưu dữ liệu vào localStorage mỗi khi context thay đổi
     useEffect(() => {
         const contextData = {
@@ -119,6 +120,22 @@ export const SearchContextProvider = ({
             location,
         };
         localStorage.setItem("searchContext", JSON.stringify(contextData));
+        const params = new URLSearchParams();
+        if (keyword) params.set("searchTerm", keyword);
+        if (sortOrder) params.set("sortOrder", sortOrder);
+        if (styles.length > 0) params.set("styles", styles.join(","));
+        if (features.length > 0) params.set("features", features.join(","));
+        if (price.min_price !== null)
+            params.set("minPrice", price.min_price.toString());
+        if (price.max_price !== null)
+            params.set("maxPrice", price.max_price.toString());
+        if (location.lat !== null)
+            params.set("latitude", location.lat.toString());
+        if (location.lon !== null)
+            params.set("longitude", location.lon.toString());
+
+        const queryString = params.toString();
+        setQueryParam(queryString);
     }, [keyword, sortOrder, styles, features, price, location]);
 
     return (

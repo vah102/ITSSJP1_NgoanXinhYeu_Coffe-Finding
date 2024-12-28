@@ -29,7 +29,6 @@ function Card({ item }: CardProps) {
     };
 
     useEffect(() => {
-        console.log("Card rendered with:", item);
         setImageSrc(item.logo);
     }, [item]);
 

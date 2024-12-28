@@ -22,7 +22,7 @@ function SearchBar({ className }: Parameter) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         search.saveSearchValues(keyword);
-        navigate(`/search?${search.queryParam}`);
+        navigate(`/search`);
     };
 
     useEffect(() => {

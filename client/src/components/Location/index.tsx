@@ -88,7 +88,7 @@ function Location () {
   };
 
   return (
-    <div className="mt-3">
+    <div className="">
       {/* Form nhập địa chỉ */}
       <div className="relative">
         <div className="relative flex items-center">

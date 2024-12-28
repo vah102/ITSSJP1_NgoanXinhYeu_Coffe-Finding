@@ -30,7 +30,6 @@ function Header() {
     };
 
     const { data, loading } = useFetch<User>(`http://localhost:3000/api/user/profile`);
-    console.log(data);
 
 
     const navigate = useNavigate();
@@ -172,7 +171,7 @@ function Header() {
                                     <img
                                         onClick={handleToggleMenu}
                                         className="w-[40px] h-[40px] rounded-full cursor-pointer"
-                                        src="/default.png"
+                                        src={data.avatar}
                                         alt="avatar"
                                     // onError={handleAvaError}
                                     />

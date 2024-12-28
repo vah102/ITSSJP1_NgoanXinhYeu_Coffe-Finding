@@ -36,7 +36,7 @@ function Home() {
     const { data, loading } = useFetch<Store[]>(
         `http://localhost:3000/api/home/stores`
     );
-    console.log(data);
+    // console.log(data);
 
     const itemsPerPage = 8;
     const [currentPage, setCurrentPage] = useState(0);
@@ -45,8 +45,6 @@ function Home() {
     const offset = currentPage * itemsPerPage;
     const currentItems = data && data.slice(offset, offset + itemsPerPage);
     const pageCount = data ? Math.ceil(data.length / itemsPerPage) : 1;
-
-    console.log(currentItems);
 
     // Hàm xử lý khi chuyển trang
     const handlePageClick = (event: { selected: number }) => {
@@ -68,7 +66,6 @@ function Home() {
                                 <PopperItem
                                     onClick={() => {
                                         setSortOption(t("home.rate"));
-                                        search.saveSortValues("ASC");
                                         handleToggleSort();
                                         navigate(`/search`);
                                     }}

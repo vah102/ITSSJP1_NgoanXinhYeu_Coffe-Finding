@@ -7,7 +7,7 @@ import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import useFetch from "../../services/hooks/useFetch";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import { useTranslation } from "react-i18next";
 type Store = {
@@ -22,61 +22,52 @@ type Store = {
 };
 
 function SearchPage() {
-    const{t}=useTranslation();
+    const { t } = useTranslation();
+    const storedData = localStorage.getItem("searchContext");
+    console.log(storedData);
     const search = useSearchContext();
-    const navigate = useNavigate();
     const [sortOption, setSortOption] = useState(t("home.rate"));
     const [visible, setVisible] = useState(false);
 
-    // const savedQuery = localStorage.getItem("searchQuery");
-    // if (savedQuery) {
-    //     const params = new URLSearchParams(savedQuery);
-    //     search.saveSearchValues(params.get("searchTerm") || "");
-    //     search.saveSortValues(params.get("sortOrder") || "ASC");
-    //     search.saveStyleValues(params.get("styles")?.split(",") || []);
-    //     search.saveFeatureValues(params.get("features")?.split(",") || []);
-    //     search.savePriceValues({
-    //         min_price: params.get("minPrice")
-    //             ? Number(params.get("minPrice"))
-    //             : null,
-    //         max_price: params.get("maxPrice")
-    //             ? Number(params.get("maxPrice"))
-    //             : null,
-    //     });
-    //     search.saveLocationValues({
-    //         lat: params.get("latitude") ? Number(params.get("latitude")) : null,
-    //         lon: params.get("longitude")
-    //             ? Number(params.get("longitude"))
-    //             : null,
-    //     });
-    //     search.saveQueryParam(savedQuery); // Đồng bộ giá trị từ localStorage vào trạng thái
-    // }
+    const location = useLocation();
+    useEffect(() => {
+        const queryParams = new URLSearchParams(search.queryParam);
+        switch (sortOption) {
+            case t("home.rate"):
+                console.log(1)
+                queryParams.delete("latitude");
+                queryParams.delete("longitude");
+                queryParams.set("sortOrder", "ASC");
+                search.saveQueryParam(queryParams.toString());
+                break;
+            case t("home.location"):
+                console.log(2)
+                queryParams.delete("sortOrder");
+                if (search.location.lat !== null)
+                    queryParams.set("latitude", search.location.lat.toString());
+                if (search.location.lon !== null)
+                    queryParams.set(
+                        "longitude",
+                        search.location.lon.toString()
+                    );
+                search.saveQueryParam(queryParams.toString());
+                break;
+            default:
+                break;
+        }
+    }, [sortOption]);
 
-    const params = new URLSearchParams();
-
-    if (search.keyword) params.set("searchTerm", search.keyword);
-    if (search.sortOrder) params.set("sortOrder", search.sortOrder);
-    if (search.styles.length > 0) params.set("styles", search.styles.join(","));
-    if (search.features.length > 0)
-        params.set("features", search.features.join(","));
-    if (search.price.min_price !== null)
-        params.set("minPrice", search.price.min_price.toString());
-    if (search.price.max_price !== null)
-        params.set("maxPrice", search.price.max_price.toString());
-    if (search.location.lat !== null)
-        params.set("latitude", search.location.lat.toString());
-    if (search.location.lon !== null)
-        params.set("longitude", search.location.lon.toString());
-
-    const queryString = params.toString();
-
-    // if (queryString !== search.queryParam) {
-    //     search.saveQueryParam(queryString); // Cập nhật trạng thái
-    // }
-
-    const { data, loading } = useFetch<Store[]>(
-        `http://localhost:3000/api/home/search-filter?${queryString}`
+    const { data, loading, reFetch } = useFetch<Store[]>(
+        `http://localhost:3000/api/home/search-filter?${search.queryParam}`
     );
+
+    useEffect(() => {
+        reFetch();
+        console.log(
+            `http://localhost:3000/api/home/search-filter?${search.queryParam}`
+        );
+        console.log(data);
+    }, [search]);
 
     const handleToggleSort = () => {
         setVisible(!visible);
@@ -100,7 +91,11 @@ function SearchPage() {
                     <h2 className="text-4xl font-bold">{t("home.no_item")}</h2>
                 ) : (
                     <h2 className="text-4xl font-bold">
-                        {t("home.result")} {data && data.length} {t("home.item")}
+                        {data && data.length > 0
+                            ? `${t("home.result")} ${data.length} ${t(
+                                  "home.item"
+                              )}`
+                            : t("home.no_item")}
                     </h2>
                 )}
                 <Tippy
@@ -114,7 +109,6 @@ function SearchPage() {
                                 <PopperItem
                                     onClick={() => {
                                         setSortOption(t("home.rate"));
-                                        search.saveSortValues("ASC");
                                         handleToggleSort();
                                     }}
                                 >
@@ -124,9 +118,6 @@ function SearchPage() {
                                     onClick={() => {
                                         setSortOption(t("home.location"));
                                         handleToggleSort();
-                                        navigate(
-                                            `/search?${search.queryParam}`
-                                        );
                                     }}
                                 >
                                     {t("home.location")}
@@ -139,7 +130,10 @@ function SearchPage() {
                         className="flex flex-row items-center gap-3 cursor-pointer"
                         onClick={handleToggleSort}
                     >
-                        <div>{t("home.sort")}{sortOption}</div>
+                        <div>
+                            {t("home.sort")}
+                            {sortOption}
+                        </div>
                         <FontAwesomeIcon icon={faArrowDownWideShort} />
                     </div>
                 </Tippy>
