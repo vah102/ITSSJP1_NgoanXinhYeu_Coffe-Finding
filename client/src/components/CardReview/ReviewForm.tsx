@@ -38,6 +38,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   };
 
   const { t } = useTranslation();
+
   // Xử lý khi người dùng gửi đánh giá
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +72,9 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       setComment("");
       setPhoto(null);
       setIsFormOpen(false); // Đóng form sau khi gửi
+
+      // Reload trang để hiển thị review mới
+      window.location.reload(); // Hoặc gọi hàm fetch dữ liệu nếu có
     } catch (error) {
       console.error("Error submitting review:", error);
     }
