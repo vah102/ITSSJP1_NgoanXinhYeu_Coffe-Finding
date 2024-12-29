@@ -71,6 +71,7 @@ type Store = {
         rate: number;
         comment: string;
         image: string;
+        created_at: string;
         User: {
             username: string;
             avatar: string;
@@ -476,7 +477,7 @@ function StoreDetail() {
                                                 username:
                                                     user.username ||
                                                     "Anonymous",
-                                                time: "24/12/2024", // Nếu có thời gian thực trong dữ liệu review, hãy thay vào đây
+                                                time: review.created_at, // Nếu có thời gian thực trong dữ liệu review, hãy thay vào đây
                                                 rate: review.rate,
                                                 comment: review.comment,
                                                 image: review.image || "",

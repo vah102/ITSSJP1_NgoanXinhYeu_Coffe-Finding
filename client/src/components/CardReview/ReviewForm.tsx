@@ -19,7 +19,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // Kiểm tra trạng thái của form (đóng/mở)
   const [rating, setRating] = useState<number>(0); // Lưu rating của người dùng
   const [comment, setComment] = useState<string>(""); // Lưu comment của người dùng
-  const [photo, setPhoto] = useState<string | null>(null); // Lưu ảnh (nếu có)
+  const [photo, setPhoto] = useState<File | null>(null); // Lưu ảnh (nếu có)
 
   // Xử lý khi người dùng thay đổi rating (sao)
   const handleStarClick = (starIndex: number) => {
@@ -31,48 +31,50 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
     setComment(e.target.value);
   };
 
-  // Xử lý khi người dùng thêm ảnh
   const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.result) setPhoto(reader.result as string);
-      };
-      reader.readAsDataURL(e.target.files[0]);
+      setPhoto(e.target.files[0]); // Lưu file ảnh trực tiếp
     }
   };
+
   const { t } = useTranslation();
   // Xử lý khi người dùng gửi đánh giá
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (rating === 0 || comment.trim() === "") {
       console.error("Rating and comment are required.");
       return; // Không gửi yêu cầu khi rating hoặc comment trống
     }
 
     try {
+      const formData = new FormData();
+      formData.append("store_id", store_id);
+      formData.append("rate", rating.toString());
+      formData.append("comment", comment);
+      if (photo) {
+        formData.append("image", photo); // Thêm file ảnh vào formData
+      }
+
       const response = await axios.post(
         "http://localhost:3000/api/review/create",
+        formData,
         {
-          store_id, // Lấy store_id từ prop
-          rate: rating, // Lấy rating từ state
-          comment: comment, // Lấy comment từ state
-          image: photo || null, // Lấy ảnh từ state (có thể null nếu không có ảnh)
-        },
-        { withCredentials: true }
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
       );
+
       console.log("Review submitted:", response.data);
+
       // Reset form sau khi submit
       setRating(0);
       setComment("");
       setPhoto(null);
       setIsFormOpen(false); // Đóng form sau khi gửi
     } catch (error) {
-      console.error("Error submitting review:");
+      console.error("Error submitting review:", error);
     }
   };
-
   // Lấy ngày hiện tại
   const currentDate = new Date().toLocaleDateString();
 
@@ -154,7 +156,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
                 htmlFor="photo"
                 className="flex items-center text-[#57370E] cursor-pointer"
               >
-                <FontAwesomeIcon icon={faCamera} className="mr-2 text-[#57370E]" />
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  className="mr-2 text-[#57370E]"
+                />
                 {t("review.add_photo")}
               </label>
               <input
@@ -166,7 +171,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
               />
               {photo && (
                 <img
-                  src={photo}
+                  src={URL.createObjectURL(photo)}
                   alt="Preview"
                   className="w-16 h-16 object-cover"
                 />
@@ -178,7 +183,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
               className="w-full bg-[#57370E] text-white py-2 rounded-lg hover:bg-[#4F310D] transition"
               disabled={rating === 0 || comment.trim() === ""}
             >
-                {t("review.save")}
+              {t("review.save")}
             </button>
           </div>
         </div>

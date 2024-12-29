@@ -1,14 +1,23 @@
 import sequelize from '../config/db.js'; // import sequelize
 import Review from '../models/review.js'; // import Review model
+import cloudinary from '../config/cloudinary.js';
 
 const reviewController = {
     createReview: async (req, res) => {
         const { user_id } = req.user;
-        const { store_id, rate, comment, image } = req.body;
+        const { store_id, rate, comment } = req.body;
+        const image = req.file; 
         try {
             // Kiểm tra dữ liệu đầu vào
             if (!store_id || !rate) {
               return res.status(400).json({ message: 'Store ID and rating are required.' });
+            }
+            let uploadedImageUrl = null;
+            if (image) {
+              const uploadResult = await cloudinary.uploader.upload(image.path, {
+                folder: 'reviews', // Lưu ảnh trong thư mục "reviews"
+              });
+              uploadedImageUrl = uploadResult.secure_url; // URL ảnh được Cloudinary trả về
             }
       
             // Tạo mới review trong database
@@ -17,7 +26,7 @@ const reviewController = {
               user_id,
               rate,
               comment,
-              image,
+              image: uploadedImageUrl, 
               created_at: sequelize.fn('CONVERT_TZ', sequelize.fn('NOW'), '+00:00', '+07:00') // Lưu thời gian với múi giờ VN
             });
       

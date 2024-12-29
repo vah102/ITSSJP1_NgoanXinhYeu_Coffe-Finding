@@ -9,5 +9,4 @@ blacklistRouter.get('/all', authMiddleware, blacklistController.getUserBlacklist
 
 blacklistRouter.post('/add', authMiddleware, blacklistController.addStoreToBlacklist);
 blacklistRouter.delete('/remove', authMiddleware, blacklistController.removeStoreFromBlacklist);
-
 export default blacklistRouter;

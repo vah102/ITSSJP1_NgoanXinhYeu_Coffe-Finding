@@ -13,6 +13,7 @@ type ReviewCardProps = {
 };
 
 function ReviewCard({ item }: ReviewCardProps) {
+  const formattedTime = new Date(item.time).toLocaleDateString("en-GB");
   return (
     <div>
       {/* User Info */}
@@ -24,7 +25,7 @@ function ReviewCard({ item }: ReviewCardProps) {
         />
         <div>
           <h3 className="text-2xl font-semibold pb-2">{item.username}</h3>
-          <p className="text-xl text-gray-500">{item.time}</p>
+          <p className="text-xl text-gray-500">{formattedTime}</p>
         </div>
       </div>
 
