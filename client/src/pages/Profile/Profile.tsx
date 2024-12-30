@@ -49,11 +49,8 @@ export default function Profile() {
         console.log("Token:", token); 
         if (formData) {
             axios
-                .put("http://localhost:3000/api/user/update", formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Gửi token trong header
-                    },
-                    withCredentials: true, 
+                .put("http://localhost:3000/api/user/update", formData,{
+                    withCredentials: true, // Đảm bảo cookie được gửi đi
                 })
                 .then(() => {
                     toast.success("Profile updated successfully!");

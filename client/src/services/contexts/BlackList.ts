@@ -24,9 +24,10 @@ export const removeStoreFromBlacklist = async (token: string, storeId: number) =
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true, 
+      withCredentials: true,
       data: { store_id: storeId },  // Gửi tham số store_id trong body
-    });
+    }
+    );
     return response.data; // Trả về thông báo thành công
   } catch (error) {
     throw new Error('Failed to remove store from blacklist');
