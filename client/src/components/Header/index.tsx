@@ -9,7 +9,11 @@ import useFetch from "../../services/hooks/useFetch";
 import Tippy from "@tippyjs/react/headless";
 import PopperItem from "../PopperItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+    faChevronDown,
+    faRightFromBracket,
+    faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import Popper from "../Popper";
 import { useEffect, useState } from "react";
 import i18n from "i18next";
@@ -29,8 +33,9 @@ function Header() {
         search.saveFeatureValues([]);
     };
 
-    const { data, loading } = useFetch<User>(`http://localhost:3000/api/user/profile`);
-
+    const { data, loading } = useFetch<User>(
+        `http://localhost:3000/api/user/profile`
+    );
 
     const navigate = useNavigate();
 
@@ -41,7 +46,8 @@ function Header() {
                 credentials: "include",
             });
             if (response.ok) {
-                navigate("/signin");
+                navigate("/");
+                window.location.reload();
             }
         } catch (error) {
             console.error("Có lỗi xảy ra:", error);
@@ -53,7 +59,9 @@ function Header() {
         setVisible(!visible);
     };
 
-    const [language, setLanguage] = useState(localStorage.getItem("language") || "en"); // Lấy mã ngôn ngữ từ localStorage
+    const [language, setLanguage] = useState(
+        localStorage.getItem("language") || "en"
+    ); // Lấy mã ngôn ngữ từ localStorage
     useEffect(() => {
         const savedLanguage = localStorage.getItem("language") || "en";
         i18n.changeLanguage(savedLanguage); // Đồng bộ với i18n khi load trang
@@ -84,14 +92,24 @@ function Header() {
     return (
         <div className={cx("wrapper")}>
             <div className="h-[8rem] w-full">
-                <img src={import.meta.env.BASE_URL + "bg.png"} alt="" className="w-full h-full object-cover object-top" />
+                <img
+                    src={import.meta.env.BASE_URL + "bg.png"}
+                    alt=""
+                    className="w-full h-full object-cover object-top"
+                />
             </div>
 
             <div className="absolute flex flex-row justify-between items-center top-0 w-full h-full px-32">
                 <Link to={config.routes.home} onClick={handleReset}>
                     <div className="flex flex-row items-center gap-3">
-                        <img className="w-24 h-24" src={import.meta.env.BASE_URL + "icon.png"} alt="" />
-                        <h1 className="font-bold text-6xl text-[#4F310D]">FiCofe</h1>
+                        <img
+                            className="w-24 h-24"
+                            src={import.meta.env.BASE_URL + "icon.png"}
+                            alt=""
+                        />
+                        <h1 className="font-bold text-6xl text-[#4F310D]">
+                            FiCofe
+                        </h1>
                     </div>
                 </Link>
 
@@ -109,25 +127,29 @@ function Header() {
                             placement="bottom-end"
                             interactive
                             render={(attrs) => (
-                                <div className={cx("user-menu")} tabIndex={-1} {...attrs}>
+                                <div
+                                    className={cx("user-menu")}
+                                    tabIndex={-1}
+                                    {...attrs}
+                                >
                                     <Popper>
                                         <PopperItem
                                             onClick={() => {
-                                                handleChangeLanguage("en")
+                                                handleChangeLanguage("en");
                                             }}
                                         >
                                             English
                                         </PopperItem>
                                         <PopperItem
                                             onClick={() => {
-                                                handleChangeLanguage("jp")
+                                                handleChangeLanguage("jp");
                                             }}
                                         >
                                             日本語
                                         </PopperItem>
                                         <PopperItem
                                             onClick={() => {
-                                                handleChangeLanguage("vi")
+                                                handleChangeLanguage("vi");
                                             }}
                                         >
                                             Tiếng Việt
@@ -140,8 +162,13 @@ function Header() {
                                 className="flex flex-row items-center justify-between w-[130px] py-3 px-5 font-bold cursor-pointer gap-2 border-solid rounded-full border-white border-2"
                                 onClick={handleToggleLang}
                             >
-                                <p className="text-white">{getLanguageLabel(language)}</p>
-                                <FontAwesomeIcon color="#fff" icon={faChevronDown} />
+                                <p className="text-white">
+                                    {getLanguageLabel(language)}
+                                </p>
+                                <FontAwesomeIcon
+                                    color="#fff"
+                                    icon={faChevronDown}
+                                />
                             </div>
                         </Tippy>
                     </div>
@@ -149,19 +176,41 @@ function Header() {
                     <div className="flex flex-row gap-5">
                         {data ? (
                             <>
-                                <p className="flex flex-row items-center font-bold text-white">{data.username}</p>
+                                <p className="flex flex-row items-center font-bold text-white">
+                                    {data.username}
+                                </p>
                                 <Tippy
                                     visible={visible}
                                     onClickOutside={() => setVisible(false)}
                                     placement="bottom-end"
                                     interactive
                                     render={(attrs) => (
-                                        <div className={cx("user-menu")} tabIndex={-1} {...attrs}>
+                                        <div
+                                            className={cx("user-menu")}
+                                            tabIndex={-1}
+                                            {...attrs}
+                                        >
                                             <Popper>
-                                                <PopperItem to="/profile" icon={<FontAwesomeIcon icon={faUser} />}>
+                                                <PopperItem
+                                                    to="/profile"
+                                                    icon={
+                                                        <FontAwesomeIcon
+                                                            icon={faUser}
+                                                        />
+                                                    }
+                                                >
                                                     {t("header.profile")}
                                                 </PopperItem>
-                                                <PopperItem onClick={handleLogout} icon={<FontAwesomeIcon icon={faRightFromBracket} />}>
+                                                <PopperItem
+                                                    onClick={handleLogout}
+                                                    icon={
+                                                        <FontAwesomeIcon
+                                                            icon={
+                                                                faRightFromBracket
+                                                            }
+                                                        />
+                                                    }
+                                                >
                                                     {t("header.logout")}
                                                 </PopperItem>
                                             </Popper>
@@ -171,19 +220,24 @@ function Header() {
                                     <img
                                         onClick={handleToggleMenu}
                                         className="w-[40px] h-[40px] rounded-full cursor-pointer"
-                                        src={data.avatar}
+                                        src={data.avatar == null ? "/default.png" : data.avatar}
                                         alt="avatar"
-                                    // onError={handleAvaError}
                                     />
                                 </Tippy>
                             </>
                         ) : (
                             <div className="flex">
                                 <Button to="/signin">
-                                    <span className="text-white"> {t("header.login")}</span>
+                                    <span className="text-white">
+                                        {" "}
+                                        {t("header.login")}
+                                    </span>
                                 </Button>
                                 <Button primary to="/signup">
-                                    <span className="text-white"> {t("header.signup")}</span>
+                                    <span className="text-white">
+                                        {" "}
+                                        {t("header.signup")}
+                                    </span>
                                 </Button>
                             </div>
                         )}

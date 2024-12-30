@@ -102,6 +102,14 @@ const featureIcons: Record<string, JSX.Element> = {
     "Good for kids": (
         <FontAwesomeIcon icon={faChild} className="text-blue-500" />
     ),
+    "子供向け": (
+        <FontAwesomeIcon icon={faChild} className="text-blue-500" />
+    ),
+
+    "Thích hợp cho trẻ em": (
+        <FontAwesomeIcon icon={faChild} className="text-blue-500" />
+    ),
+
 
     "Outdoor seating": (
         <FontAwesomeIcon icon={faChair} className="text-blue-500" />
@@ -137,7 +145,13 @@ const featureIcons: Record<string, JSX.Element> = {
         <FontAwesomeIcon icon={faSmoking} className="text-blue-500" />
     ),
 
-    "Seeking Not Allowed": (
+    "Smoking: No": (
+        <FontAwesomeIcon icon={faBan} className="text-blue-500" />
+    ),
+    "禁煙": (
+        <FontAwesomeIcon icon={faBan} className="text-blue-500" />
+    ),
+    "Không hút thuốc": (
         <FontAwesomeIcon icon={faBan} className="text-blue-500" />
     ),
 };

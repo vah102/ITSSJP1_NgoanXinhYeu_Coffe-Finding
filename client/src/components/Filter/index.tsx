@@ -81,6 +81,7 @@ function Filter() {
             min_price: null,
             max_price: null,
         })
+        navigate(`/`);
     };
 
     return (
