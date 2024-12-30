@@ -81,7 +81,7 @@ type Store = {
 
 const featureIcons: Record<string, JSX.Element> = {
     "Free wifi": <FontAwesomeIcon icon={faWifi} className="text-blue-500" />,
-    "Air Conditioned": (
+    "Air Conditioner": (
         <FontAwesomeIcon icon={faSnowflake} className="text-blue-500" />
     ),
     "Pet allowed": <FontAwesomeIcon icon={faPaw} className="text-blue-500" />,
