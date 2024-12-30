@@ -26,7 +26,7 @@ export default function Profile() {
         axios
             .get("http://localhost:3000/api/user/profile", {
                 withCredentials: true,
-            })
+            }) // Thay bằng endpoint của bạn
             .then((response) => {
                 setFormData(response.data);
             })
