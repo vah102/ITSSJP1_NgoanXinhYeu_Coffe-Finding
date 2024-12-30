@@ -34,7 +34,7 @@ function Home() {
     };
 
     const { data, loading } = useFetch<Store[]>(
-        `http://localhost:3000/api/home/stores`
+        `http://localhost:3000/api/home/stores?latitude=${search.location.lat}&longitude=${search.location.lon}`
     );
     // console.log(data);
 
