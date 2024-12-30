@@ -46,7 +46,9 @@ export default function Profile() {
     const handleSubmit = () => {
         if (formData) {
             axios
-                .put("http://localhost:3000/api/user/update", formData)
+                .put("http://localhost:3000/api/user/update", formData,{
+                    withCredentials: true, // Đảm bảo cookie được gửi đi
+                })
                 .then(() => {
                     toast.success("Profile updated successfully!");
                     setIsEditing(false); // Quay lại chế độ xem
