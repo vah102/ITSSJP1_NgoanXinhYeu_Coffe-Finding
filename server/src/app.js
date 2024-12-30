@@ -17,6 +17,7 @@ const app = express();
 const corsOptions = {
     origin: 'http://localhost:5173', // Frontend URL
     credentials: true, // Cho phép gửi cookie
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
   };
 
 // Middleware

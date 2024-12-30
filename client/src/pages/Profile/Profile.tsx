@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./profile.css";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 // Định nghĩa kiểu dữ liệu cho thông tin người dùng
 export interface UserProfile {
@@ -25,7 +26,7 @@ export default function Profile() {
     useEffect(() => {
         axios
             .get("http://localhost:3000/api/user/profile", {
-                withCredentials: true, // Gửi kèm cookie
+                withCredentials: true,
             }) // Thay bằng endpoint của bạn
             .then((response) => {
                 setFormData(response.data);
@@ -44,9 +45,13 @@ export default function Profile() {
 
     // Gửi yêu cầu cập nhật đến API
     const handleSubmit = () => {
+        const token = Cookies.get("token"); 
+        console.log("Token:", token); 
         if (formData) {
             axios
-                .put("http://localhost:3000/api/user/update", formData)
+                .put("http://localhost:3000/api/user/update", formData,{
+                    withCredentials: true, // Đảm bảo cookie được gửi đi
+                })
                 .then(() => {
                     toast.success("Profile updated successfully!");
                     setIsEditing(false); // Quay lại chế độ xem

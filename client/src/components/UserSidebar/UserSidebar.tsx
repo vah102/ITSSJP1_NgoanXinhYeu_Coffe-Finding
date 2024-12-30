@@ -61,7 +61,7 @@ export default function UserSidebar() {
     useEffect(() => {
         axios
             .get("http://localhost:3000/api/user/profile", {
-                withCredentials: true, // Gửi kèm cookie
+                withCredentials: true,
             }) // Thay bằng endpoint của bạn
             .then((response) => {
                 setFormData(response.data);

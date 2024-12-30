@@ -38,9 +38,11 @@ const storeController = {
   // Lấy danh sách các cửa hàng có rate > 4.0
   getStoresByRate : async (req, res) => {
     try {
+      const { latitude, longitude } = req.query; // Lấy latitude và longitude từ params
+  
       let whereCondition = {
         rate: {
-          [Op.gt]: 4.0,  // So sánh rating lớn hơn 4.0
+          [Op.gt]: 4.0, // So sánh rating lớn hơn 4.0
         },
       };
   
@@ -72,13 +74,25 @@ const storeController = {
       }
   
       // Truy vấn cửa hàng với điều kiện đã xác định
-      const stores = await Store.findAll({
+      let stores = await Store.findAll({
         where: whereCondition,
       });
   
+      // Tính khoảng cách nếu có tọa độ
+      if (latitude && longitude) {
+        stores = stores.map(store => {
+          const storeLat = store.latitude;
+          const storeLon = store.longitude;
+          const distance = haversine(latitude, longitude, storeLat, storeLon);
+          // Thêm khoảng cách vào mỗi cửa hàng
+          store.dataValues.distance = distance;
+          return store;
+        });
+      }
+  
       res.json(stores);
     } catch (error) {
-      console.error('Error fetching stores:', error);
+      console.error('Error fetching stores by rate:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   },
@@ -86,6 +100,9 @@ const storeController = {
     const { searchTerm, minPrice, maxPrice, features, styles,latitude, longitude, sortOrder } = req.query;
 
     console.log('Request Query:', req.query); // In ra query để kiểm tra
+    if (!latitude || !longitude) {
+      return res.status(400).json({ message: 'Latitude and Longitude are required.' });
+    }
 
     try {
         const whereCondition = {};
@@ -201,24 +218,19 @@ const storeController = {
             // order: [['rate', sortOrder || 'DESC']],
             
         });
-        if (latitude && longitude) {
-          // Tính khoảng cách giữa cửa hàng và vị trí người dùng
-          stores = stores.filter(store => {
-            const storeLat = store.latitude;
-            const storeLon = store.longitude;
-            const distance = haversine(latitude, longitude, storeLat, storeLon);
-            
-            // Thêm khoảng cách vào mỗi cửa hàng, nếu khoảng cách >= 10km thì loại bỏ cửa hàng đó
-            store.dataValues.distance = distance;
-            return distance < 10; // Chỉ giữ lại các cửa hàng có khoảng cách < 10km
+        // Tính khoảng cách cho từng cửa hàng
+        stores.forEach(store => {
+          const storeLat = store.latitude;
+          const storeLon = store.longitude;
+          store.dataValues.distance = haversine(latitude, longitude, storeLat, storeLon);
         });
 
-          // Sắp xếp các cửa hàng theo khoảng cách (tăng dần)
-          stores.sort((a, b) => a.dataValues.distance - b.dataValues.distance);
-      } else if (sortOrder) {
-          // Nếu không có tọa độ, sắp xếp theo `rate`
-          stores.sort((a, b) => (sortOrder === 'DESC' ? a.rate - b.rate : b.rate - a.rate));
-      }
+        // Sắp xếp cửa hàng theo `sortOrder`
+        if (sortOrder === 'rate') {
+            stores.sort((a, b) => b.rate - a.rate); // Sắp xếp theo `rate` giảm dần
+        } else if (sortOrder === 'distance') {
+            stores.sort((a, b) => a.dataValues.distance - b.dataValues.distance); // Sắp xếp theo `distance` tăng dần
+        }
 
         if (stores.length === 0) {
             return res.status(404).json({ message: 'Store not found' });
