@@ -61,12 +61,15 @@
     "amenities": "アメニティなど",
     "review": "レビュー",
      "rating_over":"総合評価",
-    "star":"星"
+    "star":"星",
+     "please": "レビューを投稿するにはサインインしてください。",
+     "no": "レビューはありません"
   },
   "review":{
    "start":" レビューを始める",
    "add_photo":"写真を追加",
-   "save":"保存"
+   "save":"保存",
+   "write": "レビューを書く"
   },
   "profile":{
    "update_avt":"アバターを更新する",
