@@ -17,24 +17,6 @@ export const getUserBlacklist = async (token: string) => {
   }
 };
 
-// // Thêm store vào blacklist
-// export const addStoreToBlacklist = async (token: string, storeId: number) => {
-//   try {
-//     const response = await axios.post(
-//       `${API_URL}/add`,
-//       { store_id: storeId },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     return response.data; // Trả về dữ liệu blacklist detail mới được thêm
-//   } catch (error) {
-//     throw new Error('Failed to add store to blacklist');
-//   }
-// };
-
 // Xóa store khỏi blacklist
 export const removeStoreFromBlacklist = async (token: string, storeId: number) => {
   try {
@@ -42,6 +24,7 @@ export const removeStoreFromBlacklist = async (token: string, storeId: number) =
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      withCredentials: true, 
       data: { store_id: storeId },  // Gửi tham số store_id trong body
     });
     return response.data; // Trả về thông báo thành công
