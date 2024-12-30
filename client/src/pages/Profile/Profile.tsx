@@ -17,7 +17,7 @@ export interface UserProfile {
 }
 
 export default function Profile() {
-    const{t}=useTranslation();
+    const { t } = useTranslation();
     const [formData, setFormData] = useState<UserProfile | null>(null); // Dữ liệu người dùng
     const [selectedFile, setSelectedFile] = useState<File | null>(null); // Tệp ảnh được chọn
     const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
@@ -82,7 +82,10 @@ export default function Profile() {
         formDataToSend.append("upload_preset", "itss"); // Sử dụng preset đã tạo
 
         axios
-            .post("https://api.cloudinary.com/v1_1/dgkfmvxat/image/upload", formDataToSend)
+            .post(
+                "https://api.cloudinary.com/v1_1/dgkfmvxat/image/upload",
+                formDataToSend
+            )
             .then((response) => {
                 const avatarUrl = response.data.secure_url; // URL của ảnh đã tải lên
                 axios
@@ -95,7 +98,10 @@ export default function Profile() {
                         setFormData({ ...formData, avatar: avatarUrl });
                     })
                     .catch((error) => {
-                        console.error("Error updating avatar in the database:", error);
+                        console.error(
+                            "Error updating avatar in the database:",
+                            error
+                        );
                     });
             })
             .catch((error) => {
@@ -110,37 +116,122 @@ export default function Profile() {
     return (
         <div className="profile">
             <div className="avatar">
-                <img src={formData.avatar} alt="User Avatar" className="avatar-img" />
-                <input type="file" accept="image/*" onChange={handleFileChange} className="file-input" id="file-input" style={{ display: "none" }} />
-                <button className="button-update-avatar" onClick={() => document.getElementById("file-input")?.click()}>
+                <img
+                    src={formData.avatar}
+                    alt="User Avatar"
+                    className="avatar-img"
+                />
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="file-input"
+                    id="file-input"
+                    style={{ display: "none" }}
+                />
+                <button
+                    className="button-update-avatar"
+                    onClick={() =>
+                        document.getElementById("file-input")?.click()
+                    }
+                >
                     {t("profile.update_avt")}
                 </button>
-                {selectedFile && <button className="button-upload-avatar" onClick={handleAvatarUpload}></button>}
+                {selectedFile && (
+                    <button
+                        className="button-upload-avatar"
+                        onClick={handleAvatarUpload}
+                    ></button>
+                )}
             </div>
             <div className="form">
-                <h2 style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold", fontSize: "20px" }}>{t("profile.your_pro")}</h2>
+                <h2
+                    style={{
+                        textAlign: "center",
+                        marginBottom: "20px",
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                    }}
+                >
+                    {t("profile.your_pro")}
+                </h2>
 
                 <div className="item">
-                    <input className="input" placeholder="Username" type="text" value={formData.username} onChange={(e) => handleChange("username", e.target.value)} disabled={!isEditing} />
+                    <input
+                        className="input"
+                        placeholder="Username"
+                        type="text"
+                        value={formData.username}
+                        onChange={(e) =>
+                            handleChange("username", e.target.value)
+                        }
+                        disabled={!isEditing}
+                    />
                 </div>
                 <div className="row">
                     <div className="item">
-                        <input className="input" placeholder="First Name" type="text" value={formData.first_name} onChange={(e) => handleChange("first_name", e.target.value)} disabled={!isEditing} />
+                        <input
+                            className="input"
+                            placeholder="First Name"
+                            type="text"
+                            value={formData.first_name}
+                            onChange={(e) =>
+                                handleChange("first_name", e.target.value)
+                            }
+                            disabled={!isEditing}
+                        />
                     </div>
                     <div className="item">
-                        <input className="input" placeholder="Last Name" type="text" value={formData.last_name} onChange={(e) => handleChange("last_name", e.target.value)} disabled={!isEditing} />
+                        <input
+                            className="input"
+                            placeholder="Last Name"
+                            type="text"
+                            value={formData.last_name}
+                            onChange={(e) =>
+                                handleChange("last_name", e.target.value)
+                            }
+                            disabled={!isEditing}
+                        />
                     </div>
                 </div>
                 <div className="item">
-                    <input className="input" placeholder="Phone Number" type="text" value={formData.phone} onChange={(e) => handleChange("phone", e.target.value)} disabled={!isEditing} />
+                    <input
+                        className="input"
+                        placeholder="Phone Number"
+                        type="text"
+                        value={formData.phone}
+                        onChange={(e) => handleChange("phone", e.target.value)}
+                        disabled={!isEditing}
+                    />
                 </div>
                 <div className="item">
-                    <input className="input" placeholder="Gmail" type="text" value={formData.gmail} onChange={(e) => handleChange("gmail", e.target.value)} disabled={!isEditing} />
+                    <input
+                        className="input"
+                        placeholder="Gmail"
+                        type="text"
+                        value={formData.gmail}
+                        onChange={(e) => handleChange("gmail", e.target.value)}
+                        disabled={!isEditing}
+                    />
                 </div>
                 <div className="item">
-                    <input className="input" placeholder="Address" type="text" value={formData.address} onChange={(e) => handleChange("address", e.target.value)} disabled={!isEditing} />
+                    <input
+                        className="input"
+                        placeholder="Address"
+                        type="text"
+                        value={formData.address}
+                        onChange={(e) =>
+                            handleChange("address", e.target.value)
+                        }
+                        disabled={!isEditing}
+                    />
                 </div>
-                <button className="button-update-avatar" onClick={isEditing ? handleSubmit : () => setIsEditing(true)}>
+                <button
+                    className="button-update-avatar"
+                    onClick={
+                        isEditing ? handleSubmit : () => setIsEditing(true)
+                    }
+                >
                     {isEditing ? t("profile.submit") : t("profile.edit")}
                 </button>
             </div>

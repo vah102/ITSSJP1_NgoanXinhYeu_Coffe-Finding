@@ -45,7 +45,7 @@ function Menu({ item }: MenuProps) {
             <div className="flex justify-between items-center mb-1 h-[64px]">
                 <h3 className="text-3xl font-semibold">{dish_name[language]}</h3>
                 <span className="text-3xl font-medium text-gray-600">
-                    {item.dish_price}
+                    {item.dish_price} VND
                 </span>
             </div>
             <p className="text-2xl line-clamp-3">{description[language]}</p>

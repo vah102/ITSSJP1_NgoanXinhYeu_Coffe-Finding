@@ -7,7 +7,6 @@ import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 import Card from "../../components/Card";
 import { useSearchContext } from "../../services/contexts/SearchContext";
 import useFetch from "../../services/hooks/useFetch";
-import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import { useTranslation } from "react-i18next";
 type Store = {
@@ -29,27 +28,17 @@ function SearchPage() {
     const [sortOption, setSortOption] = useState(t("home.rate"));
     const [visible, setVisible] = useState(false);
 
-    const location = useLocation();
     useEffect(() => {
         const queryParams = new URLSearchParams(search.queryParam);
         switch (sortOption) {
             case t("home.rate"):
                 console.log(1)
-                queryParams.delete("latitude");
-                queryParams.delete("longitude");
-                queryParams.set("sortOrder", "ASC");
+                queryParams.set("sortOrder", "rate");
                 search.saveQueryParam(queryParams.toString());
                 break;
             case t("home.location"):
                 console.log(2)
-                queryParams.delete("sortOrder");
-                if (search.location.lat !== null)
-                    queryParams.set("latitude", search.location.lat.toString());
-                if (search.location.lon !== null)
-                    queryParams.set(
-                        "longitude",
-                        search.location.lon.toString()
-                    );
+                queryParams.set("sortOrder", "distance");
                 search.saveQueryParam(queryParams.toString());
                 break;
             default:

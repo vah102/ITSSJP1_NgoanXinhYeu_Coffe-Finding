@@ -22,13 +22,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useFetch from "../../services/hooks/useFetch";
 import Menu from "../../components/Menu/Menu";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import Cookies from "js-cookie";
 import ReviewCard from "../../components/CardReview/ReviewCard";
 import RatingOverview from "../../components/CardReview/RatingOverview";
 import ReviewForm from "../../components/CardReview/ReviewForm";
 import { useTranslation } from "react-i18next";
 import Pagination from "../../components/Pagination";
+
 
 type User = {
     username: string;
@@ -81,23 +82,61 @@ type Store = {
 
 const featureIcons: Record<string, JSX.Element> = {
     "Free wifi": <FontAwesomeIcon icon={faWifi} className="text-blue-500" />,
-    "Air Conditioner": (
+    "Wifi miễn phí": <FontAwesomeIcon icon={faWifi} className="text-blue-500" />,
+    "無料Wi-Fi": <FontAwesomeIcon icon={faWifi} className="text-blue-500" />,
+
+    "Air Conditioned": (
         <FontAwesomeIcon icon={faSnowflake} className="text-blue-500" />
     ),
+    "エアコン付き": (
+        <FontAwesomeIcon icon={faSnowflake} className="text-blue-500" />
+    ),
+    "Máy lạnh": (
+        <FontAwesomeIcon icon={faSnowflake} className="text-blue-500" />
+    ),
+
     "Pet allowed": <FontAwesomeIcon icon={faPaw} className="text-blue-500" />,
+    "ペット同伴可": <FontAwesomeIcon icon={faPaw} className="text-blue-500" />,
+    "Cho phép thú cưng": <FontAwesomeIcon icon={faPaw} className="text-blue-500" />,
+
     "Good for kids": (
         <FontAwesomeIcon icon={faChild} className="text-blue-500" />
     ),
+
     "Outdoor seating": (
         <FontAwesomeIcon icon={faChair} className="text-blue-500" />
     ),
+    "屋外席": (
+        <FontAwesomeIcon icon={faChair} className="text-blue-500" />
+    ),
+    "Chỗ ngồi ngoài trời": (
+        <FontAwesomeIcon icon={faChair} className="text-blue-500" />
+    ),
+
     "Power Outlet": <FontAwesomeIcon icon={faPlug} className="text-blue-500" />,
+    "電源コンセント": <FontAwesomeIcon icon={faPlug} className="text-blue-500" />,
+    "Ổ cắm điện ": <FontAwesomeIcon icon={faPlug} className="text-blue-500" />,
+
     "Card payment": (
         <FontAwesomeIcon icon={faCreditCard} className="text-blue-500" />
     ),
+    "カード払い対応": (
+        <FontAwesomeIcon icon={faCreditCard} className="text-blue-500" />
+    ),
+    "Thanh toán bằng thẻ": (
+        <FontAwesomeIcon icon={faCreditCard} className="text-blue-500" />
+    ),
+
     "Smoking room": (
         <FontAwesomeIcon icon={faSmoking} className="text-blue-500" />
     ),
+    "喫煙室": (
+        <FontAwesomeIcon icon={faSmoking} className="text-blue-500" />
+    ),
+    "Phòng hút thuốc": (
+        <FontAwesomeIcon icon={faSmoking} className="text-blue-500" />
+    ),
+
     "Seeking Not Allowed": (
         <FontAwesomeIcon icon={faBan} className="text-blue-500" />
     ),
@@ -427,8 +466,8 @@ function StoreDetail() {
                         <div className="grid grid-cols-2 gap-4">
                             {Features &&
                                 Features.map((item, index) => (
-                                    <div className="flex items-center space-x-2">
-                                        {featureIcons[item.features_name] || (
+                                    <div key={index} className="flex items-center space-x-2">
+                                        {featureIcons[(item.features_name.split("|").map((i) => i.trim()))[language]] || (
                                             <FontAwesomeIcon
                                                 icon={faQuestionCircle}
                                                 className="text-gray-500"

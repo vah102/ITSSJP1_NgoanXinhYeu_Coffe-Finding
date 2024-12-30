@@ -1,14 +1,8 @@
-import Tippy from "@tippyjs/react/headless";
-import { useEffect, useState } from "react";
-import Popper from "../../components/Popper";
-import PopperItem from "../../components/PopperItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 import Card from "../../components/Card";
 import useFetch from "../../services/hooks/useFetch";
 import Pagination from "../../components/Pagination";
 import { useSearchContext } from "../../services/contexts/SearchContext";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 type Store = {
     store_id: string;
@@ -23,18 +17,11 @@ type Store = {
 
 function Home() {
     const { t } = useTranslation();
-    const [sortOption, setSortOption] = useState("");
-    const [visible, setVisible] = useState(false);
 
     const search = useSearchContext();
-    const navigate = useNavigate();
-
-    const handleToggleSort = () => {
-        setVisible(!visible);
-    };
 
     const { data, loading } = useFetch<Store[]>(
-        `http://localhost:3000/api/home/stores`
+        `http://localhost:3000/api/home/stores?latitude=${search.location.lat}&longitude=${search.location.lon}`
     );
     // console.log(data);
 
@@ -55,47 +42,6 @@ function Home() {
         <div className="w-full">
             <div className="w-full flex flex-row justify-between ">
                 <h2 className="text-4xl font-bold">{t("home.trending")}</h2>
-                <Tippy
-                    visible={visible}
-                    onClickOutside={() => setVisible(false)}
-                    placement="bottom-end"
-                    interactive
-                    render={(attrs) => (
-                        <div tabIndex={-1} {...attrs}>
-                            <Popper>
-                                <PopperItem
-                                    onClick={() => {
-                                        setSortOption(t("home.rate"));
-                                        handleToggleSort();
-                                        navigate(`/search`);
-                                    }}
-                                >
-                                    {t("home.rate")}
-                                </PopperItem>
-                                <PopperItem
-                                    onClick={() => {
-                                        setSortOption(t("home.location"));
-                                        handleToggleSort();
-                                        navigate(`/search`);
-                                    }}
-                                >
-                                    {t("home.location")}
-                                </PopperItem>
-                            </Popper>
-                        </div>
-                    )}
-                >
-                    <div
-                        className="flex flex-row items-center gap-3 cursor-pointer"
-                        onClick={handleToggleSort}
-                    >
-                        <div>
-                            {t("home.sort")}
-                            {sortOption}
-                        </div>
-                        <FontAwesomeIcon icon={faArrowDownWideShort} />
-                    </div>
-                </Tippy>
             </div>
             {loading ? (
                 "Loading please wait"
