@@ -205,6 +205,10 @@ function StoreDetail() {
 
     const API_URL = "http://localhost:3000/api/blacklist";
     const handleBlacklist = async () => {
+        if (!token) {
+            navigate("/signin"); // Chuyển hướng đến trang đăng nhập
+            return;
+        }
         try {
             const response = await axios.post(
                 `${API_URL}/add`,
