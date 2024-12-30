@@ -24,7 +24,9 @@ export default function Profile() {
     // Lấy dữ liệu từ API khi component được render
     useEffect(() => {
         axios
-            .get("http://localhost:3000/api/user/profile") // Thay bằng endpoint của bạn
+            .get("http://localhost:3000/api/user/profile", {
+                withCredentials: true,
+            }) // Thay bằng endpoint của bạn
             .then((response) => {
                 setFormData(response.data);
             })
