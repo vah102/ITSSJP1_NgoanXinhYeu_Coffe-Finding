@@ -61,12 +61,15 @@
     "amenities":"Amenities and More",
     "review":"Review",
     "rating_over":"Rating Overall",
-    "star":"stars"
+    "star":"stars",
+    "please": "Please sign in to submit a review.",
+    "no": "No reviews yet"
    },
    "review":{
     "start":" Start Your Review",
     "add_photo":" Add Photo",
-    "save":"Save"
+    "save":"Save",
+    "write": "Write your comment"
    },
    "profile":{
     "update_avt":" Update Avatar",

@@ -150,7 +150,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
             <textarea
               value={comment}
               onChange={handleCommentChange}
-              placeholder="Write your review..."
+              placeholder={t("review.write")}
               className="w-full p-2 border rounded-lg mb-4"
               rows={4}
             />

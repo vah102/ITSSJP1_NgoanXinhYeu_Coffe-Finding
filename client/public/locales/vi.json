@@ -61,12 +61,15 @@
     "amenities":"Tiện nghi",
     "review":"Đánh giá",
      "rating_over":"Tổng số đánh giá",
-    "star":"sao"
+    "star":"sao",
+     "please" : "Vui lòng đăng nhập để gửi đánh giá.",
+     "no": "Không có đánh giá nào"
    },
    "review":{
     "start":" Bắt đầu đánh giá của bạn",
     "add_photo":"Thêm ảnh",
-    "save":"Lưu"
+    "save":"Lưu",
+    "write": "Viết đánh giá của bạn"
    },
    "profile":{
     "update_avt":"Cập nhật ảnh",
