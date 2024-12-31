@@ -60,3 +60,5 @@ npm run dev
 ## Contributing
 
 Contributions are welcome! Please read the contributing guidelines before getting started.
+
+## Happy New Year 2025 
