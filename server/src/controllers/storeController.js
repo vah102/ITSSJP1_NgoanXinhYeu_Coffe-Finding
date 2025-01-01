@@ -36,7 +36,7 @@ const storeController = {
   },
 
   // Lấy danh sách các cửa hàng có rate > 4.0
-  getStoresByRate : async (req, res) => {
+  getStoresByRate: async (req, res) => {
     try {
       const { latitude, longitude } = req.query; // Lấy latitude và longitude từ params
   
@@ -78,7 +78,7 @@ const storeController = {
         where: whereCondition,
       });
   
-      // Tính khoảng cách nếu có tọa độ
+      // Nếu có tọa độ, tính khoảng cách và sắp xếp
       if (latitude && longitude) {
         stores = stores.map(store => {
           const storeLat = store.latitude;
@@ -88,6 +88,17 @@ const storeController = {
           store.dataValues.distance = distance;
           return store;
         });
+  
+        // Sắp xếp theo rate giảm dần, nếu rate bằng nhau thì theo khoảng cách tăng dần
+        stores.sort((a, b) => {
+          if (b.rate !== a.rate) {
+            return b.rate - a.rate; // Sắp xếp theo rate giảm dần
+          }
+          return a.dataValues.distance - b.dataValues.distance; // Nếu rate bằng nhau, sắp xếp theo khoảng cách tăng dần
+        });
+      } else {
+        // Nếu không có tọa độ, chỉ sắp xếp theo rate giảm dần
+        stores.sort((a, b) => b.rate - a.rate);
       }
   
       res.json(stores);
@@ -96,6 +107,7 @@ const storeController = {
       res.status(500).json({ message: 'Internal server error' });
     }
   },
+  
   getStores : async (req, res) => {
     const { searchTerm, minPrice, maxPrice, features, styles,latitude, longitude, sortOrder } = req.query;
 

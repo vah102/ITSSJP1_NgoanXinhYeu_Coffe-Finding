@@ -23,7 +23,7 @@ function Home() {
     const { data, loading } = useFetch<Store[]>(
         `http://localhost:3000/api/home/stores?latitude=${search.location.lat}&longitude=${search.location.lon}`
     );
-    // console.log(data);
+    console.log(`http://localhost:3000/api/home/stores?latitude=${search.location.lat}&longitude=${search.location.lon}`);
 
     const itemsPerPage = 8;
     const [currentPage, setCurrentPage] = useState(0);
